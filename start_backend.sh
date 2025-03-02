@@ -1,6 +1,5 @@
 # Quick shell script to start frontend app, uses webpack as defined in build and start commands in package.json
 
-echo STARTING WEB APPLICATION
+echo STARTING BACKEND APPLICATION
 
-npm --prefix ./client run build
-npm --prefix ./client run start
+node ./server/server.js
