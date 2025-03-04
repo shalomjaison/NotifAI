@@ -22,19 +22,8 @@ const getAllUsersController = async (req, res) => {
     }
 };
 
-const getUserByIdController = async (req, res) => {
-    const userId = req.params.id; // Get the user ID from the request parameters
-    try {
-        const user = await getUserById(userId); // Call the model function to get the user by ID
-        res.status(200).json(user); // 200 OK - Send the user back in the response
-    } catch (error) {
-        console.error(`Error fetching user with ID ${userId}:`, error.message);
-        res.status(500).send(`Error fetching user with ID ${userId}`); // 500 Internal Server Error
-    }
-};
 
 module.exports = { // Export the controller functions with different names.
     createUser: createUserController,
     getAllUsers: getAllUsersController,
-    getUserById: getUserByIdController
 };

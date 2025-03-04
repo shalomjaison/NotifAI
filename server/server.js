@@ -22,7 +22,7 @@ app.get('/hello-world-demo', (req, res) => {
     res.send({ text: 'Hello from the backend123!' });
 });
 
-// Use the user routes
+
 app.use('/users', userRoutes);
 
 //Mockpostrequest to store a user in the database
@@ -39,3 +39,8 @@ mockPostRequest(); //Call the mockPostRequest function
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+
+
+
+
+
