@@ -5,21 +5,36 @@
     Entry point of backend server. Establishes API endpoints, [fill in more here]
 */
 
+
 const express = require('express');
-const cors = require('cors')
-// import  { express }  from 'express';
+const cors = require('cors');
+const userRoutes = require('./routes/userRoutes');
+const { createUser } = require('./models/userModel'); // Import createUser from userModel.js
 
 const app = express();
-app.use(cors());    // important: 
+app.use(cors());
+app.use(express.json());
 
 const port = 3000;
 
-app.get('/hello-world-demo', (req, res, next) => {
-
+app.get('/hello-world-demo', (req, res) => {
     console.log("/hello-world-demo get request received");
-
-    res.send({text: 'Hello from the backend!'});
+    res.send({ text: 'Hello from the backend123!' });
 });
+
+// Use the user routes
+app.use('/users', userRoutes);
+
+//Mockpostrequest to store a user in the database
+const mockPostRequest = async () => {
+    try {
+        const newUser = await createUser("hardcodedUser3", "hardcoded3@example.com");
+        console.log('Response data:', newUser);
+    } catch (error) {
+        console.error('Error hardcoding user:', error);
+    }
+};
+mockPostRequest(); //Call the mockPostRequest function
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

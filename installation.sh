@@ -30,6 +30,10 @@ npm i react react-dom
 echo STARTING INSTALLATION EXPRESS
 npm install express
 
+# pg
+echo STARTING INSTALLATION PG
+npm install pg
+
 echo REMOVING DEPRECATED PACKAGES
 rm -r node_modules/inflight
 rm -r node_modules/glob
