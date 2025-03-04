@@ -1,4 +1,4 @@
-const { createUser, getAllUsers, getUserById } = require('../models/userModel');
+const { createUser, getAllUsers} = require('../models/userModel');
 
 const createUserController = async (req, res) => {
     try {
