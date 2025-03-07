@@ -9,7 +9,7 @@
 const express = require('express');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
-const User = require('./models/userModel')
+const { Sequelize } = require('sequelize');
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -25,7 +25,7 @@ app.get('/hello-world-demo', (req, res) => {
 app.use('/users', userRoutes);
 
 // asynchronous syncing for the database (sequelize does it for more than one database) creates one if we don't have one
-await sequelize.sync({ force: true });
+await Sequelize.sync({ force: true });
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

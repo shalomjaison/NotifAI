@@ -1,5 +1,6 @@
-const pool = require('../db/db'); // Import the pool from db.js
-const {DataTypes} = require('sequelize')
+const { DataTypes } = require('sequelize')
+const sequelize = require('../db/db'); 
+
 
 
 const User = sequelize.define(
@@ -26,5 +27,5 @@ const User = sequelize.define(
     },
   );
 
-  module.exports= User
+  module.exports = User
 
