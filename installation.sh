@@ -33,6 +33,8 @@ npm install express
 # pg
 echo STARTING INSTALLATION PG
 npm install pg
+npm install sequelize pg pg-hstore
+
 
 echo REMOVING DEPRECATED PACKAGES
 rm -r node_modules/inflight
