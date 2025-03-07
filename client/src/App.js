@@ -7,34 +7,58 @@
 
 import React, {useState, useEffect} from "react";
 
-const App = () =>{
-    const [data, setData] = useState([]);    
+    function App() {
+        const [users, setUsers] = useState([]);
+        const [data, setData] = useState([]);    
 
-    const fetchHelloWorld = async () => {
-        const response = await fetch('http://localhost:3000/hello-world-demo');
-
-        const json = await response.json();
-        setData(json);
-    }
+        const fetchHelloWorld = async () => {
+            const response = await fetch('http://localhost:3000/hello-world-demo');
+            const json = await response.json();
+            setData(json);
+        }
     
-    useEffect(() => {
-        fetchHelloWorld();
-      }, []);
+        useEffect(() => {
+            fetchHelloWorld();
+          }, []);
 
-    return (
-        <div className="mainBody">
-            <h1> 
-                Whats up data baes 
-            </h1>
+        useEffect(() => {
+          const fetchUsers = async () => {
+            try {
+              const response = await fetch('http://localhost:3000/users'); // Replace with your API URL
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              const data = await response.json();
+              setUsers(data);
+            } catch (error) {
+              console.error('Error fetching users:', error);
+            }
+          };
 
-            {data ? (
-                <h1>{data.text}</h1>
-            ) : (
+          fetchUsers();
+        }, []); 
+
+        return (
+            <div>
+                <h1> 
+                  Whats up data baes 
+                </h1>
+                {data ? (
+                 <h1>{data.text}</h1>
+                    ) : (
                 <p>No data fetched.</p>
-            )}
+                )}
 
-        </div>
-    )
-}
+                <h1>Users in database:</h1>
+                <ul>
+                    {users.map((user) => (
+                        <li key={user.id}>
+                        {user.username} - {user.email}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
+    }
 
-export default App
+    export default App;
