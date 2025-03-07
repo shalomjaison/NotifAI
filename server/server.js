@@ -9,8 +9,7 @@
 const express = require('express');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
-const { createUser } = require('./models/userModel'); // Import createUser from userModel.js
-
+const User = require('./models/userModel')
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -25,21 +24,12 @@ app.get('/hello-world-demo', (req, res) => {
 
 app.use('/users', userRoutes);
 
-//Mockpostrequest to store a user in the database
-const mockPostRequest = async () => {
-    try {
-        const newUser = await createUser("hardcodedUser3", "hardcoded3@example.com");
-        console.log('Response data:', newUser);
-    } catch (error) {
-        console.error('Error hardcoding user:', error);
-    }
-};
-mockPostRequest(); //Call the mockPostRequest function
+// asynchronous syncing for the database (sequelize does it for more than one database) creates one if we don't have one
+await sequelize.sync({ force: true });
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-
 
 
 
