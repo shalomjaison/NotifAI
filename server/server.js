@@ -1,15 +1,17 @@
-/*
-    Data Baes
-    2/28/2025
-
-    Entry point of backend server. Establishes API endpoints, [fill in more here]
+/* 
+this file is responsible for launching our express server 
+and mounting our router to the server to direct 
+the HTTP requests to the API endpoints in the routes directory 
 */
-
 
 const express = require('express');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
-const { Sequelize } = require('sequelize');
+const { createUser: createUserController } = require('./controllers/userController'); // importing for mock post request
+const sequelize = require('./db/db');
+const User = require('./models/userModel');
+
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -24,13 +26,34 @@ app.get('/hello-world-demo', (req, res) => {
 
 app.use('/users', userRoutes);
 
-// asynchronous syncing for the database (sequelize does it for more than one database) creates one if we don't have one
-await Sequelize.sync({ force: true });
+const createHardcodedUser = async () => {
+    try {
+        const existingUser = await User.findOne({ where: { username: 'john_doe', email: 'hello@gmail.com' } });
+        if (!existingUser){
+            const mockRequest = {
+                body: {
+                    username: 'john_doe',
+                    email: 'hello@gmail.com',
+                },
+            };
+                await createUserController(mockRequest);
+                console.log("Mock post request for creating user sent successfully from server.js wahoo!")
+            } else {
+                console.log('User already exists in the database womp womp.');
+            }
+    } catch (error) {
+        console.error('Error hardcoding user:', error);
+    }
+};
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
 
+const startServer = async () => {
+    await sequelize.sync({ force: true });
+    await createHardcodedUser();
 
+    app.listen(port, () => {
+        console.log(`Server is running on port ${port}`);
+    });
+};
 
-
+startServer();

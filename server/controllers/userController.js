@@ -1,24 +1,24 @@
-const User = require('../models/userModel')
+const User = require('../models/userModel'); // importing user model 
 
+// creates new user and stores in database
 const createUserController = async (req, res) => {
     try {
-        const { username, email } = req.body; // Get username and email from the request body
-        const newUser = await User.create({username,email}); // Call the model function to create the user
-        console.log("user created and stored!")
-        res.status(201).json(newUser); // 201 Created - Send the created user back in the response
+        const { username, email } = req.body; 
+        const newUser = await User.create({ username, email }); 
+        console.log("User created and stored via createUserController wahoo!")
     } catch (error) {
         console.error('Error creating user:', error.message);
-        res.status(500).send('Error creating user'); // 500 Internal Server Error
+
     }
 };
 
+// fetches all users from database
 const getAllUsersController = async (req, res) => {
     try {
-        const users = await User.findAll(); // Call the model function to get all users
-        res.status(200).json(users); // 200 OK - Send the users back in the response
+        const users = await User.findAll(); 
+        res.status(200).json(users); 
     } catch (error) {
         console.error('Error fetching users:', error.message);
-        res.status(500).send('Error fetching users'); // 500 Internal Server Error
     }
 };
 
