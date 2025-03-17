@@ -68,3 +68,8 @@ Example Summary: We want to display all the registered users on our home page.
 
 ## TO DO:
 1. Create our actual data models to be stored in the database along with their corresponding routes, and controllers
+
+
+## Further Reading:
+[Overview](../README.md#overview)                                   
+[Setup and Installation](./setup.md)
