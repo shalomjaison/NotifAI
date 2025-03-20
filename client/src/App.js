@@ -24,7 +24,6 @@ function App() {
             email, // ✅ Ensure this matches the backend expectation
             password
         });
-
         console.log("Login Success Response:", response.data); // ✅ Debugging API response
         setMessage(response.data.message);
     } catch (error) {
