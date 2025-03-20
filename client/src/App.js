@@ -51,8 +51,8 @@ import React, {useState, useEffect} from "react";
 
                 <h1>Users in database:</h1>
                 <ul>
-                    {users.map((user) => (
-                        <li key={user.id}>
+                    {users.map((user, i) => (
+                        <li key={i}>
                         {user.username} - {user.email}
                         </li>
                     ))}
