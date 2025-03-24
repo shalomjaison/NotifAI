@@ -7,13 +7,13 @@
 
 import React from "react";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Sidebar from "./components/Sidebar/Sidebar";
-import Header from "./components/Header/Header";
-import Search from "./components/Search/Search";
-import NotificationList from "./components/NotificationList/NotificationList";
-import ClaimsAlert from "./components/ClaimsAlert/ClaimsAlert";
-import Reminders from "./components/Reminders/Reminders";
-import LoginPage from "./components/LoginPage/LoginPage"; // Import LoginPage
+import Sidebar from "./MainPageComponents/Sidebar/Sidebar";
+import Header from "./MainPageComponents/Header/Header";
+import Search from "./MainPageComponents/Search/Search";
+import NotificationList from "./MainPageComponents/NotificationList/NotificationList";
+import ClaimsAlert from "./MainPageComponents/ClaimsAlert/ClaimsAlert";
+import Reminders from "./MainPageComponents/Reminders/Reminders";
+import LoginPage from "./LoginPageComponents/Login/Login"; // Import LoginPage
 
 // Main component to handle routing
 function Main() {
