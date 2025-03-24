@@ -1,14 +1,11 @@
 import React from 'react';
 import ReminderItem from '../ReminderItem/ReminderItem';
+import './Reminders.css';
 
 const Reminders = ({ reminders }) => {
   return (
-    <div>
-      <h2 style={{
-        fontSize: '24px',
-        fontWeight: 'bold',
-        marginBottom: '16px'
-      }}>
+    <div className="reminders-container">
+      <h2 className="reminders-title">
         REMINDERS
       </h2>
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import NotificationItem from '../NotificationItem/NotificationItem';
+import './NotificationList.css';
 
 const NotificationList = ({ notifications }) => {
   return (
@@ -8,30 +9,12 @@ const NotificationList = ({ notifications }) => {
         <NotificationItem key={notification.id} notification={notification} />
       ))}
       {/* Pagination */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f3f4f6',
-        borderRadius: '8px',
-        padding: '12px',
-        marginTop: '20px'
-      }}>
-        <button style={{
-          backgroundColor: 'transparent',
-          border: 'none',
-          fontSize: '16px',
-          cursor: 'pointer'
-        }}>
+      <div className="notification-list-pagination">
+        <button className="notification-list-pagination-button">
           ←
         </button>
-        <span style={{ margin: '0 16px' }}>Page 1 of 10</span>
-        <button style={{
-          backgroundColor: 'transparent',
-          border: 'none',
-          fontSize: '16px',
-          cursor: 'pointer'
-        }}>
+        <span className="notification-list-pagination-text">Page 1 of 10</span>
+        <button className="notification-list-pagination-button">
           →
         </button>
       </div>
@@ -40,3 +23,4 @@ const NotificationList = ({ notifications }) => {
 };
 
 export default NotificationList;
+

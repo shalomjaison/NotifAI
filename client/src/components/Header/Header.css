@@ -1,0 +1,53 @@
+/* client/src/components/Header/Header.css */
+.header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+  }
+  
+  .header-title {
+    font-size: 42px;
+    font-weight: bold;
+    margin: 0;
+    font-family: Verdana;
+  }
+  
+  .header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    position: absolute;
+    right: 0;
+  }
+  
+  .header-sort-by {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 8px 16px;
+    background-color: white;
+  }
+  
+  .header-sort-by-text {
+    margin-right: 5px;
+  }
+  
+  .header-profile-image-container {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #f3f4f6;
+  }
+  
+  .header-profile-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  

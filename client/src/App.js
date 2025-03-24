@@ -20,7 +20,7 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const navigate = useNavigate(); // Hook for programmatic navigation - NOW INSIDE APP
+  const navigate = useNavigate(); // Hook for programmatic navigation 
 
 
   const handleLogin = async (e) => {
@@ -155,7 +155,7 @@ function Main() {
 
 function AppWrapper() {
   return (
-    <BrowserRouter> {/* Changed to BrowserRouter */}
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} /> {/* Login page */}
         <Route path="/main" element={<Main />} /> {/* Main page */}

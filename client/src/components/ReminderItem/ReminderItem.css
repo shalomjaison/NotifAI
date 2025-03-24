@@ -1,0 +1,48 @@
+.reminder-item-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .reminder-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+  
+  .reminder-item-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .reminder-item-icon-container {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .reminder-item-icon {
+    width: 20px;
+    height: 20px;
+    background-color: #818cf8;
+    border-radius: 4px;
+    transform: rotate(12deg);
+  }
+  
+  .reminder-item-location,
+  .reminder-item-date {
+    margin: 0;
+    font-size: 14px;
+    color: #6b7280;
+  }
+  
+  .reminder-item-location {
+    margin-bottom: 4px;
+  }
+  
