@@ -37,11 +37,14 @@ npm i react react-dom
 echo STARTING INSTALLATION EXPRESS
 npm install express
 
-# pg
+# pg 
 echo STARTING INSTALLATION PG
 npm install pg
 npm install sequelize pg pg-hstore
 
+# css-loader (frontend)
+echo INSTALLING CSS-LOADER
+npm install --save-dev css-loader
 
 echo REMOVING DEPRECATED PACKAGES
 rm -r node_modules/inflight
