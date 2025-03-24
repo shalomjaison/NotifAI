@@ -5,78 +5,15 @@
     Main component of React App. Handles UI, React components, and underlying logic of frontend
 */
 
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Sidebar from "./components/Sidebar/Sidebar";
 import Header from "./components/Header/Header";
 import Search from "./components/Search/Search";
 import NotificationList from "./components/NotificationList/NotificationList";
 import ClaimsAlert from "./components/ClaimsAlert/ClaimsAlert";
 import Reminders from "./components/Reminders/Reminders";
-
-function App() {
-  
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const navigate = useNavigate(); // Hook for programmatic navigation 
-
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
-    console.log("Login button clicked! Sending request...");
-
-    try {
-      const response = await axios.post("http://localhost:3000/users/login", {
-        email,
-        password,
-      });
-      console.log("Login Success Response:", response.data);
-      setMessage(response.data.message);
-      // Redirect to the main page after successful login
-      navigate("/main"); // Navigate to the /main route
-    } catch (error) {
-      console.error(
-        "Login error:",
-        error.response ? error.response.data : error.message
-      );
-      setMessage(error.response?.data?.message || "Login failed");
-    }
-  };
-
-  return (
-    <div style={{ maxWidth: 400, margin: "0 auto", padding: 20 }}>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div style={{ marginBottom: 10 }}>
-          <label>Email</label>
-          <br />
-          <input
-            type="email"
-            value={email}
-            required
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div style={{ marginBottom: 10 }}>
-          <label>Password</label>
-          <br />
-          <input
-            type="password"
-            value={password}
-            required
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit">Log In</button>
-      </form>
-
-      {message && <p style={{ marginTop: 10 }}>{message}</p>}
-    </div>
-  );
-}
+import LoginPage from "./components/LoginPage/LoginPage"; // Import LoginPage
 
 // Main component to handle routing
 function Main() {
@@ -157,7 +94,7 @@ function AppWrapper() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} /> {/* Login page */}
+        <Route path="/" element={<LoginPage />} /> {/* Login page */}
         <Route path="/main" element={<Main />} /> {/* Main page */}
       </Routes>
     </BrowserRouter>
