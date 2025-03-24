@@ -7,8 +7,8 @@
 
 import React from "react";
 import  { createRoot, reactDom }  from 'react-dom/client';
-import App from "./src/App"
+import AppWrapper from "./src/App"
 
 const container = document.getElementById('root');
 const root = createRoot(container);
-root.render(<App/>);
+root.render(<AppWrapper />);

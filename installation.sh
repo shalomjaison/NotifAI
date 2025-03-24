@@ -29,6 +29,8 @@ echo "installing bcrypt for password safety"
 npm install bcrypt
 npm install axios
 
+npm install react-router-dom # for page redirection
+
 # React
 echo STARTING INSTALLATION REACT
 npm i react react-dom
