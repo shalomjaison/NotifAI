@@ -34,8 +34,8 @@ const createHardcodedUser = async () => {
             const mockRequest = {
                 body: {
                     username: 'john_doe',
-                    email: 'hello@gmail.com',
-                    password: '1234567',
+                    email: 'test@gmail.com',
+                    password: '123',
                 },
             };
                 await createUserController(mockRequest);
