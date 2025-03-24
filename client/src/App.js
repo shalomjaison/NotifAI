@@ -102,9 +102,9 @@ const router = createBrowserRouter([
   },
 ]);
 
-function AppWrapper() {
+function App() {
   return <RouterProvider router={router} />;
 }
 
-export default AppWrapper;
+export default App;
 
