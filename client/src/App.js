@@ -13,7 +13,7 @@ import Search from "./MainPageComponents/Search/Search";
 import NotificationList from "./MainPageComponents/NotificationList/NotificationList";
 import ClaimsAlert from "./MainPageComponents/ClaimsAlert/ClaimsAlert";
 import Reminders from "./MainPageComponents/Reminders/Reminders";
-import LoginPage from "./LoginPageComponents/Login/Login"; // Import LoginPage
+import Login from "./LoginPageComponents/Login/Login"; 
 
 // Main component to handle routing
 function Main() {
@@ -94,7 +94,7 @@ function Main() {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LoginPage />,
+    element: <Login />,
   },
   {
     path: "/main",
