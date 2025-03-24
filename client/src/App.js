@@ -6,7 +6,7 @@
 */
 
 import React from "react";
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Sidebar from "./components/Sidebar/Sidebar";
 import Header from "./components/Header/Header";
 import Search from "./components/Search/Search";
@@ -90,15 +90,21 @@ function Main() {
   );
 }
 
+// Create the router
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <LoginPage />,
+  },
+  {
+    path: "/main",
+    element: <Main />,
+  },
+]);
+
 function AppWrapper() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LoginPage />} /> {/* Login page */}
-        <Route path="/main" element={<Main />} /> {/* Main page */}
-      </Routes>
-    </BrowserRouter>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default AppWrapper;
+
