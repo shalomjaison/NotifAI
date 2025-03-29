@@ -46,26 +46,14 @@ function Login() {
 
       {/* Login form section */}
       <div className="login-form-section">
-        <div className="company-logo">
-          {/* Replace with your actual logo */}
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M24 12L36 20V36L24 44L12 36V20L24 12Z" fill="#6c5ce7" />
-            <path d="M24 12L36 20V36L24 44V12Z" fill="#5b4bc4" />
-            <path d="M24 44L12 36V20L24 12V44Z" fill="#8075e5" />
-            <path d="M24 22L32 28V34L24 40L16 34V28L24 22Z" fill="#3ae374" />
-          </svg>
-        </div>
-
-        <h2 className="login-header">Login</h2>
+        <h2 className="login-header">Sign in</h2>
         
-        <div className="signup-prompt">
-          <span>Don't have an account yet?</span>
-          <a href="/signup">Sign Up</a>
-        </div>
+
         
         <form onSubmit={handleLogin}>
           <div className="form-group">
-            <input
+            
+            <input 
               type="text"
               className="form-control"
               placeholder="Username"
@@ -76,9 +64,6 @@ function Login() {
           </div>
 
           <div className="form-group">
-            <a href="/forgot-password" className="forgot-password">
-              Forgot Password?
-            </a>
             <input
               type="password"
               className="form-control"
@@ -87,22 +72,16 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-          </div>
-
-          <div className="form-options">
-            <div className="checkbox-container">
-              <input
-                type="checkbox"
-                id="keepLoggedIn"
-                checked={keepLoggedIn}
-                onChange={(e) => setKeepLoggedIn(e.target.checked)}
-              />
-              <label htmlFor="keepLoggedIn">Keep me logged in</label>
-            </div>
+              <a href="/forgot-password" className="forgot-password">
+              Forgot Password?
+            </a>
           </div>
 
           <button type="submit" className="login-button">
-            Login
+            Sign in
+          </button>
+          <button type='button' className="signup-button">
+            Sign up
           </button>
         </form>
 

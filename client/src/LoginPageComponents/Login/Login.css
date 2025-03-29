@@ -1,126 +1,167 @@
+body {
+  background-color: #e0cfff;
+  font-family: "Quicksand", sans-serif;
+}
+
 .login-container {
-    display: flex;
-    min-height: 100vh;
-    background-color: #e0cfff;
-  }
-  
-  .brand-section {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-  }
-  
-  .brand-name {
-    font-size: 3rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
-    color: #1a1a1a;
-  }
-  
-  .illustration {
-    max-width: 700px;
-    margin-top: 1rem;
-  }
-  
-  .login-form-section {
-    width: 40%;
-    height: 90%;
-    min-height: 700px;
-    background-color: white;
-    border-radius: 24px;
-    padding: 3rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    box-shadow: 0 8px 24px rgba(108, 92, 231, 0.15);
-    margin: auto 2rem auto auto;
-  }
-  
-  .login-header {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 1.5rem;
-  }
-  
-  .form-group {
-    margin-bottom: 1.5rem;
-  }
-  
-  .form-control {
-    width: 100%;
-    padding: 1rem;
-    border: none;
-    background-color: #f2f2f7;
-    border-radius: 12px;
-    font-size: 1rem;
-  }
-  
-  .form-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .form-options a {
-    color: #6c5ce7;
-    text-decoration: none;
-  }
-  
-  .checkbox-container {
-    display: flex;
-    align-items: center;
-  }
-  
-  .checkbox-container input {
-    margin-right: 8px;
-  }
-  
-  .login-button {
-    width: 100%;
-    padding: 1rem;
-    background-color: #6c5ce7;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .login-button:hover {
-    background-color: #5b4bc4;
-  }
-  
-  .signup-prompt {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1rem;
-  }
-  
-  .signup-prompt a {
-    color: #6c5ce7;
-    text-decoration: none;
-  }
-  
-  .company-logo {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-  }
-  
-  .message {
-    margin-top: 1rem;
-    color: red;
-  }
-  
-  .forgot-password {
-    display: block;
-    text-align: right;
-    color: #6c5ce7;
-    text-decoration: none;
-    margin-bottom: 0.5rem;
-  }
+  display: flex;
+  min-height: 100vh;
+  background-color: #e0cfff;
+  padding: 0 7rem; /* Reduced padding */
+  justify-content: center;
+  align-items: center;
+}
+
+.brand-section {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.brand-name {
+  font-size: 5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #6c5ce7;
+}
+
+.illustration {
+  max-width: 700px;
+  margin-top: 1rem;
+}
+
+.login-form-section {
+  max-width: 600px; 
+  min-height: 500px;
+  background-color: white;
+  border-radius: 10%;
+  padding: 2rem;
+  padding-left: 7rem;
+  padding-right: 7rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 8px 24px rgba(108, 92, 231, 0.15);
+  margin: auto; 
+  margin-right: 5rem;
+}
+
+.login-form-section form {
+  min-width: 400px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+.login-header {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #6c5ce7;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.form-control {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid rgb(165, 163, 163);
+  background-color: #ffffff;
+  border-radius: 25px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.form-options {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.form-options a {
+  color: #6c5ce7;
+  text-decoration: none;
+}
+
+.login-button {
+  width: 100%;
+  padding: 1rem;
+  background-color: #6c5ce7;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 1rem;
+}
+
+.login-button:hover {
+  background-color: #5b4bc4;
+}
+
+.signup-prompt {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.signup-prompt a {
+  color: #6c5ce7;
+  text-decoration: none;
+}
+
+.company-logo {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.message {
+  margin-top: 1rem;
+  color: red;
+}
+
+.forgot-password {
+  display: flex;
+  text-align: left;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  color: #6c5ce7;
+  text-decoration: none;
+  margin-bottom: 0rem;
+}
+
+.signup-button {
+  width: 100%;
+  padding: 1rem;
+  background-color: #6c5ce7;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 1rem;
+}
+
+.signup-button:hover {
+  background-color: #5b4bc4;
+}
+
+
+
+
+
+
