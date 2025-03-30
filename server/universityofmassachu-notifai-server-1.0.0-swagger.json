@@ -1,0 +1,695 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "SwaggerHub API Auto Mocking",
+    "url" : "https://virtserver.swaggerhub.com/universityofmassachu/notifai-server/1.0.0"
+  } ],
+  "info" : {
+    "description" : "This is a simple API",
+    "version" : "1.0.0",
+    "title" : "NotifAI Backend Server API",
+    "contact" : {
+      "email" : "you@your-company.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags" : [ {
+    "name" : "admins",
+    "description" : "Secured Admin-only calls"
+  }, {
+    "name" : "developers",
+    "description" : "Operations available to regular developers"
+  } ],
+  "components" : {
+    "schemas" : {
+      "user" : {
+        "title" : "user",
+        "type" : "object",
+        "required" : [ "id", "username", "password", "first_name", "last_name", "role", "date_created" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "username" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "iguo8qtzshz1y"
+            }
+          },
+          "password" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "j595j1frqzur2"
+            }
+          },
+          "email" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "c6dlfmvalhntn"
+            }
+          },
+          "phone_number" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "oufnkc7pn7ktm"
+            }
+          },
+          "first_name" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "o13es8z1btxqt"
+            }
+          },
+          "last_name" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "thqo727f1cbyp"
+            }
+          },
+          "role" : {
+            "x-stoplight" : {
+              "id" : "5u19fv6q3jiyi"
+            },
+            "enum" : [ "CUSTOMER", "EMPLOYEE", "ADMIN" ],
+            "readOnly" : true
+          },
+          "date_created" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "ed9by1m9zlsxp"
+            },
+            "format" : "date-time"
+          }
+        }
+      },
+      "notification" : {
+        "title" : "notification",
+        "type" : "object",
+        "required" : [ "id", "type", "date_created", "is_read" ],
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "type" : {
+            "x-stoplight" : {
+              "id" : "c10q17kgxzb61"
+            },
+            "enum" : [ "NEWS", "CLAIM", "POLICY", "OTHER" ]
+          },
+          "date_created" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "dgtl7qb7pgd7i"
+            }
+          },
+          "title" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "494irzer6yc4a"
+            }
+          },
+          "body" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "i8np8aqyarzsb"
+            }
+          },
+          "is_read" : {
+            "type" : "boolean",
+            "x-stoplight" : {
+              "id" : "xem2k475xeczk"
+            }
+          },
+          "is_archived" : {
+            "type" : "boolean",
+            "x-stoplight" : {
+              "id" : "4265p9adsra0q"
+            }
+          },
+          "args" : {
+            "type" : "object",
+            "x-stoplight" : {
+              "id" : "jvkcqfal8u531"
+            },
+            "properties" : {
+              "due_date" : {
+                "type" : "string",
+                "x-stoplight" : {
+                  "id" : "ag12k5uj85ooj"
+                },
+                "format" : "date-time"
+              },
+              "priority" : {
+                "x-stoplight" : {
+                  "id" : "ie7lfzu5x7w1n"
+                },
+                "enum" : [ "LOW", "MEDIUM", "HIGH" ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "requestBodies" : { }
+  },
+  "paths" : {
+    "/users" : {
+      "get" : {
+        "summary" : "Get All Users (GET)",
+        "tags" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/user"
+                  }
+                },
+                "examples" : {
+                  "Example 1" : {
+                    "value" : [ {
+                      "id" : 0,
+                      "username" : "cool guy",
+                      "password" : "gdgj6rghf",
+                      "email" : "jsmiles@gmail.com",
+                      "phone_number" : "9781750132",
+                      "first_name" : "John",
+                      "last_name" : "Smiles",
+                      "role" : "CUSTOMER",
+                      "date_created" : "2019-08-24T14:15:22Z"
+                    } ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId" : "get-users",
+        "description" : "Gets all users currently in database, currently used for testing"
+      },
+      "post" : {
+        "summary" : "Create User (POST)",
+        "tags" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "reason" : {
+                      "type" : "string",
+                      "x-stoplight" : {
+                        "id" : "nmv7aa9am3s4j"
+                      },
+                      "description" : "if request failed, more specific details are provided here"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "Forbidden (account already exists)",
+            "content" : { }
+          }
+        },
+        "operationId" : "post-users",
+        "description" : "Attempts to create a new user account and store the created user data model in a database",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "required" : [ "username", "password", "first_name", "last_name", "role" ],
+                "properties" : {
+                  "username" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "5bfgorzwen0na"
+                    }
+                  },
+                  "email" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "p1j3jroaqx7z5"
+                    }
+                  },
+                  "phone_number" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "3xvcorfitbvti"
+                    }
+                  },
+                  "password" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "lonvkn1p6y6fn"
+                    }
+                  },
+                  "first_name" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "f2q8ksu0b3475"
+                    }
+                  },
+                  "last_name" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "b142fe3ytrnux"
+                    }
+                  },
+                  "role" : {
+                    "x-stoplight" : {
+                      "id" : "cfd6ygytwztwi"
+                    },
+                    "enum" : [ "CUSTOMER", "EMPLOYEE", "ADMIN" ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch" : {
+        "summary" : "Update User (PATCH)",
+        "tags" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "304" : {
+            "description" : "Not Modified"
+          },
+          "404" : {
+            "description" : "Not Found (user's ID not found)"
+          }
+        },
+        "operationId" : "patch-users",
+        "description" : "Updates information about account, currently does not change password or user's role",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "id" : {
+                    "type" : "integer",
+                    "x-stoplight" : {
+                      "id" : "s3s58bchbopor"
+                    },
+                    "description" : "user's ID"
+                  },
+                  "first_name" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "cc3v2jf6jjq53"
+                    }
+                  },
+                  "last_name" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "n8bitc3f0k8x0"
+                    }
+                  },
+                  "email" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "vashveh82u3hn"
+                    }
+                  },
+                  "phone_number" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "ar3ybcqs9hqsw"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login" : {
+      "post" : {
+        "summary" : "User Login (POST)",
+        "tags" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "reason" : {
+                      "type" : "string",
+                      "x-stoplight" : {
+                        "id" : "5rgxm43ihm17w"
+                      },
+                      "description" : "if request failed, more specific details are provided here"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized (incorrect password)"
+          }
+        },
+        "operationId" : "post-users-login",
+        "parameters" : [ ],
+        "requestBody" : {
+          "description" : "",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "required" : [ "password", "email" ],
+                "properties" : {
+                  "password" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "ie5ehye5tebje"
+                    }
+                  },
+                  "email" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "x07zam0ply698"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/logout" : {
+      "post" : {
+        "summary" : "User Logout (POST)",
+        "tags" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "403" : {
+            "description" : "Forbidden (user already logged out)"
+          },
+          "404" : {
+            "description" : "Not Found (user id not found)"
+          }
+        },
+        "operationId" : "get-users-logout",
+        "description" : "Attempts to log the user out of the session ",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "required" : [ "id" ],
+                "properties" : {
+                  "id" : {
+                    "type" : "integer",
+                    "x-stoplight" : {
+                      "id" : "p9116c3s1nntr"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications" : {
+      "post" : {
+        "summary" : "Get Notifications (POST)",
+        "tags" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "notifications" ],
+                  "properties" : {
+                    "notifications" : {
+                      "type" : "array",
+                      "x-stoplight" : {
+                        "id" : "ug7yetz52viu5"
+                      },
+                      "description" : "contains array of objects in matching order and filters of request, each object also has information about who sent and received the notification, as notification does not store sender and receiver",
+                      "items" : {
+                        "x-stoplight" : {
+                          "id" : "8uanmatduu2av"
+                        },
+                        "type" : "object",
+                        "required" : [ "from", "to", "notification" ],
+                        "properties" : {
+                          "from" : {
+                            "type" : "string",
+                            "x-stoplight" : {
+                              "id" : "kvy6xfgc6wj47"
+                            }
+                          },
+                          "to" : {
+                            "type" : "string",
+                            "x-stoplight" : {
+                              "id" : "426vieudfteck"
+                            }
+                          },
+                          "notification" : {
+                            "$ref" : "#/components/schemas/notification"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "reason" : {
+                      "type" : "string",
+                      "x-stoplight" : {
+                        "id" : "ccy9tv9tt7lze"
+                      },
+                      "description" : "reason why it is a bad request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found (user not found)"
+          }
+        },
+        "operationId" : "get-notifications",
+        "description" : "Gets all notifications from the user in an ordered list with filters applied to it",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "required" : [ "id", "filters" ],
+                "properties" : {
+                  "id" : {
+                    "type" : "integer",
+                    "x-stoplight" : {
+                      "id" : "cwss27ce832bx"
+                    }
+                  },
+                  "most_recent_first" : {
+                    "type" : "boolean",
+                    "x-stoplight" : {
+                      "id" : "m09mu1mlrohj2"
+                    },
+                    "description" : "sorts notifications so that the latest posted date is first, if this field is empty, notifications are not sorted unless another sorting method is in args"
+                  },
+                  "max_notifications" : {
+                    "type" : "integer",
+                    "x-stoplight" : {
+                      "id" : "iqzniw7xuygt5"
+                    },
+                    "description" : "return all notifications if this field is not set"
+                  },
+                  "filters" : {
+                    "type" : "object",
+                    "x-stoplight" : {
+                      "id" : "8rkw8rgkrzh1t"
+                    },
+                    "required" : [ "sent" ],
+                    "properties" : {
+                      "method" : {
+                        "x-stoplight" : {
+                          "id" : "pi64g1q3gdgcb"
+                        },
+                        "enum" : [ "IN_APP", "EMAIL", "SMS", "TEAMS" ],
+                        "description" : "is blank, do not filter by method\n"
+                      },
+                      "sent" : {
+                        "type" : "boolean",
+                        "x-stoplight" : {
+                          "id" : "opulzzhhgtw5e"
+                        },
+                        "description" : "true means sent by user, false means user is receiving notifications\n"
+                      },
+                      "type" : {
+                        "x-stoplight" : {
+                          "id" : "fng6cy64bltkl"
+                        },
+                        "enum" : [ "CLAIMS", "NEWS", "POLICY" ],
+                        "description" : "if empty, do not filter by type"
+                      },
+                      "archived" : {
+                        "type" : "boolean",
+                        "x-stoplight" : {
+                          "id" : "hfbilxyrf96oa"
+                        },
+                        "description" : "if true, leave only archived notifications, if false or undefined, do not filter by archived"
+                      },
+                      "text" : {
+                        "type" : "string",
+                        "x-stoplight" : {
+                          "id" : "3udpodujm5r2q"
+                        },
+                        "description" : "filter from the searching feature of user inbox, filters title, description, and users involved in notifications for matching text"
+                      },
+                      "args" : {
+                        "type" : "object",
+                        "x-stoplight" : {
+                          "id" : "odc9013h8kswi"
+                        },
+                        "description" : "contains comparators and filters specific to different types of notifications\n",
+                        "properties" : {
+                          "due_earliest_first" : {
+                            "type" : "boolean",
+                            "x-stoplight" : {
+                              "id" : "adb8fw77rop7t"
+                            },
+                            "description" : "overides most_recent_first, need to check if notification type has due date"
+                          },
+                          "is_completed" : {
+                            "type" : "boolean",
+                            "x-stoplight" : {
+                              "id" : "qajp7y2fsra8q"
+                            }
+                          },
+                          "is_overdue" : {
+                            "type" : "boolean",
+                            "x-stoplight" : {
+                              "id" : "d6et4y5ibes50"
+                            }
+                          },
+                          "priority" : {
+                            "x-stoplight" : {
+                              "id" : "hz7brsze9g1u7"
+                            },
+                            "enum" : [ "HIGH_PRIORITY", "MEDIUM_PRIORITY", "LOW_PRIORITY" ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ ]
+      }
+    },
+    "/notifications/send" : {
+      "post" : {
+        "summary" : "Send Notification (POST)",
+        "tags" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "reason" : {
+                      "type" : "string",
+                      "x-stoplight" : {
+                        "id" : "sjeq38wa0vmzc"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Not Found (user_id not found)"
+          }
+        },
+        "operationId" : "post-notifications-send",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "required" : [ "sender_id", "receiver_ids", "notification" ],
+                "properties" : {
+                  "sender_id" : {
+                    "type" : "integer",
+                    "x-stoplight" : {
+                      "id" : "31a1bsokqtwwo"
+                    }
+                  },
+                  "receiver_ids" : {
+                    "type" : "array",
+                    "x-stoplight" : {
+                      "id" : "qovkgur81466a"
+                    },
+                    "items" : {
+                      "x-stoplight" : {
+                        "id" : "km233ajnhfjzd"
+                      },
+                      "type" : "integer"
+                    }
+                  },
+                  "notification" : {
+                    "$ref" : "#/components/schemas/notification"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
