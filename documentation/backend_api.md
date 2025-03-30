@@ -1,4 +1,7 @@
 # OVERVIEW
+VIEW DOCUMENTATION HERE
+https://app.swaggerhub.com/apis-docs/universityofmassachu/notifai-server/1.0.0
+
 Backend REST API documentation developed using Swagger's API Hub. Swagger is a part of SmartBear, a company for developing software quality tools. 
 Swagger is a tool for designing REST API's that are Open API compliant. Open API is a set of specifications on how to document and design an API 
 that is widely accepted by developers. The documentation is represented in a json file.
