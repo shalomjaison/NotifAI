@@ -1,7 +1,12 @@
-# OVERVIEW
-VIEW DOCUMENTATION HERE
-https://app.swaggerhub.com/apis-docs/universityofmassachu/notifai-server/1.0.0
+# VIEWING DOCUMENTATION
+1. View documentation on SmartBear's API Hub w/ Swagger platform https://app.swaggerhub.com/apis-docs/universityofmassachu/notifai-server/1.0.0
 
+   (NOTE: this will be read only, to edit, see colalborating on swagger, also there is some bug that prevents enums of request/response bodies from displaying,
+    I recommend using the option to open the html file NotifAI/server/api_documentation.html containing docs on a browser instead)
+   
+3. Open NotifAI/server/api_documentation.html on browser, an image is included in OVERVIEW section
+   
+# OVERVIEW
 Backend REST API documentation developed using Swagger's API Hub. Swagger is a part of SmartBear, a company for developing software quality tools. 
 Swagger is a tool for designing REST API's that are Open API compliant. Open API is a set of specifications on how to document and design an API 
 that is widely accepted by developers. The documentation is represented in a json file.
@@ -13,7 +18,7 @@ NotifAI/server/universityofmassachu-notifai-server-1.0.0-resolved.json
 
 This file path is the html file that is a more interactive documentation, open this in a browser such as Chrome
 ```
-NotifAI/api_documentation.html
+NotifAI/server/api_documentation.html
 ```
 <img width="671" alt="Screenshot 2025-03-29 at 9 59 49 PM" src="https://github.com/user-attachments/assets/054c991c-c6b9-41c4-9a7d-d85c7ee2d73d" />
 
