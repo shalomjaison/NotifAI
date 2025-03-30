@@ -6,6 +6,7 @@ A Notification-as-a-Service Web-App
 - [Overview](./README.md#Overview)
 - [Setup and Installation](./documentation/setup.md)
 - [Code Explanation](./documentation/code_explanation.md)
+- [Backend API (Using Swagger) Documentation](./documentation/backend_api.md)
 
 ### Overview
 
