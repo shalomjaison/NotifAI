@@ -1,0 +1,811 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "NotifAI Backend Server API",
+    "description": "This is a simple API",
+    "contact": {
+      "email": "you@your-company.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://virtserver.swaggerhub.com/universityofmassachu/notifai-server/1.0.0",
+      "description": "SwaggerHub API Auto Mocking"
+    }
+  ],
+  "tags": [
+    {
+      "name": "admins",
+      "description": "Secured Admin-only calls"
+    },
+    {
+      "name": "developers",
+      "description": "Operations available to regular developers"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [],
+        "summary": "Get All Users (GET)",
+        "description": "Gets all users currently in database, currently used for testing",
+        "operationId": "get-users",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/user"
+                  }
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": [
+                      {
+                        "id": 0,
+                        "username": "cool guy",
+                        "password": "gdgj6rghf",
+                        "email": "jsmiles@gmail.com",
+                        "phone_number": "9781750132",
+                        "first_name": "John",
+                        "last_name": "Smiles",
+                        "role": "CUSTOMER",
+                        "date_created": "2019-08-24T14:15:22Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [],
+        "summary": "Create User (POST)",
+        "description": "Attempts to create a new user account and store the created user data model in a database",
+        "operationId": "post-users",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/users_body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden (account already exists)",
+            "content": {}
+          }
+        }
+      },
+      "patch": {
+        "tags": [],
+        "summary": "Update User (PATCH)",
+        "description": "Updates information about account, currently does not change password or user's role",
+        "operationId": "patch-users",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/users_body_1"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "304": {
+            "description": "Not Modified"
+          },
+          "404": {
+            "description": "Not Found (user's ID not found)"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": [],
+        "summary": "User Login (POST)",
+        "operationId": "post-users-login",
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/users_login_body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400_1"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized (incorrect password)"
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "tags": [],
+        "summary": "User Logout (POST)",
+        "description": "Attempts to log the user out of the session ",
+        "operationId": "get-users-logout",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/users_logout_body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden (user already logged out)"
+          },
+          "404": {
+            "description": "Not Found (user id not found)"
+          }
+        }
+      }
+    },
+    "/notifications": {
+      "post": {
+        "tags": [],
+        "summary": "Get Notifications (POST)",
+        "description": "Gets all notifications from the user in an ordered list with filters applied to it",
+        "operationId": "get-notifications",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/notifications_body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400_2"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (user not found)"
+          }
+        }
+      }
+    },
+    "/notifications/send": {
+      "post": {
+        "tags": [],
+        "summary": "Send Notification (POST)",
+        "operationId": "post-notifications-send",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/notifications_send_body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400_3"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found (user_id not found)"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "user": {
+        "title": "user",
+        "required": [
+          "date_created",
+          "first_name",
+          "id",
+          "last_name",
+          "password",
+          "role",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "username": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "iguo8qtzshz1y"
+            }
+          },
+          "password": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "j595j1frqzur2"
+            }
+          },
+          "email": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "c6dlfmvalhntn"
+            }
+          },
+          "phone_number": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "oufnkc7pn7ktm"
+            }
+          },
+          "first_name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "o13es8z1btxqt"
+            }
+          },
+          "last_name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "thqo727f1cbyp"
+            }
+          },
+          "role": {
+            "type": "string",
+            "readOnly": true,
+            "enum": [
+              "CUSTOMER",
+              "EMPLOYEE",
+              "ADMIN"
+            ],
+            "x-stoplight": {
+              "id": "5u19fv6q3jiyi"
+            }
+          },
+          "date_created": {
+            "type": "string",
+            "format": "date-time",
+            "x-stoplight": {
+              "id": "ed9by1m9zlsxp"
+            }
+          }
+        }
+      },
+      "notification": {
+        "title": "notification",
+        "required": [
+          "date_created",
+          "id",
+          "is_read",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "NEWS",
+              "CLAIM",
+              "POLICY",
+              "OTHER"
+            ],
+            "x-stoplight": {
+              "id": "c10q17kgxzb61"
+            }
+          },
+          "date_created": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "dgtl7qb7pgd7i"
+            }
+          },
+          "title": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "494irzer6yc4a"
+            }
+          },
+          "body": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "i8np8aqyarzsb"
+            }
+          },
+          "is_read": {
+            "type": "boolean",
+            "x-stoplight": {
+              "id": "xem2k475xeczk"
+            }
+          },
+          "is_archived": {
+            "type": "boolean",
+            "x-stoplight": {
+              "id": "4265p9adsra0q"
+            }
+          },
+          "args": {
+            "$ref": "#/components/schemas/notification_args"
+          }
+        }
+      },
+      "users_body": {
+        "required": [
+          "first_name",
+          "last_name",
+          "password",
+          "role",
+          "username"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "5bfgorzwen0na"
+            }
+          },
+          "email": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "p1j3jroaqx7z5"
+            }
+          },
+          "phone_number": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "3xvcorfitbvti"
+            }
+          },
+          "password": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "lonvkn1p6y6fn"
+            }
+          },
+          "first_name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "f2q8ksu0b3475"
+            }
+          },
+          "last_name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "b142fe3ytrnux"
+            }
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "CUSTOMER",
+              "EMPLOYEE",
+              "ADMIN"
+            ],
+            "x-stoplight": {
+              "id": "cfd6ygytwztwi"
+            }
+          }
+        }
+      },
+      "inline_response_400": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "if request failed, more specific details are provided here",
+            "x-stoplight": {
+              "id": "nmv7aa9am3s4j"
+            }
+          }
+        }
+      },
+      "users_body_1": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "user's ID",
+            "x-stoplight": {
+              "id": "s3s58bchbopor"
+            }
+          },
+          "first_name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "cc3v2jf6jjq53"
+            }
+          },
+          "last_name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "n8bitc3f0k8x0"
+            }
+          },
+          "email": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "vashveh82u3hn"
+            }
+          },
+          "phone_number": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "ar3ybcqs9hqsw"
+            }
+          }
+        }
+      },
+      "users_login_body": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "ie5ehye5tebje"
+            }
+          },
+          "email": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "x07zam0ply698"
+            }
+          }
+        }
+      },
+      "inline_response_400_1": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "if request failed, more specific details are provided here",
+            "x-stoplight": {
+              "id": "5rgxm43ihm17w"
+            }
+          }
+        }
+      },
+      "users_logout_body": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "p9116c3s1nntr"
+            }
+          }
+        }
+      },
+      "notifications_filters_args": {
+        "type": "object",
+        "properties": {
+          "due_earliest_first": {
+            "type": "boolean",
+            "description": "overides most_recent_first, need to check if notification type has due date",
+            "x-stoplight": {
+              "id": "adb8fw77rop7t"
+            }
+          },
+          "is_completed": {
+            "type": "boolean",
+            "x-stoplight": {
+              "id": "qajp7y2fsra8q"
+            }
+          },
+          "is_overdue": {
+            "type": "boolean",
+            "x-stoplight": {
+              "id": "d6et4y5ibes50"
+            }
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "HIGH_PRIORITY",
+              "MEDIUM_PRIORITY",
+              "LOW_PRIORITY"
+            ],
+            "x-stoplight": {
+              "id": "hz7brsze9g1u7"
+            }
+          }
+        },
+        "description": "contains comparators and filters specific to different types of notifications\n"
+      },
+      "notifications_filters": {
+        "required": [
+          "sent"
+        ],
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string",
+            "description": "is blank, do not filter by method\n",
+            "enum": [
+              "IN_APP",
+              "EMAIL",
+              "SMS",
+              "TEAMS"
+            ],
+            "x-stoplight": {
+              "id": "pi64g1q3gdgcb"
+            }
+          },
+          "sent": {
+            "type": "boolean",
+            "description": "true means sent by user, false means user is receiving notifications\n",
+            "x-stoplight": {
+              "id": "opulzzhhgtw5e"
+            }
+          },
+          "type": {
+            "type": "string",
+            "description": "if empty, do not filter by type",
+            "enum": [
+              "CLAIMS",
+              "NEWS",
+              "POLICY"
+            ],
+            "x-stoplight": {
+              "id": "fng6cy64bltkl"
+            }
+          },
+          "archived": {
+            "type": "boolean",
+            "description": "if true, leave only archived notifications, if false or undefined, do not filter by archived",
+            "x-stoplight": {
+              "id": "hfbilxyrf96oa"
+            }
+          },
+          "text": {
+            "type": "string",
+            "description": "filter from the searching feature of user inbox, filters title, description, and users involved in notifications for matching text",
+            "x-stoplight": {
+              "id": "3udpodujm5r2q"
+            }
+          },
+          "args": {
+            "$ref": "#/components/schemas/notifications_filters_args"
+          }
+        }
+      },
+      "notifications_body": {
+        "required": [
+          "filters",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "cwss27ce832bx"
+            }
+          },
+          "most_recent_first": {
+            "type": "boolean",
+            "description": "sorts notifications so that the latest posted date is first, if this field is empty, notifications are not sorted unless another sorting method is in args",
+            "x-stoplight": {
+              "id": "m09mu1mlrohj2"
+            }
+          },
+          "max_notifications": {
+            "type": "integer",
+            "description": "return all notifications if this field is not set",
+            "x-stoplight": {
+              "id": "iqzniw7xuygt5"
+            }
+          },
+          "filters": {
+            "$ref": "#/components/schemas/notifications_filters"
+          }
+        }
+      },
+      "inline_response_200": {
+        "required": [
+          "notifications"
+        ],
+        "type": "object",
+        "properties": {
+          "notifications": {
+            "type": "array",
+            "description": "contains array of objects in matching order and filters of request, each object also has information about who sent and received the notification, as notification does not store sender and receiver",
+            "items": {
+              "$ref": "#/components/schemas/inline_response_200_notifications"
+            },
+            "x-stoplight": {
+              "id": "ug7yetz52viu5"
+            }
+          }
+        }
+      },
+      "inline_response_400_2": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "reason why it is a bad request",
+            "x-stoplight": {
+              "id": "ccy9tv9tt7lze"
+            }
+          }
+        }
+      },
+      "notifications_send_body": {
+        "required": [
+          "notification",
+          "receiver_ids",
+          "sender_id"
+        ],
+        "type": "object",
+        "properties": {
+          "sender_id": {
+            "type": "integer",
+            "x-stoplight": {
+              "id": "31a1bsokqtwwo"
+            }
+          },
+          "receiver_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "x-stoplight": {
+                "id": "km233ajnhfjzd"
+              }
+            },
+            "x-stoplight": {
+              "id": "qovkgur81466a"
+            }
+          },
+          "notification": {
+            "$ref": "#/components/schemas/notification"
+          }
+        }
+      },
+      "inline_response_400_3": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "sjeq38wa0vmzc"
+            }
+          }
+        }
+      },
+      "notification_args": {
+        "type": "object",
+        "properties": {
+          "due_date": {
+            "type": "string",
+            "format": "date-time",
+            "x-stoplight": {
+              "id": "ag12k5uj85ooj"
+            }
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ],
+            "x-stoplight": {
+              "id": "ie7lfzu5x7w1n"
+            }
+          }
+        }
+      },
+      "inline_response_200_notifications": {
+        "required": [
+          "from",
+          "notification",
+          "to"
+        ],
+        "type": "object",
+        "properties": {
+          "from": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "kvy6xfgc6wj47"
+            }
+          },
+          "to": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "426vieudfteck"
+            }
+          },
+          "notification": {
+            "$ref": "#/components/schemas/notification"
+          }
+        }
+      }
+    },
+    "requestBodies": {}
+  }
+}
