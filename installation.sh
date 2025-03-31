@@ -38,6 +38,7 @@ npm i react react-dom
 # Express
 echo STARTING INSTALLATION EXPRESS
 npm install express
+npm install express-session
 
 # pg 
 echo STARTING INSTALLATION PG

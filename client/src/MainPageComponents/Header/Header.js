@@ -1,14 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Header.css';
+import LogoutButton from '../LogoutButton/LogoutButton';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-const Header = () => {
+const Header = ({ userData }) => {
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  useEffect(() => {
+    if (!userData) {
+      console.log("No user data found, redirecting to login");
+      window.location.href = "/"; // Redirect to the login page;
+    }
+  }, [userData, navigate]);
+
   return (
     <header className="header-container">
       <h1 className="header-title">
-        NotifAI
+        {userData ? `Hi ${userData.fname} <3` : 'You aren not signed in'} {/* Changed message */}
       </h1>
 
       <div className="header-actions">
+        {<LogoutButton />}
+
         <div className="header-sort-by">
           <span className="header-sort-by-text">Sort By</span>
           {/* Filter icon SVG */}
@@ -32,4 +45,10 @@ const Header = () => {
 };
 
 export default Header;
+
+
+
+
+
+
 

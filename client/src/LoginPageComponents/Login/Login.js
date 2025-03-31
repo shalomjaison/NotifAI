@@ -6,7 +6,6 @@ import "./Login.css";
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
@@ -19,9 +18,10 @@ function Login() {
       const response = await axios.post("http://localhost:3000/users/login", {
         email: username, // Using username input for email
         password,
-      });
+      }, { withCredentials: true }); // send cookies with request
       console.log("Login Success Response:", response.data);
       setMessage(response.data.message);
+
       navigate("/main"); // Navigate to the /main route
     } catch (error) {
       console.error(
