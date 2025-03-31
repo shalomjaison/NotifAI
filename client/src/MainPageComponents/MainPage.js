@@ -7,7 +7,7 @@ import ClaimsAlert from "./ClaimsAlert/ClaimsAlert";
 import Reminders from "./Reminders/Reminders";
 
 // Main component to handle routing
-function MainPage() {
+function MainPage({ userData }) { // Receive userData as a prop
   // Sample data for notifications - link to API later
   const notifications = [
     {
@@ -51,7 +51,7 @@ function MainPage() {
       {/* Main content area */}
       <div style={{ flexGrow: 1, padding: '20px', overflow: 'auto' }}>
         {/* Header component */}
-        <Header />
+        <Header userData={userData} />
 
         <div style={{
           display: 'flex',

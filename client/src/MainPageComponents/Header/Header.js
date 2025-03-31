@@ -1,30 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './Header.css';
 import LogoutButton from '../LogoutButton/LogoutButton';
-import axios from 'axios';
-import { useLocation } from 'react-router-dom'; // Import useLocation
 
-const Header = () => {
-  const [username, setUsername] = useState('');
-  const location = useLocation(); // Get the current location
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/users/me', { withCredentials: true });
-        setUsername(response.data.user.fname);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserData();
-  }, [location.pathname]); // Re-fetch data when the location changes
-
+const Header = ({ userData }) => { // Receive userData as a prop
   return (
     <header className="header-container">
       <h1 className="header-title">
-          {username ? `Hi ${username} <3` : 'Uh oh you have no name!'}
+        {userData ? `Hi ${userData.fname} <3` : 'Uh oh you have no name!'}
       </h1>
 
       <div className="header-actions">
@@ -53,6 +35,8 @@ const Header = () => {
 };
 
 export default Header;
+
+
 
 
 
