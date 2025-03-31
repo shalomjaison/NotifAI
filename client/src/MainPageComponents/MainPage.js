@@ -5,9 +5,31 @@ import Search from "./Search/Search";
 import NotificationList from "./NotificationList/NotificationList";
 import ClaimsAlert from "./ClaimsAlert/ClaimsAlert";
 import Reminders from "./Reminders/Reminders";
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 // Main component to handle routing
-function MainPage({ userData }) { // Receive userData as a prop
+function MainPage() { 
+  const [userData, setUserData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/users/me', {
+          withCredentials: true,
+        });
+        setUserData(response.data.user);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   // Sample data for notifications - link to API later
   const notifications = [
     {
@@ -43,6 +65,9 @@ function MainPage({ userData }) { // Receive userData as a prop
       date: "March 4th, 2025 at 4 pm"
     }
   ];
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       {/* Sidebar component */}
@@ -82,3 +107,4 @@ function MainPage({ userData }) { // Receive userData as a prop
   }
 
   export default MainPage;
+

@@ -7,11 +7,9 @@
 
 import React from "react";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import ProtectedRoute from "./ProtectedRoute";
 import MainPage from "./MainPageComponents/MainPage";
-import Login from "./LoginPageComponents/Login/Login"; 
+import Login from "./LoginPageComponents/Login/Login";
 import SignUp from "./SignUpComponents/SignUp";
-
 
 // Create the router
 const router = createBrowserRouter([
@@ -20,15 +18,13 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/signup", 
-    element: <SignUp />, 
+    path: "/signup",
+    element: <SignUp />,
   },
   {
     path: "/main",
     element: (
-      <ProtectedRoute>
         <MainPage />
-      </ProtectedRoute>
     ),
   },
 ]);
@@ -38,5 +34,6 @@ function App() {
 }
 
 export default App;
+
 
 

@@ -1,4 +1,3 @@
-// c:\Users\ginhp\Documents\UMASS\SPRING 2025\320\sessions\NotifAI\server\routes\userRoutes.js
 const express = require('express');
 
 const router = express.Router();
