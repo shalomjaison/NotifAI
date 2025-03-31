@@ -23,7 +23,17 @@ const loginUserController = async (req, res) => {
             return res.status(401).json({ message: "Invalid username or password" });
         }
 
-        return res.status(200).json({ message: "Login successful" });
+        // Create a session
+        req.session.user = {
+            id: user.username, // Store the user's username in the session
+            username: user.username,
+            email: user.email
+        };
+
+        console.log("Session created for user:", req.session.user);
+
+        return res.status(200).json({ message: "Login successful", user: req.session.user });
+
     } catch (error) {
         console.error("Error logging in user:", error);
         return res.status(500).json({ error: "Failed to log in" });

@@ -6,6 +6,7 @@ the HTTP requests to the API endpoints in the routes directory
 
 const express = require('express');
 const cors = require('cors');
+const session = require('express-session'); // Import express-session
 const userRoutes = require('./routes/userRoutes');
 const { createUser: createUserController } = require('./controllers/userController'); // importing for mock post request
 const sequelize = require('./db/db');
@@ -13,8 +14,24 @@ const User = require('./models/userModel');
 const bcrypt = require('bcrypt');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:9500', // Allow requests from your React app
+    credentials: true, // Allow cookies to be sent
+}));
 app.use(express.json());
+
+// Configure express-session middleware
+app.use(session({
+    secret: 'your_secret_key', // Replace with a strong, random secret
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true, // Make the cookie only accessible via HTTP(S)
+        secure: false, // Set to true in production (when using HTTPS)
+        sameSite: 'Strict', // Prevent CSRF attacks
+        maxAge: 1000 * 60 * 60 * 24, // Cookie expires after 1 day
+    },
+}));
 
 const port = 3000;
 
@@ -29,11 +46,11 @@ app.use('/users', userRoutes);
 const createHardcodedUser = async () => {
     try {
 
-        const existingUser = await User.findOne({ where: { username: 'john_doe', email: 'hello@gmail.com'} });
+        const existingUser = await User.findOne({ where: { username: 'john', email: 'hello@gmail.com'} });
         if (!existingUser){
             const mockRequest = {
                 body: {
-                    username: 'john_doe',
+                    username: 'john',
                     email: 'test@gmail.com',
                     password: '123',
                 },

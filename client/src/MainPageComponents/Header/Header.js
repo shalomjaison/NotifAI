@@ -1,14 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Header.css';
+import LogoutButton from '../LogoutButton/LogoutButton';
+import axios from 'axios';
 
 const Header = () => {
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/users/me', { withCredentials: true });
+        setUsername(response.data.user.username); // Get username of currently logged in user from server response
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   return (
     <header className="header-container">
       <h1 className="header-title">
-        NotifAI
+          {username ? `Hi ${username} <3` : 'Uh oh you have no name!'}
       </h1>
 
       <div className="header-actions">
+        <LogoutButton />
+        
         <div className="header-sort-by">
           <span className="header-sort-by-text">Sort By</span>
           {/* Filter icon SVG */}
@@ -32,4 +51,5 @@ const Header = () => {
 };
 
 export default Header;
+
 
