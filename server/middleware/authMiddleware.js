@@ -5,7 +5,7 @@ const authMiddleware = (req, res, next) => {
     if (req.session && req.session.user) {
         // User is logged in, attach user data to the request
         req.user = req.session.user;
-        console.log("User is logged in:", req.user);
+        console.log("User is logged in:", req.user.fname);
         next(); // Proceed to the next middleware or route handler
     } else {
         // No session found, user is not logged in

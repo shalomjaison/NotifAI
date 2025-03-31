@@ -11,7 +11,6 @@ const userRoutes = require('./routes/userRoutes');
 const { createUser: createUserController } = require('./controllers/userController'); // importing for mock post request
 const sequelize = require('./db/db');
 const User = require('./models/userModel');
-const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(cors({
@@ -77,8 +76,9 @@ const viewUsers = async () => {
 };
 
 
+
 const startServer = async () => {
-    await sequelize.sync();
+    await sequelize.sync({ force: true }); // Add { force: true } here
     await createHardcodedUser();
 
     app.listen(port, () => {
@@ -86,6 +86,7 @@ const startServer = async () => {
     });
     await viewUsers();
 };
+
 
 
 

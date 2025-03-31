@@ -27,7 +27,8 @@ const loginUserController = async (req, res) => {
         req.session.user = {
             id: user.username, // Store the user's username in the session
             username: user.username,
-            email: user.email
+            email: user.email,
+            fname: user.fname, // Store fname in the session
         };
 
         console.log("Session created for user:", req.session.user);

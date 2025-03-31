@@ -12,7 +12,7 @@ const Header = () => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get('http://localhost:3000/users/me', { withCredentials: true });
-        setUsername(response.data.user.username);
+        setUsername(response.data.user.fname);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }

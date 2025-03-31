@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom'; // Import useLocation
+import { useLocation } from 'react-router-dom'; // Import useLocation
 
 const ProtectedRoute = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(null); // Initialize to null
@@ -31,7 +31,8 @@ const ProtectedRoute = ({ children }) => {
     }
 
     if (isLoggedIn === false) {
-        return <Navigate to="/" replace />;
+        window.location.href = "/";
+        return null;
     }
     
     if (isLoggedIn === true) {
