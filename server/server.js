@@ -46,13 +46,16 @@ app.use('/users', userRoutes);
 const createHardcodedUser = async () => {
     try {
 
-        const existingUser = await User.findOne({ where: { username: 'john', email: 'hello@gmail.com'} });
+        const existingUser = await User.findOne({ where: { fname:'John', lname:'Doe',username: 'john_doe', email: 'hello@gmail.com', role:'customer'} });
         if (!existingUser){
             const mockRequest = {
                 body: {
-                    username: 'john',
+                    fname:'John',
+                    lname:'Doe',
+                    username: 'john_doe',
                     email: 'test@gmail.com',
                     password: '123',
+                    role:'customer',
                 },
             };
                 await createUserController(mockRequest);
@@ -75,7 +78,7 @@ const viewUsers = async () => {
 
 
 const startServer = async () => {
-    await sequelize.sync({ force: true });
+    await sequelize.sync();
     await createHardcodedUser();
 
     app.listen(port, () => {

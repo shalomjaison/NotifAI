@@ -80,7 +80,11 @@ function Login() {
           <button type="submit" className="login-button">
             Sign in
           </button>
-          <button type='button' className="signup-button">
+          <button
+            type="button"
+            className="signup-button"
+            onClick={() => navigate("/signup")}
+          >
             Sign up
           </button>
         </form>
