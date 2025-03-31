@@ -14,6 +14,7 @@ import NotificationList from "./MainPageComponents/NotificationList/Notification
 import ClaimsAlert from "./MainPageComponents/ClaimsAlert/ClaimsAlert";
 import Reminders from "./MainPageComponents/Reminders/Reminders";
 import Login from "./LoginPageComponents/Login/Login"; 
+import SignUp from "./SignUpComponents/SignUp";
 
 // Main component to handle routing
 function Main() {
@@ -97,6 +98,10 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
+    path: "/signup", 
+    element: <SignUp />, 
+  },
+  {
     path: "/main",
     element: <Main />,
   },
@@ -107,4 +112,3 @@ function App() {
 }
 
 export default App;
-
