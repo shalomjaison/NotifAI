@@ -61,7 +61,7 @@ const viewUsers = async () => {
 
 
 const startServer = async () => {
-    await sequelize.sync();
+    await sequelize.sync({force:true});
     await createHardcodedUser();
 
     app.listen(port, () => {
