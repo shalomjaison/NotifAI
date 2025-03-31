@@ -10,6 +10,14 @@ const User = sequelize.define(
         unique: true,
         primaryKey: true
     },
+    fname: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      lname: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     email: {
         type: DataTypes.STRING,
         allowNull: true,
@@ -20,7 +28,11 @@ const User = sequelize.define(
     password: {
         type: DataTypes.STRING,
         allowNull: false,
-      }
+      },
+    role: {
+        type: DataTypes.STRING,
+        defaultValue: 'customer',
+      },
 }, 
 {   // Other model options go here
     tableName: 'users'

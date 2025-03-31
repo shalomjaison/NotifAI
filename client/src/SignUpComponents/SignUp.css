@@ -1,0 +1,108 @@
+html{
+  margin:0;
+  padding:0;
+}
+body {
+    font-family: "Quicksand", sans-serif;
+    margin:0;
+    padding:0;
+  }
+  .signup-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #e0cfff;
+    padding: 0 7rem;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .brand-section {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  
+  .brand-name {
+    font-size: 5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #6c5ce7;
+  }
+  
+  .illustration {
+    max-width: 800px;
+    margin-top: 0;
+  }
+  
+  .signup-form-section {
+    max-width: 450px;
+    /* min-height: 300px; */
+    background-color: white;
+    border-radius: 10%;           
+    padding: 1rem;
+    padding-left: 4rem; 
+    padding-right: 4rem;       
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 24px rgba(108, 92, 231, 0.15);
+    margin: auto;
+  }
+  
+  .signup-form-section form {
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    margin-bottom: 2rem;
+  }
+  
+  .signup-header {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #6c5ce7;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid rgb(165, 163, 163);
+    background-color: #ffffff;
+    border-radius: 25px;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+  
+  .signup-button {
+    width: 100%;
+    padding: 1rem;
+    background-color: #6c5ce7;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 1rem;
+  }
+  
+  .signup-button:hover {
+    background-color: #5b4bc4;
+  }
+  
+  .message {
+    margin-top: 1rem;
+    color: red; /* or adjust as needed */
+  }
