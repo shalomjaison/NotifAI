@@ -1,40 +1,49 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import React from 'react';
-import { Navigate } from 'react-router-dom'; // Import Navigate
-
+import { Navigate, useLocation } from 'react-router-dom'; // Import useLocation
 
 const ProtectedRoute = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Initialize to false
-    const [isLoading, setIsLoading] = useState(true); // Add a loading state
+    const [isLoggedIn, setIsLoggedIn] = useState(null); // Initialize to null
+    const [isLoading, setIsLoading] = useState(true);
+    const location = useLocation(); // Get the current location
 
     useEffect(() => {
         const checkAuth = async () => {
             try {
+                console.log("Checking authentication...");
                 await axios.get('http://localhost:3000/users/me', { withCredentials: true });
+                console.log("User is authenticated.");
                 setIsLoggedIn(true);
             } catch (error) {
+                console.log("User is not authenticated.");
                 setIsLoggedIn(false);
             } finally {
-                setIsLoading(false); // Authentication check is done
+                setIsLoading(false);
             }
         };
 
         checkAuth();
-    }, []);
+    }, [location.pathname]); // Re-run checkAuth when the location changes
 
     if (isLoading) {
-        return <div>Loading...</div>; // Or a loading spinner
+        return <div>Loading...</div>;
     }
 
-    if (!isLoggedIn) {
-        return <Navigate to="/" replace />; // Use Navigate for redirect
+    if (isLoggedIn === false) {
+        return <Navigate to="/" replace />;
+    }
+    
+    if (isLoggedIn === true) {
+        return children;
     }
 
-    return children; // Render the protected content
+    return null; // Add this line
 };
 
 export default ProtectedRoute;
+
+
 
 
 

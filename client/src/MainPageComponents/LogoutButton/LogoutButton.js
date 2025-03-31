@@ -1,19 +1,17 @@
 import React from 'react';
 import './LogoutButton.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 function LogoutButton() {
+    const navigate = useNavigate(); // Get the navigate function
 
     const handleLogout = async () => {
         try {
-            // Send a request to the server to clear the session/cookie
             await axios.post('http://localhost:3000/users/logout', {}, { withCredentials: true });
-
-            // Force a full page reload after logout
-            window.location.href = "/"; // Redirect and reload
+            navigate("/"); // Redirect to the login page using React Router
         } catch (error) {
             console.error("Logout error:", error);
-            // Handle logout error (e.g., display an error message)
         }
     };
 
@@ -23,5 +21,6 @@ function LogoutButton() {
 }
 
 export default LogoutButton;
+
 
 

@@ -7,10 +7,9 @@
 
 import React from "react";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Login from "./LoginPageComponents/Login/Login"; 
-import ProtectedRoute from "./ProtectedRoute"; 
+import Login from "./LoginPageComponents/Login/Login";
+import ProtectedRoute from "./ProtectedRoute";
 import MainPage from "./MainPageComponents/MainPage";
-
 
 // Create the router
 const router = createBrowserRouter([
@@ -24,8 +23,8 @@ const router = createBrowserRouter([
       <ProtectedRoute>
         <MainPage />
       </ProtectedRoute>
-    )
-  }
+    ),
+  },
 ]);
 
 function App() {
@@ -33,4 +32,5 @@ function App() {
 }
 
 export default App;
+
 

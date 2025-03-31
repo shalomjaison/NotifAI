@@ -2,22 +2,24 @@ import React, { useEffect, useState } from 'react';
 import './Header.css';
 import LogoutButton from '../LogoutButton/LogoutButton';
 import axios from 'axios';
+import { useLocation } from 'react-router-dom'; // Import useLocation
 
 const Header = () => {
   const [username, setUsername] = useState('');
+  const location = useLocation(); // Get the current location
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await axios.get('http://localhost:3000/users/me', { withCredentials: true });
-        setUsername(response.data.user.username); // Get username of currently logged in user from server response
+        setUsername(response.data.user.username);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [location.pathname]); // Re-fetch data when the location changes
 
   return (
     <header className="header-container">
@@ -51,5 +53,6 @@ const Header = () => {
 };
 
 export default Header;
+
 
 
