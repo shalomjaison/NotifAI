@@ -11,6 +11,9 @@ import { useState, useEffect } from 'react';
 
 // Main component to handle routing
 function MainPage() { 
+
+  const filter = new Filter();
+
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -97,7 +100,15 @@ function MainPage() {
 
               <div style={{width: '15%' }}>
               {/* <div> */}
-                <Filter/>
+                {/* <Filter/> */}
+                {filter.renderButton()}
+              </div>
+            </div>
+
+            {/*Filter Bubbles and Filter Select */}
+            <div style={{flexBasis: '70%', zIndex: 2}}>
+              <div>
+                { filter.renderFilterMenu()}
               </div>
             </div>
 
