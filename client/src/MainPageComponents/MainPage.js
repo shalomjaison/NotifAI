@@ -1,6 +1,7 @@
 import React from 'react';
 import Sidebar from "./Sidebar/Sidebar";
 import Header from "./Header/Header";
+import Filter from "./NotificationFilter/Filter";
 import Search from "./Search/Search";
 import NotificationList from "./NotificationList/NotificationList";
 import ClaimsAlert from "./ClaimsAlert/ClaimsAlert";
@@ -85,8 +86,20 @@ function MainPage() {
         }}>
           {/* Notifications section */}
           <div style={{ flexBasis: '70%' }}>
-            {/* Search component */}
-            <Search />
+
+            {/* Search and Filter */}
+            <div style={{display: 'flex'}}>
+              {/* Search component */}
+              <div style={{flex: 1}}>
+              {/* <div> */}
+                <Search />
+              </div>
+
+              <div style={{width: '15%' }}>
+              {/* <div> */}
+                <Filter/>
+              </div>
+            </div>
 
             {/* Notification list */}
             <NotificationList notifications={notifications} />
