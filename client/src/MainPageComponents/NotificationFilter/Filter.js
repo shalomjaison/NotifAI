@@ -1,6 +1,6 @@
 /**
  * Team Data Baes
- * 4/5/2025
+ * 4/3/2025
  * 
  * Filter is a React class component that returns 2 UI through methods: UI for filter button and UI for filter menu.
  * Both UI's depend on shared data in constructor, most important data in Filter object is currentFilterRequest, 
@@ -27,7 +27,17 @@ class Filter extends React.Component {
 
         [this.FilterMenuOpen, this.setFilterMenuOpen] = useState(false);
 
-        this.currentFilterRequest = {};
+        // although this seems like copy pasta from getDefaultFilterRequest, this is needed for initial render of UI
+        this.currentFilterRequest = {
+            most_recent_first: true,
+            max_notifications: 50,
+            filters: {
+                sent: false,
+                args: {
+
+                }
+            }
+        };
         [this.currentFilterRequest, this.setCurrentFilterRequest] = useState(this.getDefaultFilterRequest());
 
         [this.isLoading, this.setIsLoading] = useState(true);
@@ -36,8 +46,8 @@ class Filter extends React.Component {
             // Send POST request to backend server at /notifications with currentFilterRequest as request body whenever currentFilterRequest is updated
             const fetchUserNotifications = async () => {
                 try {
-                    const response = await axios.get('http://localhost:3000/notifications', this.currentFilterRequest, { withCredentials: true});
-                    const notifications = response.data.notifications;
+                    const response = await axios.post('http://localhost:3000/notifications', this.currentFilterRequest, { withCredentials: true});
+                    const notifications = response.data;
 
                     this.subscribers.forEach(fxn => {
                         fxn(notifications);
@@ -49,7 +59,7 @@ class Filter extends React.Component {
                 }
             }
 
-            // fetchUserNotifications();
+            fetchUserNotifications();
 
         }, [this.currentFilterRequest]);
 
