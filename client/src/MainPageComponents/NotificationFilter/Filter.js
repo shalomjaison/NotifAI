@@ -61,7 +61,7 @@ class Filter extends React.Component {
 
     // Default filter request to pass as request body in HTTP request to backend server at /notifications POST
     getDefaultFilterRequest(){
-        return {
+        const output = {
             most_recent_first: true,
             max_notifications: 50,
             filters: {
@@ -71,6 +71,16 @@ class Filter extends React.Component {
                 }
             }
         };
+        // Do not reset text when adjusting other filters (selecting notification type resets filter)
+        if(this.currentFilterRequest && "filters" in this.currentFilterRequest && "text" in this.currentFilterRequest.filters){
+            if(this.currentFilterRequest.filters.text == "" || this.currentFilterRequest.filters.text == undefined){
+                delete this.currentFilterRequest.filters.text;
+            }
+            else{
+                output.filters.text = this.currentFilterRequest.filters.text;
+            }
+        }
+        return output;
     }
 
     getCurrentFilterRequest(){
