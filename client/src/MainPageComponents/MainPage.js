@@ -106,10 +106,15 @@ function MainPage() {
             </div>
 
             {/*Filter Bubbles and Filter Select */}
-            <div style={{flexBasis: '70%', zIndex: 2}}>
-              <div>
-                { filter.renderFilterMenu()}
+            <div style={{flexBasis: '70%'}}>
+              <div style={{zIndex: 1, position: 'absolute'}}>
+            {/* <div style={{float: 'left', overflow: 'visible', position: 'relative', zIndex: 100, height: '100px'}}> */}
+            {/* <div style={{minHeight: '100px', position: 'relative'}}> */}
+                  { filter.renderFilterMenu()}
+                  
+                {/* </div> */}
               </div>
+
             </div>
 
             {/* Notification list */}

@@ -16,6 +16,44 @@
     background-color: white;
 }
 
+.filter-menu-container{
+    display: flex;
+    align-items: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 8px 16px;
+    background-color: white;  
+    min-width: 900px;
+    min-height: 400px;
+}
+
+.filter-menu-column{
+    display: flex;
+    align-items: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 8px 16px;
+    background-color: white;  
+    overflow-y: scroll;
+    /* min-width: 900px; */
+    /* min-height: 1000px; */
+}
+
+.filter-menu-row{
+    display: flex;
+    align-items: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 8px 16px;
+    margin-left: 10%;
+    margin-right: 10%;
+    min-width: 200px;
+    /* background-color: white;   */
+
+    /* min-width: 900px; */
+    /* min-height: 1000px; */
+}
+
 .filter-text {
     margin-right: 5px;
 }
