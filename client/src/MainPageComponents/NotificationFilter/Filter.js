@@ -106,7 +106,13 @@ class Filter extends React.Component {
                 return (
                     <div>
                         <button onClick={() => {
+
                             // do stuff
+                            const temp = Object.assign({}, this.currentFilterRequest);
+                            temp.most_recent_first = false;
+                            delete temp.filters.args.due_earliest_first;
+                            this.setCurrentFilterRequest(temp);
+
                         }} className="filter-menu-row" style={{backgroundColor: (("most_recent_first" in this.currentFilterRequest) && !this.currentFilterRequest.most_recent_first) && !("due_earliest_first" in this.currentFilterRequest.filters.args) ? ('#CBC3E3') : ("white")}}>    
                             <p>Posted Oldest</p>
                         </button>
@@ -117,7 +123,13 @@ class Filter extends React.Component {
                 return (
                     <div>
                         <button onClick={() => {
+
                             // do stuff
+                            const temp = Object.assign({}, this.currentFilterRequest);
+                            temp.most_recent_first = true;
+                            delete temp.filters.args.due_earliest_first;
+                            this.setCurrentFilterRequest(temp);
+
                         }} className="filter-menu-row" style={{backgroundColor: (!("most_recent_first" in this.currentFilterRequest) || this.currentFilterRequest.most_recent_first) && !("due_earliest_first" in this.currentFilterRequest.filters.args) ? ('#CBC3E3') : ("white")}}>
                             <p>Posted Recent</p>
                         </button>
@@ -128,7 +140,12 @@ class Filter extends React.Component {
                 return (
                     <div>
                         <button onClick={() => {
+
                             // do stuff
+                            const temp = Object.assign({}, this.currentFilterRequest);
+                            temp.filters.args.due_earliest_first = true;
+                            this.setCurrentFilterRequest(temp);
+
                         }} className="filter-menu-row" style={{backgroundColor: (("due_earliest_first" in this.currentFilterRequest.filters.args) && this.currentFilterRequest.filters.args.due_earliest_first) ? ('#CBC3E3') : ("white")}}>
                             <p>Due Earliest</p>
                         </button>
@@ -139,7 +156,12 @@ class Filter extends React.Component {
                 return (
                     <div>
                         <button onClick={() => {
+
                             // do stuff
+                            const temp = Object.assign({}, this.currentFilterRequest);
+                            temp.filters.args.due_earliest_first = false;
+                            this.setCurrentFilterRequest(temp);
+
                         }} className="filter-menu-row" style={{backgroundColor: (("due_earliest_first" in this.currentFilterRequest.filters.args) && !this.currentFilterRequest.filters.args.due_earliest_first) ? ('#CBC3E3') : ("white")}}>
                             <p>Due Latest</p>
                         </button>
@@ -151,7 +173,12 @@ class Filter extends React.Component {
                 return (
                     <div>
                         <button onClick={() => {
+
                             // do stuff
+                            const temp = Object.assign({}, this.currentFilterRequest);
+                            temp.filters.sent = true;
+                            this.setCurrentFilterRequest(temp);
+
                         }} className="filter-menu-row" style={{backgroundColor: (this.currentFilterRequest.filters.sent) ? ('#CBC3E3') : ("white")}}>
                             <p>Sent</p>
                         </button>
@@ -162,7 +189,12 @@ class Filter extends React.Component {
                 return (
                     <div>
                         <button onClick={() => {
+
                             // do stuff
+                            const temp = Object.assign({}, this.currentFilterRequest);
+                            temp.filters.sent = false;
+                            this.setCurrentFilterRequest(temp);
+
                         }} className="filter-menu-row" style={{backgroundColor: (!this.currentFilterRequest.filters.sent) ? ('#CBC3E3') : ("white")}}>
                             <p>Received</p>
                         </button>
@@ -170,63 +202,301 @@ class Filter extends React.Component {
                 );
             };
 
-            const read = () => {
-
-            };
-            const unread = () => {
-
-            };
-
-            const completed = () => {
-
-            };
-            const overdue = () => {
-
-            };
-
             if(type == "CLAIMS"){
                 return (
                     <div>
                         {/* Buttons to filter by date */}
-
+                        <p>Select One</p>
                         {postedRecentButton()}
                         {postedOldestButton()}
+                        {dueEarliestButton()}
+                        {dueLatestButton()}
+
+                        <p>Select One</p>
+                        {sentButton()}
+                        {receivedButton()}
 
                     </div>
                 );
             }
             else if(type == "NEWS"){
+                return (
+                    <div>
+                        {/* Buttons to filter by date */}
+                        <p>Select One</p>
+                        {postedRecentButton()}
+                        {postedOldestButton()}
+                        {dueEarliestButton()}
+                        {dueLatestButton()}
 
+                        <p>Select One</p>
+                        {sentButton()}
+                        {receivedButton()}
+
+                    </div>
+                );
             }
             else if(type == "POLICY"){
+                return (
+                    <div>
+                        {/* Buttons to filter by date */}
 
+                        <p>Select One</p>
+                        {postedRecentButton()}
+                        {postedOldestButton()}
+
+                        <p>Select One</p>
+                        {sentButton()}
+                        {receivedButton()}
+
+                    </div>
+                );
             }
             // all
+            return (
+                <div>
+                    {/* Buttons to filter by date */}
 
+                    <p>Select One</p>
+                    {postedRecentButton()}
+                    {postedOldestButton()}
+
+                    <p>Select One</p>
+                    {sentButton()}
+                    {receivedButton()}
+
+                </div>
+            );
         }
 
         // Returns JSX rows for buttons to press depending on which type is selected
         const getMultipleSelectColumnByType = (type) => {
 
+            const highPriority = () => {
+                return (
+                    <div>
+                        <button onClick={() => {
 
-            const complete = () => {};
-            const incomplete = () => {};
+                            // do stuff
+                            const temp = Object.assign({}, this.currentFilterRequest);
+                            if("priority" in temp.filters.args && temp.filters.args.priority == "HIGH_PRIORITY"){    // click second time to unselect filter, as priority is optional filter
+                                delete temp.filters.args.priority;
+                            }
+                            else{
+                                temp.filters.args.priority = "HIGH_PRIORITY";
+                            }
+                            this.setCurrentFilterRequest(temp);
 
-            const highPriority = () => {};
-            const medPriority = () => {};
-            const lowPriority = () => {};
+                        }} className="filter-menu-row" style={{backgroundColor: ("priority" in this.currentFilterRequest.filters.args) && (this.currentFilterRequest.filters.args.priority == "HIGH_PRIORITY") ? ('#CBC3E3') : ("white")}}>
+                            <p>High Priority</p>
+                        </button>
+                    </div>
+                );
+            };            
+            
+            const medPriority = () => {
+                return (
+                    <div>
+                        <button onClick={() => {
 
+                            // do stuff
+                            const temp = Object.assign({}, this.currentFilterRequest);
+                            if("priority" in temp.filters.args && temp.filters.args.priority == "MEDIUM_PRIORITY"){    // click second time to unselect filter, as priority is optional filter
+                                delete temp.filters.args.priority;
+                            }
+                            else{
+                                temp.filters.args.priority = "MEDIUM_PRIORITY";
+                            }
+                            this.setCurrentFilterRequest(temp);
+
+                        }} className="filter-menu-row" style={{backgroundColor: ("priority" in this.currentFilterRequest.filters.args) && (this.currentFilterRequest.filters.args.priority == "MEDIUM_PRIORITY") ? ('#CBC3E3') : ("white")}}>
+                            <p>Medium Priority</p>
+                        </button>
+                    </div>
+                );
+            };
+            
+            const lowPriority = () => {
+                return (
+                    <div>
+                        <button onClick={() => {
+
+                            // do stuff
+                            const temp = Object.assign({}, this.currentFilterRequest);
+                            if("priority" in temp.filters.args && temp.filters.args.priority == "LOW_PRIORITY"){    // click second time to unselect filter, as priority is optional filter
+                                delete temp.filters.args.priority;
+                            }
+                            else{
+                                temp.filters.args.priority = "LOW_PRIORITY";
+                            }
+                            this.setCurrentFilterRequest(temp);
+
+                        }} className="filter-menu-row" style={{backgroundColor: ("priority" in this.currentFilterRequest.filters.args) && (this.currentFilterRequest.filters.args.priority == "LOW_PRIORITY") ? ('#CBC3E3') : ("white")}}>
+                            <p>Low Priority</p>
+                        </button>
+                    </div>
+                );
+            };
+
+            const readButton = () => {
+                return (
+                    <div>
+                        <button onClick={() => {
+
+                            // do stuff
+                            const temp = Object.assign({}, this.currentFilterRequest);
+                            if("read" in temp.filters && temp.filters.read){    // click second time to unselect filter, as read is optional filter
+                                delete temp.filters.read;
+                            }
+                            else{
+                                temp.filters.read = true;
+                            }
+                            this.setCurrentFilterRequest(temp);
+
+                        }} className="filter-menu-row" style={{backgroundColor: ("read" in this.currentFilterRequest.filters) && (this.currentFilterRequest.filters.read) ? ('#CBC3E3') : ("white")}}>
+                            <p>Read</p>
+                        </button>
+                    </div>
+                );
+            };
+
+            const unreadButton = () => {
+                return (
+                    <div>
+                        <button onClick={() => {
+
+                            // do stuff
+                            const temp = Object.assign({}, this.currentFilterRequest);
+                            if("read" in temp.filters && !temp.filters.read){    // click second time to unselect filter, as read is optional filter
+                                delete temp.filters.read;
+                            }
+                            else{
+                                temp.filters.read = false;
+                            }
+                            this.setCurrentFilterRequest(temp);
+
+                        }} className="filter-menu-row" style={{backgroundColor: ("read" in this.currentFilterRequest.filters) && (!this.currentFilterRequest.filters.read) ? ('#CBC3E3') : ("white")}}>
+                            <p>Unread</p>
+                        </button>
+                    </div>
+                );
+            };
+
+            const completeButton = () => {
+                return (
+                    <div>
+                        <button onClick={() => {
+
+                            // do stuff
+                            const temp = Object.assign({}, this.currentFilterRequest);
+                            if("is_completed" in temp.filters.args && temp.filters.args.is_completed){    // click second time to unselect filter, as is_completed is optional filter
+                                delete temp.filters.args.is_completed;
+                            }
+                            else{
+                                temp.filters.args.is_completed = true;
+                                delete temp.filters.args.is_overdue;
+                            }
+                            this.setCurrentFilterRequest(temp);
+
+                        }} className="filter-menu-row" style={{backgroundColor: ("is_completed" in this.currentFilterRequest.filters.args) && (this.currentFilterRequest.filters.args.is_completed) ? ('#CBC3E3') : ("white")}}>
+                            <p>Complete</p>
+                        </button>
+                    </div>
+                );
+            };
+
+            const incompleteButton = () => {
+                return (
+                    <div>
+                        <button onClick={() => {
+
+                            // do stuff
+                            const temp = Object.assign({}, this.currentFilterRequest);
+                            if("is_completed" in temp.filters.args && !temp.filters.args.is_completed){    // click second time to unselect filter, as is_completed is optional filter
+                                delete temp.filters.args.is_completed;
+                            }
+                            else{
+                                temp.filters.args.is_completed = false;
+                                delete temp.filters.args.is_overdue;
+                            }
+                            this.setCurrentFilterRequest(temp);
+
+                        }} className="filter-menu-row" style={{backgroundColor: ("is_completed" in this.currentFilterRequest.filters.args) && (!this.currentFilterRequest.filters.args.is_completed) ? ('#CBC3E3') : ("white")}}>
+                            <p>Incomplete</p>
+                        </button>
+                    </div>
+                );
+            };
+
+            const overdueButton = () => {
+                return (
+                    <div>
+                        <button onClick={() => {
+
+                            // do stuff
+                            const temp = Object.assign({}, this.currentFilterRequest);
+                            if("is_overdue" in temp.filters.args && !temp.filters.args.is_completed){    // click second time to unselect filter, as is_completed is optional filter
+                                delete temp.filters.args.is_overdue;
+                            }
+                            else{
+                                temp.filters.args.is_overdue = true;
+                                delete temp.filters.args.is_completed;
+                            }
+                            this.setCurrentFilterRequest(temp);
+
+                        }} className="filter-menu-row" style={{backgroundColor: ("is_overdue" in this.currentFilterRequest.filters.args) && (this.currentFilterRequest.filters.args.is_overdue) ? ('#CBC3E3') : ("white")}}>
+                            <p>Overdue</p>
+                        </button>
+                    </div>
+                );
+            };
+            
             if(type == "CLAIMS"){
+                return (
+                    <div>
+                        {/* Buttons to filter by priority */}
+                        <p>Select At Most One</p>
+                        {highPriority()}
+                        {medPriority()}
+                        {lowPriority()}
 
+                        <p>Select At Most One</p>
+                        {readButton()}
+                        {unreadButton()}
+
+                        <p>Select At Most One</p>
+                        {completeButton()}
+                        {incompleteButton()}
+                        {overdueButton()}
+                    </div>
+                );
             }
             else if(type == "NEWS"){
-
+                return (
+                    <div>
+                        <p>Select At Most One</p>
+                        {readButton()}
+                        {unreadButton()}
+                    </div>
+                );
             }
             else if(type == "POLICY"){
-
+                return (
+                    <div>
+                        <p>Select At Most One</p>
+                        {readButton()}
+                        {unreadButton()}
+                    </div>
+                );
             }
             // all
-
+            return (
+                <div>
+                    <p>Select At Most One</p>
+                    {readButton()}
+                    {unreadButton()}
+                </div>
+            );
         }
 
         return(
