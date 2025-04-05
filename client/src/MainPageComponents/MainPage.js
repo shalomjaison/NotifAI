@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react';
 function MainPage() { 
 
   const filter = new Filter();
+  filter.addSubscriber(x => {console.log("hi, notifications retrieved after updating filter is"); console.log(x); });
 
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);

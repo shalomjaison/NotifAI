@@ -1,27 +1,59 @@
+/**
+ * Team Data Baes
+ * 4/5/2025
+ * 
+ * Filter is a React class component that returns 2 UI through methods: UI for filter button and UI for filter menu.
+ * Both UI's depend on shared data in constructor, most important data in Filter object is currentFilterRequest, 
+ * which is the request body to be sent to the backend server at /notifications. 
+ * 
+ * The currentFilterRequest is always up to date
+ * whenever a button is pressed in the filter menu. Whenever currentFilterRequest is updated, a POST request is sent to get array of 
+ * notifications, after that all callbacks are called, add a callback using addSubscriber(fxn)
+ * 
+ */
+
 import React, { createElement, useEffect, useState } from 'react';
 import './Filter.css';
+import axios from 'axios';
 // import LogoutButton from '../LogoutButton/LogoutButton';
 // import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 // const Filter = ({ userData }) => {
 
 class Filter extends React.Component {
-// class Filter {
 
     constructor(props){
         super(props);    
-        // this.state = {
-        //     isOpen: false,
-        // };
+
         [this.FilterMenuOpen, this.setFilterMenuOpen] = useState(false);
 
-        [this.currentFilterRequest, this.setCurrentFilterRequest] = useState(this.getDefaultFilterRequest()
-            // most_recent_first: true,
-            // max_notifications: 50,
-            // filters: {
-            //     sent: false,
-            // }
-        );
+        this.currentFilterRequest = {};
+        [this.currentFilterRequest, this.setCurrentFilterRequest] = useState(this.getDefaultFilterRequest());
+
+        [this.isLoading, this.setIsLoading] = useState(true);
+
+        useEffect(() => {
+            // Send POST request to backend server at /notifications with currentFilterRequest as request body whenever currentFilterRequest is updated
+            const fetchUserNotifications = async () => {
+                try {
+                    const response = await axios.get('http://localhost:3000/notifications', this.currentFilterRequest, { withCredentials: true});
+                    const notifications = response.data.notifications;
+
+                    this.subscribers.forEach(fxn => {
+                        fxn(notifications);
+                    });
+                } catch (error) {
+                console.error('Error fetching notifications:', error);
+                } finally {
+                    this.setIsLoading(false);
+                }
+            }
+
+            // fetchUserNotifications();
+
+        }, [this.currentFilterRequest]);
+
+        this.subscribers = [];
     }
     test(){
         return <div><p>aksdkadhjsada</p></div>;
@@ -39,6 +71,32 @@ class Filter extends React.Component {
                 }
             }
         };
+    }
+
+    getCurrentFilterRequest(){
+        return this.currentFilterRequest;
+    }
+
+   /**
+    * Adds fxn to subscribers list
+    * 
+    * Whenever the filter is updated, send POST request to backend server at /notifications, 
+    * if success and return array of notification objects, call all subscribers with the array of notification objects
+    * 
+    * USAGE EXAMPLE: [notifications, setNotifications] = useState([]);
+    *                const filter = new Filter();
+    *               filter.addSubscriber(x => {setNotifications(x);});  // notifications will now have x, which is the array of notification objects
+    * 
+    * (Object[] => *) fxn: any function that takes in array of notification objects
+    */
+    addSubscriber(fxn){
+        this.subscribers.push(fxn);
+    }
+
+    updateTextFilter(str){
+        const temp = Object.assign({}, this.currentFilterRequest);
+        temp.filters.text = str;
+        this.setCurrentFilterRequest(temp);
     }
 
     renderButton(){
@@ -77,24 +135,20 @@ class Filter extends React.Component {
             const temp = this.getDefaultFilterRequest();
             temp.filters.type = "CLAIMS";
             this.setCurrentFilterRequest(temp);
-            console.log(this.currentFilterRequest);
         };
         const setNews = () => {
             const temp = this.getDefaultFilterRequest();
             temp.filters.type = "NEWS";
             this.setCurrentFilterRequest(temp);
-            console.log(this.currentFilterRequest);
         };
         const setPolicy = () => {
             const temp = this.getDefaultFilterRequest();
             temp.filters.type = "POLICY";
             this.setCurrentFilterRequest(temp);
-            console.log(this.currentFilterRequest);
         }
         const setAll = () => {
             const temp = this.getDefaultFilterRequest();
             this.setCurrentFilterRequest(temp);
-            console.log(this.currentFilterRequest);
         }
 
         // Returns JSX rows for buttons to press in the select one of each category depending on which type is selected
@@ -450,7 +504,7 @@ class Filter extends React.Component {
                     </div>
                 );
             };
-            
+
             if(type == "CLAIMS"){
                 return (
                     <div>
