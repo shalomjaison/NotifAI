@@ -2,11 +2,12 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db/db');
 
 const ClaimNotification = sequelize.define(
-    'ClaimNotification', {
+  'ClaimNotification',
+  {
     notification_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        references: { model: 'Notifications', key: 'id' },
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      references: { model: 'Notifications', key: 'id' },
     },
     insured_name: DataTypes.STRING,
     claimant_name: DataTypes.STRING,
@@ -16,9 +17,14 @@ const ClaimNotification = sequelize.define(
     description: DataTypes.TEXT,
     priority: DataTypes.STRING,
     is_completed: DataTypes.BOOLEAN,
-},
-{   // Other model options go here
-    tableName: 'claimnotifications'
-});
+  },
+  {
+    tableName: 'claimnotifications',
+  }
+);
 
 module.exports = ClaimNotification;
+
+
+
+

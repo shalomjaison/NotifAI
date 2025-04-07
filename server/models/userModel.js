@@ -2,40 +2,55 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db/db');
 
 const User = sequelize.define(
-  'User', 
-  { // Model attributes are defined here
+  'User',
+  {
     username: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        unique: true,
-        primaryKey: true
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
+      primaryKey: true,
     },
     fname: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      lname: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     email: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        unique: true,
-        // allowNull defaults to true
-        //email has to be unique different from others
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
     },
     password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     role: {
-        type: DataTypes.STRING,
-        defaultValue: 'customer',
-      },
-}, 
-{   // Other model options go here
-    tableName: 'users'
+      type: DataTypes.STRING,
+      defaultValue: 'customer',
+    },
+  },
+  {
+    tableName: 'users',
+  }
+);
+
+// Import Notification and NotificationRecipient AFTER User is defined (prevents circular dependency)
+const Notification = require('./notificationModel');
+const NotificationRecipient = require('./notificationRecipientModel');
+
+
+User.belongsToMany(Notification, {
+  through: NotificationRecipient,
+  foreignKey: 'recipient_id',
+  otherKey: 'notification_id',
 });
 
-module.exports = User
+module.exports = User;
+
+
+
+
+

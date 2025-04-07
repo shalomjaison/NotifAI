@@ -1,36 +1,37 @@
-//this is our relationship table for sending notifications to users
-
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db/db');
 
 const NotificationRecipient = sequelize.define(
-    'NotificationRecipient', {
+  'NotificationRecipient',
+  {
     id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
     },
     notification_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: { model: 'Notifications', key: 'id' }, // Linking the Notification 
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: { model: 'Notifications', key: 'id' },
     },
     recipient_id: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        references: { model: 'Users', key: 'username' }, // Linking the recipient Usyer
+      type: DataTypes.STRING,
+      allowNull: false,
+      references: { model: 'Users', key: 'username' },
     },
     is_read: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
     date_sent: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
     },
-},
-{   // Other model options go here
-    tableName: 'notificationrecipients'
-});
+  },
+  {
+    tableName: 'notificationrecipients',
+  }
+);
 
 module.exports = NotificationRecipient;
+
