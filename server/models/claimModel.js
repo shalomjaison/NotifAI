@@ -20,6 +20,7 @@ const ClaimNotification = sequelize.define(
   },
   {
     tableName: 'claimnotifications',
+    timestamps: false,
   }
 );
 

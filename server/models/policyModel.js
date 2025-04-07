@@ -18,6 +18,7 @@ const PolicyNotification = sequelize.define(
   },
   {
     tableName: 'policynotifications',
+    timestamps: false,
   }
 );
 

@@ -30,6 +30,7 @@ const NotificationRecipient = sequelize.define(
   },
   {
     tableName: 'notificationrecipients',
+    timestamps: false,
   }
 );
 

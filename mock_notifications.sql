@@ -1,39 +1,39 @@
 -- This data is for testing extraction of news notifications from the database to be displayed in the inbox.
 
-INSERT INTO Notifications (user_id, type, title, body, date_created) VALUES
-('sender', 'news', 'Breaking News: Tech Innovation', 'Exciting new tech developments are on the horizon.', NOW()),
-('sender', 'news', 'Market Update: Stocks Surge', 'The stock market has seen a significant surge today.', NOW()),
-('sender', 'news', 'Health Alert: New Guidelines', 'New health guidelines have been released by the authorities.', NOW()),
-('sender', 'news', 'Sports News: Championship Results', 'The championship results are in, and it was a close call.', NOW()),
-('sender', 'news', 'Entertainment: Movie Premiere', 'A highly anticipated movie is premiering this weekend.', NOW()),
-('sender', 'news', 'Travel: New Destination', 'A new travel destination has been discovered.', NOW()),
-('sender', 'news', 'Food: Gourmet Recipe', 'Try out this new gourmet recipe for a delightful meal.', NOW()),
-('sender', 'news', 'Fashion: Latest Trends', 'Check out the latest fashion trends for this season.', NOW()),
-('sender', 'news', 'Home: Decor Ideas', 'Get inspired with these new home decor ideas.', NOW()),
-('sender', 'news', 'Books: New Release', 'A new book release is making waves in the literary world.', NOW()),
-('sender', 'news', 'Science: Breakthrough Discovery', 'Scientists have made a breakthrough discovery.', NOW()),
-('sender', 'news', 'Business: New Partnership', 'A new partnership has been formed in the business world.', NOW()),
-('sender', 'news', 'Education: New Courses', 'New courses are being offered for professional development.', NOW()),
-('sender', 'news', 'Music: New Album', 'A new album has just been released by a popular artist.', NOW()),
-('sender', 'news', 'Art: New Exhibition', 'A new art exhibition is opening this month.', NOW()),
-('sender', 'news', 'Environment: Conservation Efforts', 'New conservation efforts are underway.', NOW()),
-('sender', 'news', 'Technology: New Gadget', 'A new gadget is set to revolutionize the tech industry.', NOW()),
-('sender', 'news', 'Finance: Investment Tips', 'Here are some new investment tips for you.', NOW()),
-('sender', 'news', 'Fitness: New Workout', 'Try out this new workout routine for better fitness.', NOW()),
-('sender', 'news', 'Lifestyle: Wellness Tips', 'Here are some wellness tips for a healthier lifestyle.', NOW()),
-('sender', 'news', 'Politics: New Policy', 'A new policy has been announced by the government.', NOW()),
-('sender', 'news', 'Economics: Market Analysis', 'Here is a detailed market analysis for today.', NOW()),
-('sender', 'news', 'Social: Community Event', 'A community event is being organized this weekend.', NOW()),
-('sender', 'news', 'Culture: Festival Announcement', 'A new cultural festival has been announced.', NOW()),
-('sender', 'news', 'History: New Discovery', 'A new historical discovery has been made.', NOW()),
-('sender', 'news', 'Space: New Mission', 'A new space mission is being planned.', NOW()),
-('sender', 'news', 'Weather: Forecast Update', 'Here is the latest weather forecast update.', NOW()),
-('sender', 'news', 'Animals: Wildlife Conservation', 'New efforts are being made for wildlife conservation.', NOW()),
-('sender', 'news', 'Plants: Gardening Tips', 'Here are some new gardening tips for you.', NOW()),
-('sender', 'news', 'Vehicles: New Model', 'A new vehicle model has been released.', NOW());
+INSERT INTO Notifications (userid, type, title, body, isread, isarchived, datecreated) VALUES
+('john_doe', 'news', 'Breaking News: Tech Innovation', 'Exciting new tech developments are on the horizon.', false, false, NOW()),
+('john_doe', 'news', 'Market Update: Stocks Surge', 'The stock market has seen a significant surge today.', false, false, NOW()),
+('john_doe', 'news', 'Health Alert: New Guidelines', 'New health guidelines have been released by the authorities.', false, false, NOW()),
+('john_doe', 'news', 'Sports News: Championship Results', 'The championship results are in, and it was a close call.', false, false, NOW()),
+('john_doe', 'news', 'Entertainment: Movie Premiere', 'A highly anticipated movie is premiering this weekend.', false, false, NOW()),
+('john_doe', 'news', 'Travel: New Destination', 'A new travel destination has been discovered.', false, false, NOW()),
+('john_doe', 'news', 'Food: Gourmet Recipe', 'Try out this new gourmet recipe for a delightful meal.', false, false, NOW()),
+('john_doe', 'news', 'Fashion: Latest Trends', 'Check out the latest fashion trends for this season.', false, false, NOW()),
+('john_doe', 'news', 'Home: Decor Ideas', 'Get inspired with these new home decor ideas.', false, false, NOW()),
+('john_doe', 'news', 'Books: New Release', 'A new book release is making waves in the literary world.', false, false, NOW()),
+('john_doe', 'news', 'Science: Breakthrough Discovery', 'Scientists have made a breakthrough discovery.', false, false, NOW()),
+('john_doe', 'news', 'Business: New Partnership', 'A new partnership has been formed in the business world.', false, false, NOW()),
+('john_doe', 'news', 'Education: New Courses', 'New courses are being offered for professional development.', false, false, NOW()),
+('john_doe', 'news', 'Music: New Album', 'A new album has just been released by a popular artist.', false, false, NOW()),
+('john_doe', 'news', 'Art: New Exhibition', 'A new art exhibition is opening this month.', false, false, NOW()),
+('john_doe', 'news', 'Environment: Conservation Efforts', 'New conservation efforts are underway.', false, false, NOW()),
+('john_doe', 'news', 'Technology: New Gadget', 'A new gadget is set to revolutionize the tech industry.', false, false, NOW()),
+('john_doe', 'news', 'Finance: Investment Tips', 'Here are some new investment tips for you.', false, false, NOW()),
+('john_doe', 'news', 'Fitness: New Workout', 'Try out this new workout routine for better fitness.', false, false, NOW()),
+('john_doe', 'news', 'Lifestyle: Wellness Tips', 'Here are some wellness tips for a healthier lifestyle.', false, false, NOW()),
+('john_doe', 'news', 'Politics: New Policy', 'A new policy has been announced by the government.', false, false, NOW()),
+('john_doe', 'news', 'Economics: Market Analysis', 'Here is a detailed market analysis for today.', false, false, NOW()),
+('john_doe', 'news', 'Social: Community Event', 'A community event is being organized this weekend.', false, false, NOW()),
+('john_doe', 'news', 'Culture: Festival Announcement', 'A new cultural festival has been announced.', false, false, NOW()),
+('john_doe', 'news', 'History: New Discovery', 'A new historical discovery has been made.', false, false, NOW()),
+('john_doe', 'news', 'Space: New Mission', 'A new space mission is being planned.', false, false, NOW()),
+('john_doe', 'news', 'Weather: Forecast Update', 'Here is the latest weather forecast update.', false, false, NOW()),
+('john_doe', 'news', 'Animals: Wildlife Conservation', 'New efforts are being made for wildlife conservation.', false, false, NOW()),
+('john_doe', 'news', 'Plants: Gardening Tips', 'Here are some new gardening tips for you.', false, false, NOW()),
+('john_doe', 'news', 'Vehicles: New Model', 'A new vehicle model has been released.', false, false, NOW());
 
 -- Insert into NewsNotifications table (30 inserts)
-INSERT INTO NewsNotifications (notification_id, expiration_date, type, details) VALUES
+INSERT INTO NewsNotifications (notificationid, expirationdate, type, details) VALUES
 (1, '2024-08-15', 'urgent', 'Details about the new tech developments.'),
 (2, '2024-08-20', 'general', 'More details on the stock market surge.'),
 (3, '2024-08-10', 'alert', 'Additional information on the new health guidelines.'),
@@ -66,7 +66,7 @@ INSERT INTO NewsNotifications (notification_id, expiration_date, type, details) 
 (30, '2024-08-08', 'general', 'More details on the new vehicle model.');
 
 -- Insert into NotificationRecipient table (30 inserts - all to john_doe)
-INSERT INTO NotificationRecipients (notification_id, recipient_id, date_sent) VALUES
+INSERT INTO NotificationRecipients (notificationid, recipientid, datesent) VALUES
 (1, 'john_doe', NOW()),
 (2, 'john_doe', NOW()),
 (3, 'john_doe', NOW()),

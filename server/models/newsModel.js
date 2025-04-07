@@ -15,6 +15,7 @@ const NewsNotification = sequelize.define(
   },
   {
     tableName: 'newsnotifications',
+    timestamps: false,
   }
 );
 
