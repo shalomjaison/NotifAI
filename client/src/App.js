@@ -6,10 +6,11 @@
 */
 
 import React from "react";
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainPage from "./MainPageComponents/MainPage";
 import Login from "./LoginPageComponents/Login/Login";
 import SignUp from "./SignUpComponents/SignUp";
+import EmailPage from "./EmailPopupComponent/EmailPage";
 
 // Create the router
 const router = createBrowserRouter([
@@ -23,9 +24,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/main",
-    element: (
-        <MainPage />
-    ),
+    element: <MainPage />,
+  },
+  {
+    path: "/main/email",
+    element: <EmailPage />,
   },
 ]);
 
@@ -34,6 +37,3 @@ function App() {
 }
 
 export default App;
-
-
-
