@@ -57,8 +57,16 @@ Notification.hasOne(ClaimNotification, { foreignKey: 'notification_id' });
 Notification.hasOne(PolicyNotification, { foreignKey: 'notification_id' });
 
 // Define the many-to-many relationship betw users and notifications using the relationship table
-Notification.belongsToMany(User, { through: NotificationRecipient, foreignKey: 'notification_id', otherKey: 'recipient_id' });
-User.belongsToMany(Notification, { through: NotificationRecipient, foreignKey: 'recipient_id', otherKey: 'notification_id' });
+Notification.belongsToMany(User, 
+    { through: NotificationRecipient, 
+        foreignKey: 'notification_id',
+        otherKey: 'recipient_id'
+     });
+User.belongsToMany(Notification, 
+    { through: NotificationRecipient,
+        foreignKey: 'recipient_id',
+        otherKey: 'notification_id' 
+    });
 
 const createHardcodedUser = async () => {
     try {

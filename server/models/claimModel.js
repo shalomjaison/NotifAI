@@ -16,6 +16,9 @@ const ClaimNotification = sequelize.define(
     description: DataTypes.TEXT,
     priority: DataTypes.STRING,
     is_completed: DataTypes.BOOLEAN,
+},
+{   // Other model options go here
+    tableName: 'claimnotifications'
 });
 
-module.exports = ClaimNotification
+module.exports = ClaimNotification;

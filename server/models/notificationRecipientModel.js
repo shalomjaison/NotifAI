@@ -28,6 +28,9 @@ const NotificationRecipient = sequelize.define(
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
     },
+},
+{   // Other model options go here
+    tableName: 'notificationrecipients'
 });
 
 module.exports = NotificationRecipient;

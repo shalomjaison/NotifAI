@@ -11,6 +11,9 @@ const NewsNotification = sequelize.define(
     expiration_date: DataTypes.DATE,
     type: DataTypes.STRING,
     details: DataTypes.TEXT,
+},
+{   // Other model options go here
+    tableName: 'newsnotifications'
 });
 
 module.exports = NewsNotification;

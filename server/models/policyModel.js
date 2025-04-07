@@ -14,6 +14,9 @@ const PolicyNotification = sequelize.define(
     },
     changes_to_premium: DataTypes.TEXT,
     billing_reminder_date: DataTypes.DATE,
+},
+{   // Other model options go here
+    tableName: 'policynotifications'
 });
 
 module.exports = PolicyNotification;
