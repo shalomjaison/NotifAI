@@ -11,6 +11,11 @@ const userRoutes = require('./routes/userRoutes');
 const { createUser: createUserController } = require('./controllers/userController'); // importing for mock post request
 const sequelize = require('./db/db');
 const User = require('./models/userModel');
+const Notification = require('./models/notificationModel');
+const NewsNotification = require('./models/newsModel');
+const ClaimNotification = require('./models/claimModel');
+const PolicyNotification = require('./models/policyModel');
+const NotificationRecipient = require('./models/notificationRecipientModel');
 
 const app = express();
 app.use(cors({
@@ -41,6 +46,19 @@ app.get('/hello-world-demo', (req, res) => {
 
 
 app.use('/users', userRoutes);
+
+
+// Define the one-to-one relationships between base Notification and its types
+NewsNotification.belongsTo(Notification, { foreignKey: 'notification_id' });
+ClaimNotification.belongsTo(Notification, { foreignKey: 'notification_id' });
+PolicyNotification.belongsTo(Notification, { foreignKey: 'notification_id' });
+Notification.hasOne(NewsNotification, { foreignKey: 'notification_id' });
+Notification.hasOne(ClaimNotification, { foreignKey: 'notification_id' });
+Notification.hasOne(PolicyNotification, { foreignKey: 'notification_id' });
+
+// Define the many-to-many relationship betw users and notifications using the relationship table
+Notification.belongsToMany(User, { through: NotificationRecipient, foreignKey: 'notification_id', otherKey: 'recipient_id' });
+User.belongsToMany(Notification, { through: NotificationRecipient, foreignKey: 'recipient_id', otherKey: 'notification_id' });
 
 const createHardcodedUser = async () => {
     try {
@@ -78,17 +96,16 @@ const viewUsers = async () => {
 
 
 const startServer = async () => {
-    await sequelize.sync({ force: true }); // Add { force: true } here
-    await createHardcodedUser();
-
-    app.listen(port, () => {
-        console.log(`Server is running on port ${port}`);
-    });
-    await viewUsers();
+    try {
+        await sequelize.sync( { force: true }); 
+        await createHardcodedUser();
+        app.listen(port, () => {
+            console.log(`Server is running on port ${port}`);
+        });
+        await viewUsers();
+    } catch (error) {
+        console.error("Error during server startup:", error);
+    }
 };
 
-
-
-
 startServer();
-
