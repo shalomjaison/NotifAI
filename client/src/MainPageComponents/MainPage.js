@@ -68,12 +68,12 @@ function MainPage() {
 
   // State for filtered notifications
   const [filteredNotifications, setFilteredNotifications] = useState(allNotifications);
-
+  // filter.addSubscriber(notificationList => setFilteredNotifications(notificationList))
   // Handle search functionality
   const handleSearch = (searchTerm) => {
     if (!searchTerm.trim()) {
       // If search is empty, show all notifications
-      setFilteredNotifications(allNotifications);
+      setFilteredNotifications(filteredNotifications);
     } else {
       // Filter notifications that contain the search term (case-insensitive)
       const filtered = allNotifications.filter(notification => 
