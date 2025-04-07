@@ -31,7 +31,7 @@ function MainPage() {
   }, []);
 
   // Sample data for notifications - link to API later
-  const notifications = [
+  const allNotifications = [
     {
       id: 1,
       source: "Slack",
@@ -47,8 +47,43 @@ function MainPage() {
       message: "Your payment of $50 is due tommorrow",
       time: "1 hour ago",
       details: "Hello this is to inform you....."
+    },
+    {
+      id: 3,
+      source: "Slack",
+      sender: "Gin Park",
+      message: "Your payment of $300 is due tommorrow",
+      time: "1 hour ago",
+      icon: "slack"
+    },
+    {
+      id: 4,
+      source: "Claims",
+      sender: "Claims Department",
+      message: "We are contacting you about your car's extended...",
+      time: "1 hour ago",
+      details: "Hello this is to inform you....."
     }
   ];
+
+  // State for filtered notifications
+  const [filteredNotifications, setFilteredNotifications] = useState(allNotifications);
+
+  // Handle search functionality
+  const handleSearch = (searchTerm) => {
+    if (!searchTerm.trim()) {
+      // If search is empty, show all notifications
+      setFilteredNotifications(allNotifications);
+    } else {
+      // Filter notifications that contain the search term (case-insensitive)
+      const filtered = allNotifications.filter(notification => 
+        notification.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        notification.sender.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        notification.source.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredNotifications(filtered);
+    }
+  };
 
   // Sample reminders - link to API later
   const reminders = [
@@ -65,9 +100,11 @@ function MainPage() {
       date: "March 4th, 2025 at 4 pm"
     }
   ];
+  
   if (isLoading) {
     return <div>Loading...</div>;
   }
+  
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       {/* Sidebar component */}
@@ -85,11 +122,11 @@ function MainPage() {
         }}>
           {/* Notifications section */}
           <div style={{ flexBasis: '70%' }}>
-            {/* Search component */}
-            <Search />
+            {/* Search component with onSearch handler */}
+            <Search onSearch={handleSearch} />
 
-            {/* Notification list */}
-            <NotificationList notifications={notifications} />
+            {/* Notification list with filtered notifications */}
+            <NotificationList notifications={filteredNotifications} />
           </div>
 
           {/* Right sidebar - claims and reminders */}
@@ -104,7 +141,6 @@ function MainPage() {
       </div>
     </div>
   );
-  }
+}
 
-  export default MainPage;
-
+export default MainPage;
