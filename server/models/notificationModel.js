@@ -9,7 +9,7 @@ const Notification = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    user_id: {
+    userid: {
       type: DataTypes.STRING,
       allowNull: false,
       references: { model: 'users', key: 'username' }, // linking the sender
@@ -26,21 +26,21 @@ const Notification = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    is_read: {
+    isread: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    is_archived: {
+    isarchived: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    date_created: {
+    datecreated: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
   },
   {
-    tableName: 'Notifications',
+    tableName: 'notifications',
   }
 );
 
@@ -50,14 +50,14 @@ const ClaimNotification = require('./claimModel');
 const PolicyNotification = require('./policyModel');
 
 // Define relationships here
-Notification.hasOne(NewsNotification, { foreignKey: 'notification_id' });
-Notification.hasOne(ClaimNotification, { foreignKey: 'notification_id' });
-Notification.hasOne(PolicyNotification, { foreignKey: 'notification_id' });
+Notification.hasOne(NewsNotification, { foreignKey: 'notificationid' });
+Notification.hasOne(ClaimNotification, { foreignKey: 'notificationid' });
+Notification.hasOne(PolicyNotification, { foreignKey: 'notificationid' });
 
 // Define the belongsTo relationships AFTER the child models are imported (prevents circular dependecy)
-NewsNotification.belongsTo(Notification, { foreignKey: 'notification_id' });
-ClaimNotification.belongsTo(Notification, { foreignKey: 'notification_id' });
-PolicyNotification.belongsTo(Notification, { foreignKey: 'notification_id' });
+NewsNotification.belongsTo(Notification, { foreignKey: 'notificationid' });
+ClaimNotification.belongsTo(Notification, { foreignKey: 'notificationid' });
+PolicyNotification.belongsTo(Notification, { foreignKey: 'notificationid' });
 
 module.exports = Notification;
 

@@ -4,12 +4,12 @@ const sequelize = require('../db/db');
 const PolicyNotification = sequelize.define(
   'PolicyNotification',
   {
-    notification_id: {
+    notificationid: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      references: { model: 'Notifications', key: 'id' },
+      references: { model: 'notifications', key: 'id' },
     },
-    policy_id: {
+    policyid: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

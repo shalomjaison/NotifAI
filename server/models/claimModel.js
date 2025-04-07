@@ -4,19 +4,19 @@ const sequelize = require('../db/db');
 const ClaimNotification = sequelize.define(
   'ClaimNotification',
   {
-    notification_id: {
+    notificationid: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      references: { model: 'Notifications', key: 'id' },
+      references: { model: 'notifications', key: 'id' },
     },
-    insured_name: DataTypes.STRING,
-    claimant_name: DataTypes.STRING,
-    task_type: DataTypes.STRING,
-    due_date: DataTypes.DATE,
-    line_of_business: DataTypes.STRING,
+    insuredname: DataTypes.STRING,
+    claimantname: DataTypes.STRING,
+    tasktype: DataTypes.STRING,
+    duedate: DataTypes.DATE,
+    lineofbusiness: DataTypes.STRING,
     description: DataTypes.TEXT,
     priority: DataTypes.STRING,
-    is_completed: DataTypes.BOOLEAN,
+    iscompleted: DataTypes.BOOLEAN,
   },
   {
     tableName: 'claimnotifications',

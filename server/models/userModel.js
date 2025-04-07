@@ -44,8 +44,8 @@ const NotificationRecipient = require('./notificationRecipientModel');
 
 User.belongsToMany(Notification, {
   through: NotificationRecipient,
-  foreignKey: 'recipient_id',
-  otherKey: 'notification_id',
+  foreignKey: 'recipientid',
+  otherKey: 'notificationid',
 });
 
 module.exports = User;

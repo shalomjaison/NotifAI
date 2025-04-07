@@ -4,12 +4,12 @@ const sequelize = require('../db/db');
 const NewsNotification = sequelize.define(
   'NewsNotification',
   {
-    notification_id: {
+    notificationid: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      references: { model: 'Notifications', key: 'id' },
+      references: { model: 'notifications', key: 'id' },
     },
-    expiration_date: DataTypes.DATE,
+    expirationdate: DataTypes.DATE,
     type: DataTypes.STRING,
     details: DataTypes.TEXT,
   },

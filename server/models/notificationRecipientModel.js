@@ -9,21 +9,21 @@ const NotificationRecipient = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    notification_id: {
+    notificationid: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: { model: 'Notifications', key: 'id' },
+      references: { model: 'notifications', key: 'id' },
     },
-    recipient_id: {
+    recipientid: {
       type: DataTypes.STRING,
       allowNull: false,
-      references: { model: 'Users', key: 'username' },
+      references: { model: 'users', key: 'username' },
     },
-    is_read: {
+    isread: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    date_sent: {
+    datesent: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
