@@ -6,21 +6,26 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: linear-gradient(to bottom, #f6e7fc, #ffffff);
+    background: linear-gradient(to bottom, #d9cde7, #ffffff);
 }
 
 .notifai-text {
-    font-size: 3rem;
+    font-size: 4rem;
     color: #000;
-    margin-bottom: 0.8rem;
-    font-family: 'Slabo 13px', serif;
+    margin-bottom: 0rem;
+    margin-top: 0rem;
+    font-family: "Playfair Display", serif;
+    font-weight: 400;
+    font-style: normal;
     cursor: pointer;
 }
   
 .section-title {
-    font-size: 1.5rem;
-    color: #888;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #111111;
     margin-bottom: 2rem;
+    margin-top: 0rem;
 }
 
 .profile-card {
@@ -33,7 +38,7 @@
 }
 
 .card-title {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     color: #222;
     font-weight: 700;
     margin-bottom: 1rem;
@@ -44,7 +49,7 @@
     height: 100px;
     background-color: #ccc;
     border-radius: 50%;
-    margin: 0 auto 1.5rem;
+    margin: 0 auto 1rem;
 }
 
 .info-row {

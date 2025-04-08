@@ -35,7 +35,7 @@ function Profile() {
     return (
         <div className='profile-page'>
             <h1 className='notifai-text' onClick={handleTextClick}>NOTIFAI</h1>
-            <h2 className='section-title'>Personal Page</h2>
+            <h2 className='section-title'>Personal Info</h2>
             <div className='profile-card'>
                 <div className="card-title">Profile</div>
                 <div className='avatar'></div>

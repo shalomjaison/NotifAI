@@ -2,6 +2,9 @@
     background-color: #ffffff;
     padding:0.5rem 1rem;
     border-radius: 26px;
+    font-family: "Jaldi", sans-serif;
+    font-weight: 500;
+    /* font-size: 0.9rem; */
 }
 
 .logout-button:hover {
