@@ -5,7 +5,7 @@
   const NotificationList = ({ notifications = [] }) => {
     const [currentPage, setCurrentPage] = useState(1);
     // Setting a smaller number to make pagination visible with fewer items
-    const [itemsPerPage] = useState(2);
+    const [itemsPerPage] = useState(10);
     
     // Calculate total pages
     const totalPages = Math.ceil(notifications.length / itemsPerPage);
@@ -36,10 +36,10 @@
     return (
       <div className="notification-list">
         {currentNotifications.length > 0 ? (
-          currentNotifications.map(notification => (
+          currentNotifications.map(notificationWrapper => (
             <NotificationItem 
-              key={notification.id} 
-              notification={notification} 
+              key={notificationWrapper.notification.id} 
+              notificationWrapper={notificationWrapper} 
             />
           ))
         ) : (

@@ -8,6 +8,7 @@ import ClaimsAlert from "./ClaimsAlert/ClaimsAlert";
 import Reminders from "./Reminders/Reminders";
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { search } from '../../../server/routes/userRoutes';
 
 // Main component to handle routing
 function MainPage() { 
@@ -72,19 +73,62 @@ function MainPage() {
   ];
 
   // State for filtered notifications
-  const [filteredNotifications, setFilteredNotifications] = useState(allNotifications);
-  // filter.addSubscriber(notificationList => setFilteredNotifications(notificationList))
+  // filteredNotifications and notifications are each a list of objects, each object contains three fields: from, to, and notification
+  // fro:m is array of strings, usernames of senders
+  // to: is array of strings, usernames of receivers
+  // notification: is object, contains fields of notification info following ER diagram, also contains args field, which is an 
+  // object containing fields specific to a type of notification (duedate, priority) following ER diagram
+
+  const [filteredNotifications, setFilteredNotifications] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  // let currentSearchFilter = "";  // track the current search filter in Search so that Filter can refresh search after filtering
+
+  // const [filteredNotifications, setFilteredNotifications] = useState(allNotifications);
+
+  filter.addSubscriber(notificationList => {
+
+    setNotifications(notificationList);
+    setFilteredNotifications(notificationList);
+
+    // if(searchTerm != ""){
+    //   console.log("current search filter is ");
+    //   console.log(searchTerm)
+    //   // handleSearch(searchTerm);   // refresh the search filter
+    // }
+  });
+
   // Handle search functionality
   const handleSearch = (searchTerm) => {
-    if (!searchTerm.trim()) {
+
+    setSearchTerm(searchTerm);
+
+    if (searchTerm == "" || !searchTerm.trim()) {
       // If search is empty, show all notifications
-      setFilteredNotifications(filteredNotifications);
+      setFilteredNotifications(notifications);
     } else {
       // Filter notifications that contain the search term (case-insensitive)
-      const filtered = allNotifications.filter(notification => 
-        notification.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        notification.sender.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        notification.source.toLowerCase().includes(searchTerm.toLowerCase())
+      const filtered = notifications.filter(notificationWrapper => 
+        {
+          let senders = "";
+          let receivers = "";
+          notificationWrapper.from.forEach((username) => {
+            senders += username;
+          });
+          notificationWrapper.to.forEach((username) => {
+            receivers += username;
+          });
+          let source = "";
+          if("source" in notificationWrapper.notification){
+            source = notificationWrapper.notification.source;
+          }
+
+          return  (notificationWrapper.notification.body.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          notificationWrapper.notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          senders.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          receivers.toLowerCase().includes(searchTerm.toLowerCase())) ||
+          source.toLowerCase().includes(searchTerm.toLowerCase());
+        }
       );
       setFilteredNotifications(filtered);
     }

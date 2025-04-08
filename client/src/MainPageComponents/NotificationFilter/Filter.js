@@ -47,7 +47,7 @@ class Filter extends React.Component {
             const fetchUserNotifications = async () => {
                 try {
                     const response = await axios.post('http://localhost:3000/notifications', this.currentFilterRequest, { withCredentials: true});
-                    const notifications = response.data;
+                    const notifications = response.data.notifications;
 
                     this.subscribers.forEach(fxn => {
                         fxn(notifications);
@@ -101,13 +101,17 @@ class Filter extends React.Component {
     * Adds fxn to subscribers list
     * 
     * Whenever the filter is updated, send POST request to backend server at /notifications, 
-    * if success and return array of notification objects, call all subscribers with the array of notification objects
+    * if success and return array of objects, call all subscribers with the array of objects
     * 
     * USAGE EXAMPLE: [notifications, setNotifications] = useState([]);
     *                const filter = new Filter();
     *               filter.addSubscriber(x => {setNotifications(x);});  // notifications will now have x, which is the array of notification objects
     * 
-    * (Object[] => *) fxn: any function that takes in array of notification objects
+    * (Object[] => *) fxn: any function that takes in array of objects Z, each object Z contains three fields: from, to, and notification
+    * from: is array of strings, usernames of senders
+    * to: is array of strings, usernames of receivers
+    * notification: is object, contains fields of notification info following ER diagram, also contains args field, which is an 
+    * object containing fields specific to a type of notification (duedate, priority) following ER diagram
     */
     addSubscriber(fxn){
         this.subscribers.push(fxn);
