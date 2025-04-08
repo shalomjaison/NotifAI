@@ -8,9 +8,6 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session'); // Import express-session
 const userRoutes = require('./routes/userRoutes');
-const {
-  createUser: createUserController,
-} = require('./controllers/userController'); // importing for mock post request
 const notificationRoutes = require('./routes/notificationRoutes');
 const { createUser: createUserController } = require('./controllers/userController'); // importing for mock post request
 const sequelize = require('./db/db');
