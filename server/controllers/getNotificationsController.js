@@ -191,38 +191,38 @@ const getNotificationsReceived = async (username, body) => {
     }
     if(type == "ALL"){
 
-        // const userWithNotifications = await User.findOne({
-        //     where: { username: username }, // Replace 'username' with the appropriate identifier
-        //     include: [
-        //       {
-        //         model: Notification,
-        //         include: [
-        //             { model: NewsNotification},
-        //             { model: ClaimsNotification},
-        //             { model: PolicyNotification},
-        //         ],
-        //         through: { attributes: [] }, // Exclude the join table attributes
-        //       },
-        //     ],
-        //   });
+        const userWithNotifications = await User.findOne({
+            where: { username: username }, // Replace 'username' with the appropriate identifier
+            include: [
+              {
+                model: Notification,
+                include: [
+                    { model: NewsNotification},
+                    // { model: ClaimsNotification},
+                    // { model: PolicyNotification},
+                ],
+                through: { attributes: [] }, // Exclude the join table attributes
+              },
+            ],
+          });
         
-        // const notif_list = userWithNotifications.Notifications.map((obj) => {
-        //     const notification = obj.dataValues;
-        //     if("ClaimsNotification" in notification){
-        //         delete notification.ClaimsNotification;
-        //         notification.args = obj.ClaimsNotification.dataValues;    // put all properties of ClaimsNotification into args
-        //     }
-        //     else if("NewsNotification" in notification){
-        //         delete notification.NewsNotification;
-        //         notification.args = obj.NewsNotification.dataValues;    // put all properties of NewsNotification into args
-        //     }
-        //     else if("PolicyNotification" in notification){
-        //         delete notification.PolicyNotification;
-        //         notification.args = obj.PolicyNotification.dataValues;    // put all properties of PolicyNotification into args
-        //     }
-        //     return notification;
-        // });
-        // return notif_list;
+        const notif_list = userWithNotifications.Notifications.map((obj) => {
+            const notification = obj.dataValues;
+            // if("ClaimsNotification" in notification){
+            //     delete notification.ClaimsNotification;
+            //     notification.args = obj.ClaimsNotification.dataValues;    // put all properties of ClaimsNotification into args
+            // }
+            if("NewsNotification" in notification){
+                delete notification.NewsNotification;
+                notification.args = obj.NewsNotification.dataValues;    // put all properties of NewsNotification into args
+            }
+            // if("PolicyNotification" in notification){
+            //     delete notification.PolicyNotification;
+            //     notification.args = obj.PolicyNotification.dataValues;    // put all properties of PolicyNotification into args
+            // }
+            return notification;
+        });
+        return notif_list;
     }
     else if(type == "CLAIMS"){
 

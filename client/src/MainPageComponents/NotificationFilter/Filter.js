@@ -15,10 +15,6 @@
 import React, { createElement, useEffect, useState } from 'react';
 import './Filter.css';
 import axios from 'axios';
-// import LogoutButton from '../LogoutButton/LogoutButton';
-// import { useNavigate } from 'react-router-dom'; // Import useNavigate
-
-// const Filter = ({ userData }) => {
 
 class Filter extends React.Component {
 

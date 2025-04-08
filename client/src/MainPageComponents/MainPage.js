@@ -81,20 +81,12 @@ function MainPage() {
   const [filteredNotifications, setFilteredNotifications] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  // let currentSearchFilter = "";  // track the current search filter in Search so that Filter can refresh search after filtering
-
-  // const [filteredNotifications, setFilteredNotifications] = useState(allNotifications);
 
   filter.addSubscriber(notificationList => {
 
     setNotifications(notificationList);
 
     if(searchTerm != ""){
-      // console.log("current search filter is ");
-      // console.log(searchTerm)
-      // console.log("notif list is");
-      // console.log(notifications);
-      // handleSearch(searchTerm, notificationList);   // refresh the search filter
       setFilteredNotifications(getFilteredNotifications(searchTerm, notificationList));
     }
     else{
@@ -197,12 +189,9 @@ function MainPage() {
 
             {/*Filter Bubbles and Filter Select */}
             <div style={{flexBasis: '70%'}}>
+              
               <div style={{zIndex: 1, position: 'absolute'}}>
-            {/* <div style={{float: 'left', overflow: 'visible', position: 'relative', zIndex: 100, height: '100px'}}> */}
-            {/* <div style={{minHeight: '100px', position: 'relative'}}> */}
                   { filter.renderFilterMenu()}
-                  
-                {/* </div> */}
               </div>
 
             </div>
