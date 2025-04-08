@@ -11,7 +11,7 @@ const PolicyNotification = sequelize.define(
     },
     policyid: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     changes_to_premium: DataTypes.TEXT,
     billing_reminder_date: DataTypes.DATE,

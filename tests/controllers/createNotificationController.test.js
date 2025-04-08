@@ -35,6 +35,15 @@ beforeAll(async () => {
     password: hashedPassword,
     role: 'customer',
   });
+
+  await User.create({
+    username: 'testuser3',
+    fname: 'Test3',
+    lname: 'User3',
+    email: 'test3@example.com',
+    password: hashedPassword,
+    role: 'customer',
+  });
 });
 
 // After all tests, close the database connection
@@ -56,7 +65,7 @@ describe('POST /notifications/create', () => {
       type: 'news',
       title: 'Test News Notification',
       body: 'This is a test news notification.',
-      recipients: ['testuser2'],
+      recipients: ['testuser2', 'testuser3'],
       newsDetails: {
         expirationdate: '2024-12-31',
         type: 'breaking',
@@ -86,11 +95,16 @@ describe('POST /notifications/create', () => {
     expect(newsDetails).not.toBeNull();
     expect(newsDetails.type).toBe('breaking');
 
-    // Verify that the notification recipient was created
+    // Verify that the notification recipients were created
     const notificationRecipient = await NotificationRecipient.findOne({
       where: { notificationid: notification.id, recipientid: 'testuser2' },
     });
     expect(notificationRecipient).not.toBeNull();
+
+    const notificationRecipient2 = await NotificationRecipient.findOne({
+      where: { notificationid: notification.id, recipientid: 'testuser3' },
+    });
+    expect(notificationRecipient2).not.toBeNull();
   });
 });
 
