@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import './Profile.css';
 import axios from 'axios';
-
+import { useNavigate } from 'react-router-dom';
 // const user = {
 //     firstName: "John",
 //     lastName: "Doe",
@@ -11,6 +11,10 @@ import axios from 'axios';
 // };
 function Profile() {
     const [user, setUser] = useState(null); // to hold user data
+    const navigate = useNavigate();
+    const handleTextClick = () => {
+      navigate('/main');
+    };
     useEffect(() => {
       const fetchData = async () => {
         try {
@@ -30,7 +34,7 @@ function Profile() {
     }, []);
     return (
         <div className='profile-page'>
-            <h1 className='notifai-text'>NOTIFAI</h1>
+            <h1 className='notifai-text' onClick={handleTextClick}>NOTIFAI</h1>
             <h2 className='section-title'>Personal Page</h2>
             <div className='profile-card'>
                 <div className="card-title">Profile</div>
