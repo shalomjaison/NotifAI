@@ -1,10 +1,10 @@
 const request = require('supertest');
-const { app, startServer } = require('../../server/server'); // Import your Express app instance
-const sequelize = require('../../server/db/db'); // Import your Sequelize instance
-const User = require('../../server/models/userModel'); // Corrected path
-const Notification = require('../../server/models/notificationModel'); // Corrected path
-const NewsNotification = require('../../server/models/newsModel'); // Corrected path
-const NotificationRecipient = require('../../server/models/notificationRecipientModel'); // Corrected path
+const { app, startServer } = require('../../server/server'); 
+const sequelize = require('../../server/db/db'); 
+const User = require('../../server/models/userModel'); 
+const Notification = require('../../server/models/notificationModel'); 
+const NewsNotification = require('../../server/models/newsModel'); 
+const NotificationRecipient = require('../../server/models/notificationRecipientModel'); 
 const bcrypt = require('bcrypt');
 
 // Before all tests, establish a connection to the database
