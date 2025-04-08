@@ -1,21 +1,53 @@
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 100%;
+}
+
+.notification-empty {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
 .notification-list-pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f3f4f6;
-    border-radius: 8px;
-    padding: 12px;
-    margin-top: 20px;
-  }
-  
-  .notification-list-pagination-button {
-    background-color: transparent;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .notification-list-pagination-text {
-    margin: 0 16px;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  padding: 10px 0;
+  gap: 15px;
+}
+
+.notification-list-pagination-button {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+.notification-list-pagination-button:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+.notification-list-pagination-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.notification-list-pagination-text {
+  font-size: 14px;
+  color: #555;
+}
