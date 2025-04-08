@@ -7,7 +7,7 @@ const Header = ({ userData }) => {
   const navigate = useNavigate(); // Initialize useNavigate
   const [menuOpen, setMenuOpen] = useState(false);
   const handleProfileClick = () => {
-    navigate('/profile');
+    window.location.href= "/profile";
     setMenuOpen(false);
   };
   useEffect(() => {

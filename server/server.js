@@ -8,6 +8,7 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session'); // Import express-session
 const userRoutes = require('./routes/userRoutes');
+const notificationRoutes = require('./routes/notificationRoutes')
 const {
   createUser: createUserController,
 } = require('./controllers/userController'); // importing for mock post request
@@ -46,6 +47,7 @@ app.get('/hello-world-demo', (req, res) => {
 });
 
 app.use('/users', userRoutes);
+app.use('/notifications', notificationRoutes)
 
 const createHardcodedUser = async () => {
   try {
@@ -102,6 +104,17 @@ const startServer = async () => {
   }
 };
 
-startServer();
+
+module.exports = { app, startServer }; // exporting for testing with jest
+
+
+/*  ensures that startServer() is 
+    only called when server.js is the entry point of your application, 
+    not when it's imported as a dependency.
+    used for testing controllers that involve starting the server (jest)
+*/
+if (require.main === module) {
+    startServer();
+}
 
 

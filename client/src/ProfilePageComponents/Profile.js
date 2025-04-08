@@ -13,7 +13,7 @@ function Profile() {
     const [user, setUser] = useState(null); // to hold user data
     const navigate = useNavigate();
     const handleTextClick = () => {
-      navigate('/main');
+      window.location.href="/main";
     };
     useEffect(() => {
       const fetchData = async () => {

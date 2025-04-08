@@ -52,3 +52,8 @@ npm install --save-dev css-loader
 echo REMOVING DEPRECATED PACKAGES
 rm -r node_modules/inflight
 rm -r node_modules/glob
+
+
+# testing frame works
+echo INSTALLING JEST AND HTTP TESTING FRAMEWORK  
+npm install --save-dev jest supertest
