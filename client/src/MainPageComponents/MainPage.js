@@ -8,7 +8,6 @@ import ClaimsAlert from "./ClaimsAlert/ClaimsAlert";
 import Reminders from "./Reminders/Reminders";
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { search } from '../../../server/routes/userRoutes';
 
 // Main component to handle routing
 function MainPage() { 
@@ -89,18 +88,48 @@ function MainPage() {
   filter.addSubscriber(notificationList => {
 
     setNotifications(notificationList);
-    setFilteredNotifications(notificationList);
 
-    // if(searchTerm != ""){
-    //   console.log("current search filter is ");
-    //   console.log(searchTerm)
-    //   // handleSearch(searchTerm);   // refresh the search filter
-    // }
+    if(searchTerm != ""){
+      // console.log("current search filter is ");
+      // console.log(searchTerm)
+      // console.log("notif list is");
+      // console.log(notifications);
+      // handleSearch(searchTerm, notificationList);   // refresh the search filter
+      setFilteredNotifications(getFilteredNotifications(searchTerm, notificationList));
+    }
+    else{
+      setFilteredNotifications(notificationList);
+    }
   });
+
+  const getFilteredNotifications = (searchTerm, notifList) => {
+
+    return notifList.filter(notificationWrapper => 
+      {
+        let senders = "";
+        let receivers = "";
+        notificationWrapper.from.forEach((username) => {
+          senders += username;
+        });
+        notificationWrapper.to.forEach((username) => {
+          receivers += username;
+        });
+        let source = "";
+        if("source" in notificationWrapper.notification){
+          source = notificationWrapper.notification.source;
+        }
+
+        return  (notificationWrapper.notification.body.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        notificationWrapper.notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        senders.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        receivers.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        source.toLowerCase().includes(searchTerm.toLowerCase());
+      }
+    );
+  }
 
   // Handle search functionality
   const handleSearch = (searchTerm) => {
-
     setSearchTerm(searchTerm);
 
     if (searchTerm == "" || !searchTerm.trim()) {
@@ -108,28 +137,7 @@ function MainPage() {
       setFilteredNotifications(notifications);
     } else {
       // Filter notifications that contain the search term (case-insensitive)
-      const filtered = notifications.filter(notificationWrapper => 
-        {
-          let senders = "";
-          let receivers = "";
-          notificationWrapper.from.forEach((username) => {
-            senders += username;
-          });
-          notificationWrapper.to.forEach((username) => {
-            receivers += username;
-          });
-          let source = "";
-          if("source" in notificationWrapper.notification){
-            source = notificationWrapper.notification.source;
-          }
-
-          return  (notificationWrapper.notification.body.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          notificationWrapper.notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          senders.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          receivers.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          source.toLowerCase().includes(searchTerm.toLowerCase());
-        }
-      );
+      const filtered = getFilteredNotifications(searchTerm, notifications);
       setFilteredNotifications(filtered);
     }
   };
