@@ -13,8 +13,8 @@ const PolicyNotification = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    changes_to_premium: DataTypes.TEXT,
-    billing_reminder_date: DataTypes.DATE,
+    changestopremium: DataTypes.TEXT,
+    billingreminderdate: DataTypes.DATE,
   },
   {
     tableName: 'policynotifications',
@@ -23,4 +23,4 @@ const PolicyNotification = sequelize.define(
 );
 
 module.exports = PolicyNotification;
-
+               
