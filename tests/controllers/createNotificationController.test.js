@@ -71,7 +71,6 @@ describe('POST /notifications/create', () => {
       newsDetails: {
         expirationdate: '2024-12-31',
         type: 'breaking',
-        details: 'This is a test news detail.',
       },
     };
 
@@ -182,7 +181,6 @@ describe('POST /notifications/create', () => {
         tasktype: 'test task type for claim notification',
         duedate: '2024-12-31',
         lineofbusiness: 'test line of business for claim notification',
-        description: 'test description for claim notification',
         priority: 'test priority for claim notification',
         iscompleted: true,
       },

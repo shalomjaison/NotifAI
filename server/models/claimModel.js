@@ -14,7 +14,6 @@ const ClaimNotification = sequelize.define(
     tasktype: DataTypes.STRING,
     duedate: DataTypes.DATE,
     lineofbusiness: DataTypes.STRING,
-    description: DataTypes.TEXT,
     priority: DataTypes.STRING,
     iscompleted: DataTypes.BOOLEAN,
   },
