@@ -1,9 +1,3 @@
-<!-- 
-Team Data Baes
-3/29/2025
-OPEN THIS FILE ON YOUR BROWSER TO VIEW API DOCUMENTATION OF BACKEND SERVER 
--->
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -716,13 +710,25 @@ OPEN THIS FILE ON YOUR BROWSER TO VIEW API DOCUMENTATION OF BACKEND SERVER
   "type" : "object",
   "properties" : {
     "from" : {
-      "type" : "string",
+      "type" : "array",
+      "items" : {
+        "type" : "string",
+        "x-stoplight" : {
+          "id" : "opawhe6c1l9ij"
+        }
+      },
       "x-stoplight" : {
         "id" : "kvy6xfgc6wj47"
       }
     },
     "to" : {
-      "type" : "string",
+      "type" : "array",
+      "items" : {
+        "type" : "string",
+        "x-stoplight" : {
+          "id" : "jt5x7rt98naj3"
+        }
+      },
       "x-stoplight" : {
         "id" : "426vieudfteck"
       }
@@ -781,7 +787,7 @@ OPEN THIS FILE ON YOUR BROWSER TO VIEW API DOCUMENTATION OF BACKEND SERVER
 };
             defs["notification"] = {
   "title" : "notification",
-  "required" : [ "date_created", "id", "is_read", "type" ],
+  "required" : [ "date_created", "id", "is_read", "title", "type" ],
   "type" : "object",
   "properties" : {
     "id" : {
@@ -849,15 +855,9 @@ OPEN THIS FILE ON YOUR BROWSER TO VIEW API DOCUMENTATION OF BACKEND SERVER
   }
 };
             defs["notifications_body"] = {
-  "required" : [ "filters", "id" ],
+  "required" : [ "filters" ],
   "type" : "object",
   "properties" : {
-    "id" : {
-      "type" : "integer",
-      "x-stoplight" : {
-        "id" : "cwss27ce832bx"
-      }
-    },
     "most_recent_first" : {
       "type" : "boolean",
       "description" : "sorts notifications so that the latest posted date is first, if this field is empty, notifications are not sorted unless another sorting method is in args",
@@ -878,12 +878,12 @@ OPEN THIS FILE ON YOUR BROWSER TO VIEW API DOCUMENTATION OF BACKEND SERVER
   }
 };
             defs["notifications_filters"] = {
-  "required" : [ "sent" ],
+  "required" : [ "args", "sent" ],
   "type" : "object",
   "properties" : {
     "method" : {
       "type" : "string",
-      "description" : "is blank, do not filter by method\n",
+      "description" : "if blank, do not filter by method\n",
       "enum" : [ "IN_APP", "EMAIL", "SMS", "TEAMS" ],
       "x-stoplight" : {
         "id" : "pi64g1q3gdgcb"
@@ -918,6 +918,12 @@ OPEN THIS FILE ON YOUR BROWSER TO VIEW API DOCUMENTATION OF BACKEND SERVER
         "id" : "3udpodujm5r2q"
       }
     },
+    "read" : {
+      "type" : "boolean",
+      "x-stoplight" : {
+        "id" : "ktj6myud7gb3j"
+      }
+    },
     "args" : {
       "$ref" : "#/components/schemas/notifications_filters_args"
     }
@@ -928,7 +934,7 @@ OPEN THIS FILE ON YOUR BROWSER TO VIEW API DOCUMENTATION OF BACKEND SERVER
   "properties" : {
     "due_earliest_first" : {
       "type" : "boolean",
-      "description" : "overides most_recent_first, need to check if notification type has due date",
+      "description" : "overides most_recent_first, need to check if notification type has due date, if property not found, do not sort by earliest due date",
       "x-stoplight" : {
         "id" : "adb8fw77rop7t"
       }
@@ -984,7 +990,7 @@ OPEN THIS FILE ON YOUR BROWSER TO VIEW API DOCUMENTATION OF BACKEND SERVER
 };
             defs["user"] = {
   "title" : "user",
-  "required" : [ "date_created", "first_name", "id", "last_name", "password", "role", "username" ],
+  "required" : [ "date_created", "email", "first_name", "id", "last_name", "password", "role", "username" ],
   "type" : "object",
   "properties" : {
     "id" : {
