@@ -219,6 +219,230 @@ describe('POST /notifications/create', () => {
     });
     expect(notificationRecipient2).not.toBeNull();
   });
+
+  it('should throw an error sender id is invalid', async () => {
+    // Create a test user and get the session cookie
+    const loginResponse = await request(app)
+      .post('/users/login')
+      .send({ email: 'test@example.com', password: 'testpassword' });
+    const cookie = loginResponse.headers['set-cookie'];
+
+    const newsNotificationData = { // this data would be gathered from the form inputs on the compose box
+      userid: 'uh-oh',
+      type: 'news',
+      title: 'Test News Notification',
+      body: 'This is a test news notification.',
+      recipients: ['testuser2', 'testuser3'],
+      newsDetails: {
+        expirationdate: '2024-12-31',
+        type: 'breaking',
+      },
+    };
+
+    const response = await request(app)
+      .post('/notifications/create')
+      .set('Cookie', cookie) // Set the session cookie
+      .send(newsNotificationData);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('Invalid sender ID.');
+
+  });
+
+  it('should throw an error when 1 recipient is invalid', async () => {
+    // Create a test user and get the session cookie
+    const loginResponse = await request(app)
+      .post('/users/login')
+      .send({ email: 'test@example.com', password: 'testpassword' });
+    const cookie = loginResponse.headers['set-cookie'];
+
+    const newsNotificationData = { // this data would be gathered from the form inputs on the compose box
+      userid: 'testuser',
+      type: 'news',
+      title: 'Test News Notification',
+      body: 'This is a test news notification.',
+      recipients: ['uh-oh', 'testuser3'],
+      newsDetails: {
+        expirationdate: '2024-12-31',
+        type: 'breaking',
+      },
+    };
+
+    const response = await request(app)
+      .post('/notifications/create')
+      .set('Cookie', cookie) // Set the session cookie
+      .send(newsNotificationData);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('One or more recipient usernames are invalid.');
+
+  });
+
+  it('should throw an error when all recipients are invalid', async () => {
+    // Create a test user and get the session cookie
+    const loginResponse = await request(app)
+      .post('/users/login')
+      .send({ email: 'test@example.com', password: 'testpassword' });
+    const cookie = loginResponse.headers['set-cookie'];
+
+    const newsNotificationData = { // this data would be gathered from the form inputs on the compose box
+      userid: 'testuser',
+      type: 'news',
+      title: 'Test News Notification',
+      body: 'This is a test news notification.',
+      recipients: ['uh-oh', 'testuser4'],
+      newsDetails: {
+        expirationdate: '2024-12-31',
+        type: 'breaking',
+      },
+    };
+
+    const response = await request(app)
+      .post('/notifications/create')
+      .set('Cookie', cookie) // Set the session cookie
+      .send(newsNotificationData);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('One or more recipient usernames are invalid.');
+
+  });
+
+  it('should throw an error when recipients is not an array', async () => {
+    // Create a test user and get the session cookie
+    const loginResponse = await request(app)
+      .post('/users/login')
+      .send({ email: 'test@example.com', password: 'testpassword' });
+    const cookie = loginResponse.headers['set-cookie'];
+
+    const newsNotificationData = { // this data would be gathered from the form inputs on the compose box
+      userid: 'testuser',
+      type: 'news',
+      title: 'Test News Notification',
+      body: 'This is a test news notification.',
+      recipients: 'testuser2',
+      newsDetails: {
+        expirationdate: '2024-12-31',
+        type: 'breaking',
+      },
+    };
+
+    const response = await request(app)
+      .post('/notifications/create')
+      .set('Cookie', cookie) // Set the session cookie
+      .send(newsNotificationData);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("Missing required fields: userid, type, title, body, and at least one recipient are required.");
+
+  });
+
+
+  it('should throw an error when data is missing from request body', async () => {
+    // Create a test user and get the session cookie
+    const loginResponse = await request(app)
+      .post('/users/login')
+      .send({ email: 'test@example.com', password: 'testpassword' });
+    const cookie = loginResponse.headers['set-cookie'];
+
+    const newsNotificationData = { // this data would be gathered from the form inputs on the compose box
+      userid: 'testuser',
+      type: 'news',
+      title: null,
+      body: 'This is a test news notification.',
+      recipients: ['testuser2', 'testuser3'],
+      newsDetails: {
+        expirationdate: '2024-12-31',
+        type: 'breaking',
+      },
+    };
+
+    const response = await request(app)
+      .post('/notifications/create')
+      .set('Cookie', cookie) // Set the session cookie
+      .send(newsNotificationData);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('Missing required fields: userid, type, title, body, and at least one recipient are required.');
+
+  });
+
+  it('should throw an error when news details missing from news Notification', async () => {
+    // Create a test user and get the session cookie
+    const loginResponse = await request(app)
+      .post('/users/login')
+      .send({ email: 'test@example.com', password: 'testpassword' });
+    const cookie = loginResponse.headers['set-cookie'];
+
+    const newsNotificationData = { // this data would be gathered from the form inputs on the compose box
+      userid: 'testuser',
+      type: 'news',
+      title: 'Test News Notification',
+      body: 'This is a test news notification.',
+      recipients: ['testuser2', 'testuser3'],
+      newsDetails: null,
+    };
+
+    const response = await request(app)
+      .post('/notifications/create')
+      .set('Cookie', cookie) // Set the session cookie
+      .send(newsNotificationData);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('News details are required for news notifications.');
+
+  });
+
+
+  it('should throw an error when policy details are missing from policy Notification', async () => {
+    // Create a test user and get the session cookie
+    const loginResponse = await request(app)
+      .post('/users/login')
+      .send({ email: 'test@example.com', password: 'testpassword' });
+    const cookie = loginResponse.headers['set-cookie'];
+
+    const policyNotificationData = { // this data would be gathered from the form inputs on the compose box
+      userid: 'testuser',
+      type: 'policy',
+      title: 'Test policy Notification',
+      body: 'This is a test policy notification.',
+      recipients: ['testuser2', 'testuser3'],
+      policyDetails: null,
+    };
+
+    const response = await request(app)
+      .post('/notifications/create')
+      .set('Cookie', cookie) // Set the session cookie
+      .send(policyNotificationData);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('Policy details are required for policy notifications.');
+  });
+
+  it('should throw an error when claim details are missing from claim Notification', async () => {
+    // Create a test user and get the session cookie
+    const loginResponse = await request(app)
+      .post('/users/login')
+      .send({ email: 'test@example.com', password: 'testpassword' });
+    const cookie = loginResponse.headers['set-cookie'];
+
+    const claimNotificationData = { // this data would be gathered from the form inputs on the compose box
+      userid: 'testuser',
+      type: 'claim',
+      title: 'Test claim Notification',
+      body: 'This is a test claim notification.',
+      recipients: ['testuser2', 'testuser3'],
+      claimDetails: null,
+    };
+
+    const response = await request(app)
+      .post('/notifications/create')
+      .set('Cookie', cookie) // Set the session cookie
+      .send(claimNotificationData);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe('Claim details are required for claim notifications.');
+  });
+
 });
 
 
