@@ -14,6 +14,7 @@ const Notification = require('../models/notificationModel');
 const NotificationRecipient = require('../models/notificationRecipientModel');
 const NewsNotification = require('../models/newsModel');
 const PolicyNotification = require('../models/policyModel');
+const ClaimNotification = require('../models/claimModel');
 
 const verifyValidRequest = (body) => {
 
@@ -181,7 +182,7 @@ const getNotificationsSent = async (username) => {
  * 
  * Returns a list of json objects. The immediate keys inside each json object are properties of the Notification data model.
  * Each json object also has a property called args, which is a json object that contains all the properties of the notification type data model, 
- * such as ClaimsNotification, NewsNotification, PolicyNotification
+ * such as ClaimNotification, NewsNotification, PolicyNotification
  * 
  */
 const getNotificationsReceived = async (username, body) => {
@@ -198,56 +199,68 @@ const getNotificationsReceived = async (username, body) => {
                 model: Notification,
                 include: [
                     { model: NewsNotification},
-                    // { model: ClaimsNotification},
-                    // { model: PolicyNotification},
+                    { model: ClaimNotification},
+                    { model: PolicyNotification},
                 ],
                 through: { attributes: [] }, // Exclude the join table attributes
               },
             ],
           });
-        
+
+        if(userWithNotifications == null || !("Notifications" in userWithNotifications) || userWithNotifications.Notifications == null){
+            return [];
+        }
+
         const notif_list = userWithNotifications.Notifications.map((obj) => {
+
             const notification = obj.dataValues;
-            // if("ClaimsNotification" in notification){
-            //     delete notification.ClaimsNotification;
-            //     notification.args = obj.ClaimsNotification.dataValues;    // put all properties of ClaimsNotification into args
-            // }
-            if("NewsNotification" in notification){
+
+            if("ClaimNotification" in notification && notification.ClaimNotification != null){
+                delete notification.ClaimNotification;
+                notification.args = obj.ClaimNotification.dataValues;    // put all properties of ClaimNotification into args
+            }
+            else if("NewsNotification" in notification && notification.NewsNotification != null){
                 delete notification.NewsNotification;
                 notification.args = obj.NewsNotification.dataValues;    // put all properties of NewsNotification into args
             }
-            // if("PolicyNotification" in notification){
-            //     delete notification.PolicyNotification;
-            //     notification.args = obj.PolicyNotification.dataValues;    // put all properties of PolicyNotification into args
-            // }
+            else if("PolicyNotification" in notification && notification.PolicyNotification != null){
+                delete notification.PolicyNotification;
+                notification.args = obj.PolicyNotification.dataValues;    // put all properties of PolicyNotification into args
+            }
             return notification;
         });
         return notif_list;
     }
     else if(type == "CLAIMS"){
 
-        // const userWithNotifications = await User.findOne({
-        //     where: { username: username }, // Replace 'username' with the appropriate identifier
-        //     include: [
-        //       {
-        //         model: Notification,
-        //         include: [
-        //             {
-        //                 model: ClaimsNotification,
-        //             }
-        //         ],
-        //         through: { attributes: [] }, // Exclude the join table attributes
-        //       },
-        //     ],
-        //   });
+        const userWithNotifications = await User.findOne({
+            where: { username: username }, // Replace 'username' with the appropriate identifier
+            include: [
+              {
+                model: Notification,
+                include: [
+                    {
+                        model: ClaimNotification,
+                    }
+                ],
+                through: { attributes: [] }, // Exclude the join table attributes
+                where: {type: "claim"}, // Filter for notifications of type "CLAIMS"
+              },
+            ],
+          });
         
-        // const notif_list = userWithNotifications.Notifications.map((obj) => {
-        //     const notification = obj.dataValues;
-        //     delete notification.ClaimsNotification;
-        //     notification.args = obj.ClaimsNotification.dataValues;    // put all properties of NewsNotification into args
-        //     return notification;
-        // });
-        // return notif_list;
+        if(userWithNotifications == null || !("Notifications" in userWithNotifications) || userWithNotifications.Notifications == null){
+            return [];
+        }
+
+        const notif_list = userWithNotifications.Notifications.map((obj) => {
+            
+            const notification = obj.dataValues;
+            delete notification.ClaimNotification;
+            notification.args = obj.ClaimNotification.dataValues;    // put all properties of NewsNotification into args
+            return notification;
+        });
+        return notif_list;
     }
     else if(type == "NEWS"){
         const userWithNotifications = await User.findOne({
@@ -261,9 +274,14 @@ const getNotificationsReceived = async (username, body) => {
                     }
                 ],
                 through: { attributes: [] }, // Exclude the join table attributes
+                where: {type: "news"}, // Filter for notifications of type "CLAIMS"
               },
             ],
           });
+
+        if(userWithNotifications == null || !("Notifications" in userWithNotifications) || userWithNotifications.Notifications == null){
+            return [];
+        }
 
         const notif_list = userWithNotifications.Notifications.map((obj) => {
             const notification = obj.dataValues;
@@ -276,29 +294,34 @@ const getNotificationsReceived = async (username, body) => {
     }
     else if(type == "POLICY"){   // POLICY
 
-        // const userWithNotifications = await User.findOne({
-        //     where: { username: username }, // Replace 'username' with the appropriate identifier
-        //     include: [
-        //       {
-        //         model: Notification,
-        //         include: [
-        //             {
-        //                 model: PolicyNotification,
-        //             }
-        //         ],
-        //         through: { attributes: [] }, // Exclude the join table attributes
-        //       },
-        //     ],
-        //   });
-        
-        // const notif_list = userWithNotifications.Notifications.map((obj) => {
-        //     const notification = obj.dataValues;
-        //     delete notification.PolicyNotification;
-        //     notification.args = obj.PolicyNotification.dataValues;    // put all properties of NewsNotification into args
-        //     return notification;
-        // });
+        const userWithNotifications = await User.findOne({
+            where: { username: username }, // Replace 'username' with the appropriate identifier
+            include: [
+              {
+                model: Notification,
+                include: [
+                    {
+                        model: PolicyNotification,
+                    }
+                ],
+                through: { attributes: [] }, // Exclude the join table attributes
+                where: {type: "policy"}, // Filter for notifications of type "CLAIMS"
+              },
+            ],
+          });
 
-        // return notif_list;
+        if(userWithNotifications == null || !("Notifications" in userWithNotifications) || userWithNotifications.Notifications == null){
+            return [];
+        }
+
+        const notif_list = userWithNotifications.Notifications.map((obj) => {
+            const notification = obj.dataValues;
+            delete notification.PolicyNotification;
+            notification.args = obj.PolicyNotification.dataValues;    // put all properties of NewsNotification into args
+            return notification;
+        });
+
+        return notif_list;
 
     }
     return [];
