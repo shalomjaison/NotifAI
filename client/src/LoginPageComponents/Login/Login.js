@@ -22,7 +22,7 @@ function Login() {
       console.log("Login Success Response:", response.data);
       setMessage(response.data.message);
 
-      navigate("/main"); // Navigate to the /main route
+      window.location.href="/main"; // Navigate to the /main route
     } catch (error) {
       console.error(
         "Login error:",

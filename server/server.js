@@ -102,6 +102,17 @@ const startServer = async () => {
   }
 };
 
-startServer();
+
+module.exports = { app, startServer }; // exporting for testing with jest
+
+
+/*  ensures that startServer() is 
+    only called when server.js is the entry point of your application, 
+    not when it's imported as a dependency.
+    used for testing controllers that involve starting the server (jest)
+*/
+if (require.main === module) {
+    startServer();
+}
 
 

@@ -11,7 +11,6 @@ const NewsNotification = sequelize.define(
     },
     expirationdate: DataTypes.DATE,
     type: DataTypes.STRING,
-    details: DataTypes.TEXT,
   },
   {
     tableName: 'newsnotifications',

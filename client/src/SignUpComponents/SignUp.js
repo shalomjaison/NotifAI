@@ -8,15 +8,15 @@ function SignUp() {
 
   // Form field states
   const [fname, setFirstName] = useState("");
-  const [lname, setLastName]   = useState("");
-  const [username, setUsername]   = useState("");
-  const [email, setEmail]         = useState("");
-  const [password, setPassword]   = useState("");
+  const [lname, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [confirmPwd, setConfirmPwd] = useState("");
   const [role, setRole] = useState(""); 
 
   // For error/success messages
-  const [message, setMessage]     = useState("");
+  const [message, setMessage] = useState("");
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -41,7 +41,7 @@ function SignUp() {
       if (response.status === 201) {
         // On success, show message and navigate to login (or any other page)
         setMessage(response.data.message);
-        navigate("/");
+        window.location.href="/";
       }
     } catch (error) {
       console.error("SignUp error:", error.response?.data || error.message);
