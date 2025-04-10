@@ -48,8 +48,15 @@ beforeAll(async () => {
   });
 });
 
+
+
+
 // After all tests, close the database connection
 afterAll(async () => {
+  console.log('Cleaning up database after tests...');
+  await sequelize.sync({ force: true }); // Wipes everything
+  console.log('Database cleaned.');
+
   await sequelize.close();
   console.log('Database connection closed after tests.');
 });
