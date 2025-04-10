@@ -8,7 +8,7 @@ const{loginUser}=require('../controllers/loginUserController');
 const {logoutUser} = require('../controllers/logoutUserController'); // Import the logout controller
 const authMiddleware = require('../middleware/authMiddleware');
 const { meUser } = require('../controllers/meUserController'); // Import the meUserController
-
+const { getUserProfile } = require('../controllers/profileUserController');
 
 const { signupUserController } = require('../controllers/signupUserController');
 
@@ -22,5 +22,7 @@ router.post('/login', loginUser);
 router.post('/logout', logoutUser); // Add the logout route
 //get current user
 router.get('/me', authMiddleware, meUser); 
+// Get Current User Profile
+router.get('/profile', getUserProfile);
 
 module.exports = router;

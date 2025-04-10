@@ -10,6 +10,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import MainPage from "./MainPageComponents/MainPage";
 import Login from "./LoginPageComponents/Login/Login";
 import SignUp from "./SignUpComponents/SignUp";
+import Profile from "./ProfilePageComponents/Profile";
 
 // Create the router
 const router = createBrowserRouter([
@@ -27,6 +28,12 @@ const router = createBrowserRouter([
         <MainPage />
     ),
   },
+  {
+    path: "/profile",
+    element: (
+      <Profile />
+    )
+  }
 ]);
 
 function App() {
