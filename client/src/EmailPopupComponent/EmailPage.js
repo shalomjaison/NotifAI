@@ -7,11 +7,13 @@ import Reminders from "../MainPageComponents/Reminders/Reminders";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import EmailPopup from "./EmailPopup/EmailPopup";
+import { useNavigate } from "react-router-dom";
 
 // Main component to handle routing
 function EmailPage() {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -29,26 +31,6 @@ function EmailPage() {
 
     fetchUserData();
   }, []);
-
-  // Sample data for notifications - link to API later
-  const notifications = [
-    {
-      id: 1,
-      source: "Slack",
-      sender: "Sahana Satish",
-      message: "Hey! the UI mock-up is up",
-      time: "1 hour ago",
-      icon: "slack",
-    },
-    {
-      id: 2,
-      source: "Claims",
-      sender: "Claims Department",
-      message: "Your payment of $50 is due tommorrow",
-      time: "1 hour ago",
-      details: "Hello this is to inform you.....",
-    },
-  ];
 
   const emailData = {
     subject: "Reminder: Payment Due",
@@ -73,9 +55,11 @@ function EmailPage() {
       date: "March 4th, 2025 at 4 pm",
     },
   ];
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       {/* Sidebar component */}
@@ -106,6 +90,13 @@ function EmailPage() {
               fromEmail={emailData.fromEmail}
               toEmail={emailData.toEmail}
               content={emailData.content}
+              onBack={() => {
+                console.log("Back button clicked");
+                navigate("/main");
+              }}
+              onDelete={() => {
+                console.log("Delete button clicked");
+              }}
             />
 
             {/* If you truly want to remove NotificationList, just omit it. 
