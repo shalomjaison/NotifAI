@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Sidebar.css';
+import NewMessage from '../ComposeNewMessage/NewMessage';
 
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState('messages');
@@ -43,6 +44,14 @@ const Sidebar = () => {
           </svg>
         </button>
       </div>
+
+      {isPopupOpen && (
+        <div className="popup-container">
+          <div className="popup-content">
+            <NewMessage />
+          </div>
+        </div>
+      )}
 
       {/* Navigation items */}
       <div className="sidebar-nav-items">

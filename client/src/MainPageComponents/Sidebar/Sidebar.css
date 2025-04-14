@@ -111,4 +111,23 @@
     border: none;
     cursor: pointer;
   }
-  
+  .popup-contianer{
+    position: relative;
+    width: 50%;
+    height: 50%;
+    align-items: center;
+    display: sticky;
+    gap: 50px;
+  }
+  .popup-content{
+    position: absolute;
+    background-color: white;
+    padding-top: 0;
+    align-items: stretch;
+    display: sticky;
+    border-radius: 2%;
+    top: 40%;
+    height: 60%;
+    right: 16%;
+    border-top: none;
+  }
