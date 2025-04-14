@@ -9,6 +9,12 @@ const Sidebar = () => {
     setActiveItem(item);
   };
 
+  const [PopUpOpen, setPopUpOpen] = useState(false);
+
+  const togglePopUp = () => {
+    setPopUpOpen(!PopUpOpen);
+  };
+
   return (
     <div className="sidebar-container">
       {/* Top logo */}
@@ -36,7 +42,7 @@ const Sidebar = () => {
 
       {/* Edit button */}
       <div className="sidebar-edit-button-container">
-        <button className="sidebar-edit-button">
+        <button className="sidebar-edit-button" onClick={togglePopUp}>
           {/* Edit icon SVG */}
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
@@ -45,7 +51,7 @@ const Sidebar = () => {
         </button>
       </div>
 
-      {isPopupOpen && (
+      {PopUpOpen && (
         <div className="popup-container">
           <div className="popup-content">
             <NewMessage />

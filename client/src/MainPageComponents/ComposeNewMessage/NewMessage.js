@@ -11,48 +11,48 @@ const NewMessage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const messageData = {
-            userid: currentUserId,
-            type: emailType,
-            title: subject,
-            body: message,
-            recipients: [recipient],
-          };
+    }
+        // const messageData = {
+        //     userid: currentUserId,
+        //     type: emailType,
+        //     title: subject,
+        //     body: message,
+        //     recipients: [recipient],
+        //   };
         
-          if (emailType === 'news') {
-            messageData.newsDetails = { headline: subject };
-          } else if (emailType === 'claim') {
-            messageData.claimDetails = { claimNumber: '123ABC' };
-          } else if (emailType === 'policy') {
-            messageData.policyDetails = { policyId: 'POL456' };
-          }
+        //   if (emailType === 'news') {
+        //     messageData.newsDetails = { headline: subject };
+        //   } else if (emailType === 'claim') {
+        //     messageData.claimDetails = { claimNumber: '123ABC' };
+        //   } else if (emailType === 'policy') {
+        //     messageData.policyDetails = { policyId: 'POL456' };
+        //   }
 
-        try {
-            const response = await fetch('http://localhost:9500/notifications', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(messageData)
-            });
+    //     try {
+    //         const response = await fetch('http://localhost:9500/notifications', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify(messageData)
+    //         });
 
-            if (!response.ok) {
-                throw new Error('Failed to send message');
-            }
+    //         if (!response.ok) {
+    //             throw new Error('Failed to send message');
+    //         }
 
-            const result = await response.json();
-            console.log('Message sent:', result);
+    //         const result = await response.json();
+    //         console.log('Message sent:', result);
 
-            setSubject('');
-            setEmailType('');
-            setRecipient('');
-            setMessage('');
+    //         setSubject('');
+    //         setEmailType('');
+    //         setRecipient('');
+    //         setMessage('');
 
-        } catch (error) {
-            console.error('Error sending message:', error);
-        }
-    };
+    //     } catch (error) {
+    //         console.error('Error sending message:', error);
+    //     }
+    // };
 
 
     return (
