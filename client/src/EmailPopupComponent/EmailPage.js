@@ -9,7 +9,6 @@ import { useState, useEffect } from "react";
 import EmailPopup from "./EmailPopup/EmailPopup";
 import { useNavigate } from "react-router-dom";
 
-// Main component to handle routing
 function EmailPage() {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -82,9 +81,6 @@ function EmailPage() {
             {/* Search component */}
             <Search />
 
-            {/* Notification list */}
-            {/* <NotificationList notifications={notifications} /> */}
-
             <EmailPopup
               subject={emailData.subject}
               fromEmail={emailData.fromEmail}
@@ -98,12 +94,6 @@ function EmailPage() {
                 console.log("Delete button clicked");
               }}
             />
-
-            {/* If you truly want to remove NotificationList, just omit it. 
-                If you want to conditionally show it when the popup is closed, 
-                you could do something like:
-                {!showEmail && <NotificationList notifications={notifications} />}
-            */}
           </div>
 
           {/* Right sidebar - claims and reminders */}
