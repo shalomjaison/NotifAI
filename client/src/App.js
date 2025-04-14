@@ -11,6 +11,7 @@ import MainPage from "./MainPageComponents/MainPage";
 import Login from "./LoginPageComponents/Login/Login";
 import SignUp from "./SignUpComponents/SignUp";
 import EmailPage from "./EmailPopupComponent/EmailPage";
+import Profile from "./ProfilePageComponents/Profile";
 
 // Create the router
 const router = createBrowserRouter([
@@ -29,6 +30,14 @@ const router = createBrowserRouter([
   {
     path: "/main/email",
     element: <EmailPage />,
+  },
+  {
+    path: "/profile",
+    element: <MainPage />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
 ]);
 

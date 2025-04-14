@@ -28,7 +28,7 @@
       "user" : {
         "title" : "user",
         "type" : "object",
-        "required" : [ "id", "username", "password", "first_name", "last_name", "role", "date_created" ],
+        "required" : [ "id", "username", "password", "email", "first_name", "last_name", "role", "date_created" ],
         "properties" : {
           "id" : {
             "type" : "integer"
@@ -88,7 +88,7 @@
       "notification" : {
         "title" : "notification",
         "type" : "object",
-        "required" : [ "id", "type", "date_created", "is_read" ],
+        "required" : [ "id", "type", "date_created", "title", "is_read" ],
         "properties" : {
           "id" : {
             "type" : "integer"
@@ -465,15 +465,27 @@
                         "required" : [ "from", "to", "notification" ],
                         "properties" : {
                           "from" : {
-                            "type" : "string",
+                            "type" : "array",
                             "x-stoplight" : {
                               "id" : "kvy6xfgc6wj47"
+                            },
+                            "items" : {
+                              "x-stoplight" : {
+                                "id" : "opawhe6c1l9ij"
+                              },
+                              "type" : "string"
                             }
                           },
                           "to" : {
-                            "type" : "string",
+                            "type" : "array",
                             "x-stoplight" : {
                               "id" : "426vieudfteck"
+                            },
+                            "items" : {
+                              "x-stoplight" : {
+                                "id" : "jt5x7rt98naj3"
+                              },
+                              "type" : "string"
                             }
                           },
                           "notification" : {
@@ -517,14 +529,8 @@
             "application/json" : {
               "schema" : {
                 "type" : "object",
-                "required" : [ "id", "filters" ],
+                "required" : [ "filters" ],
                 "properties" : {
-                  "id" : {
-                    "type" : "integer",
-                    "x-stoplight" : {
-                      "id" : "cwss27ce832bx"
-                    }
-                  },
                   "most_recent_first" : {
                     "type" : "boolean",
                     "x-stoplight" : {
@@ -544,14 +550,14 @@
                     "x-stoplight" : {
                       "id" : "8rkw8rgkrzh1t"
                     },
-                    "required" : [ "sent" ],
+                    "required" : [ "sent", "args" ],
                     "properties" : {
                       "method" : {
                         "x-stoplight" : {
                           "id" : "pi64g1q3gdgcb"
                         },
                         "enum" : [ "IN_APP", "EMAIL", "SMS", "TEAMS" ],
-                        "description" : "is blank, do not filter by method\n"
+                        "description" : "if blank, do not filter by method\n"
                       },
                       "sent" : {
                         "type" : "boolean",
@@ -581,6 +587,12 @@
                         },
                         "description" : "filter from the searching feature of user inbox, filters title, description, and users involved in notifications for matching text"
                       },
+                      "read" : {
+                        "type" : "boolean",
+                        "x-stoplight" : {
+                          "id" : "ktj6myud7gb3j"
+                        }
+                      },
                       "args" : {
                         "type" : "object",
                         "x-stoplight" : {
@@ -593,7 +605,7 @@
                             "x-stoplight" : {
                               "id" : "adb8fw77rop7t"
                             },
-                            "description" : "overides most_recent_first, need to check if notification type has due date"
+                            "description" : "overides most_recent_first, need to check if notification type has due date, if property not found, do not sort by earliest due date"
                           },
                           "is_completed" : {
                             "type" : "boolean",
