@@ -3,10 +3,10 @@
     display: flex;
     align-items: center;
     padding: 0px 8px;
-    
+    width: 476px;
   }
-  
-  .search-input-wrapper:focus-within {
+
+  .search-input-wrapper:focus {
     outline: none;
   }
   

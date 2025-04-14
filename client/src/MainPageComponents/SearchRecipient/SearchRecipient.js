@@ -20,7 +20,7 @@ const SearchRecipient = ({ onSearch = () => {}}) => {
         
         <input
           type="text"
-          placeholder="To: "
+          placeholder="To: Enter Username"
           className="search-input"
           value={searchTerm}
           onChange={handleInputChange}
