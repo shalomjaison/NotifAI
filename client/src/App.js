@@ -28,7 +28,7 @@ const router = createBrowserRouter([
     element: <MainPage />,
   },
   {
-    path: "/main/email",
+    path: "/main/email/:id",
     element: <EmailPage />,
   },
   {
