@@ -6,6 +6,7 @@ import Search from "./Search/Search";
 import NotificationList from "./NotificationList/NotificationList";
 import ClaimsAlert from "./ClaimsAlert/ClaimsAlert";
 import Reminders from "./Reminders/Reminders";
+import GenAI from "./genAI/genAI"
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
@@ -207,6 +208,7 @@ function MainPage() {
 
             {/* Reminders section */}
             <Reminders reminders={reminders} />
+            <GenAI />
           </div>
         </div>
       </div>

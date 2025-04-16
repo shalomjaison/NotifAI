@@ -57,3 +57,7 @@ rm -r node_modules/glob
 # testing frame works
 echo INSTALLING JEST AND HTTP TESTING FRAMEWORK  
 npm install --save-dev jest supertest
+
+# gen ai sdk
+echo INSTALLING GOOGLE AI SDK
+npm install @google/generative-ai
