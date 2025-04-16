@@ -14,12 +14,19 @@ const geminiPromptController = async (req, res) => {
         console.log("user's prompt:", userRequest)
     
         const prompt = `
-        Analyze the following user request and extract the email Subject and Body.
-        Format the output strictly as:
-        Subject: [The extracted subject (you would have to determine whats in thesubject)]
-        Body: [The extracted message body (you would have to determine whats in the body)]
-    
-        Do not include any other explanation or text.
+        Your job is to write emails. If the user request is 
+        unrelated to composing an email 
+        (if the user is trying to start an unrelated conversation or if the
+        user request does not contain the keyword "email"), 
+        please kindly tell the user that they can only request assistance with emails.
+        Analyze the following user request.  Write the email
+        using your own generation if the user request does not provide enough context.
+        If you did not deny the request,
+        then format it strictly as:
+        Subject:
+        Body:
+
+        Do not provide any further explanation or words.
     
         User Request: "${userRequest}"
         `;

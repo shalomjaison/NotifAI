@@ -8,3 +8,18 @@ textArea {
     flex-direction: column;
     align-items: center;
 }
+
+.gemini-response-display pre {
+    white-space: pre-wrap; 
+    word-wrap: break-word; 
+    width: 30vw;
+    height: 25vh;
+  }
+  
+  .gemini-response-display {
+    overflow: auto;
+    border: 1px solid #ccc; /* Just for visualization */
+    padding: 10px;
+    margin-top: 15px;
+    background-color: #f9f9f9;
+  }
