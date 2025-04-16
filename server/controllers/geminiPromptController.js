@@ -10,7 +10,8 @@ const geminiPromptController = async (req, res) => {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest"});
 
 
-        const userRequest = "pls write email with hello123 as subject stating policy updates as the message body";
+        const userRequest = req.body.prompt;
+        console.log("user's prompt:", userRequest)
     
         const prompt = `
         Analyze the following user request and extract the email Subject and Body.
@@ -26,6 +27,9 @@ const geminiPromptController = async (req, res) => {
         const response = await result.response;
         const text = response.text();
         console.log(text);
+
+        return res.status(200).json({ generatedText: text });
+
 
     }
     catch (error) {

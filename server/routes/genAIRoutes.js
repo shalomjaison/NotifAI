@@ -1,5 +1,8 @@
 const express = require('express');
+const { geminiPrompt } = require("../controllers/geminiPromptController");
+
 const router = express.Router();
-import { geminiPrompt } from "../controllers/geminiPromptController";
 
 router.post("/gemini-prompt", geminiPrompt)
+
+module.exports = router
