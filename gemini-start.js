@@ -8,8 +8,19 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 async function run() {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest"});
 
-    const prompt = "Whisper sweet nothings to me like I am meaningful to u";
 
+    const userRequest = "pls write email with hello123 as subject stating policy updates as the message body";
+
+    const prompt = `
+    Analyze the following user request and extract the email Subject and Body.
+    Format the output strictly as:
+    Subject: [The extracted subject (you would have to determine whats in thesubject)]
+    Body: [The extracted message body (you would have to determine whats in the body)]
+
+    Do not include any other explanation or text.
+
+    User Request: "${userRequest}"
+    `;
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
