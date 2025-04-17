@@ -1,60 +1,66 @@
 import "./genAI.css";
-import React, { useState } from 'react';
+// Make sure useEffect is imported
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 
-const initialHistory = []; 
-
+const initialHistory = [];
 
 const GenAI = () => {
     const [prompt, setPrompt] = useState('');
     const [response, setResponse] = useState('');
-    const [chatHistory, setChatHistory] = useState(initialHistory); 
+    const [chatHistory, setChatHistory] = useState(initialHistory);
     const [isLoading, setIsLoading] = useState(false);
+    const textareaRef = useRef(null);
+    const [focusRequested, setFocusRequested] = useState(false);
+
+    useEffect(() => {
+        if (focusRequested && textareaRef.current) {
+            textareaRef.current.focus();
+            setFocusRequested(false);
+        }
+    }, [focusRequested]); 
 
     const handlePromptChange = (event) => {
         setPrompt(event.target.value);
     }
 
     const promptHandler = async () => {
-        // checking if prompt is empty
-        if (!prompt.trim()) return;
+        const currentPrompt = prompt;
+        if (!currentPrompt.trim()) return;
+
         setIsLoading(true);
         setResponse('');
+        setPrompt('');
 
         try {
-            // clearing prompt field after send
-            setPrompt('');
-
-            // Send a POST request to the backend endpoint
             const result = await axios.post("http://localhost:3000/genAI/gemini-prompt", {
-                prompt: prompt, // user's typed in prompt
-                history: chatHistory // existing chat history
+                prompt: currentPrompt,
+                history: chatHistory
             });
 
-            // extracting the response from gemini
             const aiResponseText = result.data.generatedText;
-
-            // displaying it on frontend
             setResponse(aiResponseText);
 
-            // updating chat history
-            setChatHistory([
-                ...chatHistory,
-                { role: "user", parts: [{ text: prompt }] },
+            setChatHistory(prevHistory => [
+                ...prevHistory,
+                { role: "user", parts: [{ text: currentPrompt }] },
                 { role: "model", parts: [{ text: aiResponseText }]}
-            ])
+            ]);
 
         } catch (error) {
-            console.log("uh oh we have an error with the prompt")
+            console.error("uh oh, error sending prompt:", error);
+            setResponse("uh oh, error fetching response");
+            setPrompt(currentPrompt); // restore prompt on error
         } finally {
             setIsLoading(false);
+            setFocusRequested(true);
         }
     }
+
     const handleKeyDown = (event) => {
-        // Check if Enter key was pressed and Shift key was NOT pressed
         if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault(); // Prevent default behavior (adding a new line)
-            promptHandler(); // Call the existing prompt handler
+            event.preventDefault();
+            promptHandler();
         }
     }
 
@@ -62,19 +68,28 @@ const GenAI = () => {
         <div className="promptContainer">
             <div className="gemini-response-display">
                 <h4>Gemini Response:</h4>
-                {isLoading ? <pre>Generating response...</pre> : <pre>{response}</pre>}
+                <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+                    {isLoading ? "Generating response..." : response}
+                </pre>
             </div>
             <textarea
                 className="genai-prompt-textarea"
-                placeholder="Ask for help!" 
-                rows="10" 
-                cols="60" 
+                placeholder="Ask for help!"
+                rows="10"
+                cols="60"
                 value={prompt}
-                onChange={handlePromptChange} 
+                onChange={handlePromptChange}
                 onKeyDown={handleKeyDown}
-                disabled={isLoading}
+                disabled={isLoading} 
+                ref={textareaRef}
             />
-            <button id="send" onClick={promptHandler} disabled={isLoading || !prompt.trim()}>{isLoading ? 'Sending...' : 'Send'}</button>
+            <button
+                id="send"
+                onClick={promptHandler}
+                disabled={isLoading || !prompt.trim()}
+            >
+                {isLoading ? 'Sending...' : 'Send'}
+            </button>
         </div>
     )
 }
