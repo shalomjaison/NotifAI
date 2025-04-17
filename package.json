@@ -40,7 +40,7 @@
   "scripts": {
     "start": "webpack-dev-server .",
     "build": "Webpack .",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --detectOpenHandles --coverage"
   },
   "keywords": [],
   "author": "",

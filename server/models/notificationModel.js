@@ -49,6 +49,7 @@ const Notification = sequelize.define(
 const NewsNotification = require('./newsModel');
 const ClaimNotification = require('./claimModel');
 const PolicyNotification = require('./policyModel');
+const NotificationRecipient = require('./notificationRecipientModel');
 
 // Define relationships here
 Notification.hasOne(NewsNotification, { foreignKey: 'notificationid' });
@@ -59,6 +60,13 @@ Notification.hasOne(PolicyNotification, { foreignKey: 'notificationid' });
 NewsNotification.belongsTo(Notification, { foreignKey: 'notificationid' });
 ClaimNotification.belongsTo(Notification, { foreignKey: 'notificationid' });
 PolicyNotification.belongsTo(Notification, { foreignKey: 'notificationid' });
+
+// NotificationRecipient.belongsTo(Notification, {
+//   foreignKey: 'notificationid',
+// });
+Notification.hasMany(NotificationRecipient, {
+  foreignKey: 'notificationid',
+});
 
 module.exports = Notification;
 
