@@ -1,25 +1,44 @@
-textArea {
-    border: 5px solid pink;
-    height: 10vh;
-}
+
 
 .promptContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100%;
+    background: #e9d5ff;
+    width: 20vw;
 }
 
 .gemini-response-display pre {
     white-space: pre-wrap; 
     word-wrap: break-word; 
-    width: 30vw;
-    height: 25vh;
   }
   
   .gemini-response-display {
+    flex-grow: 1;
     overflow: auto;
-    border: 1px solid #ccc; /* Just for visualization */
-    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
     margin-top: 15px;
-    background-color: #f9f9f9;
+    color: black;
+    font-size: 1.2rem;
   }
+  .genai-prompt-textarea {
+    width: 16vw;
+    height: 10vh;
+    margin-bottom: 1vh;
+    border-radius: 15px;
+    border: none;
+    padding: 10px;
+    font-size: 1.2rem;
+  }
+
+  #send {
+    width: 17vw;
+    height: 2vw;
+    border: none;
+    display: absolute;
+    margin-bottom: 1vh;
+    border-radius: 10px;
+  }
+

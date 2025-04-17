@@ -8,35 +8,29 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 const geminiPromptController = async (req, res) => {
     try {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest"});
+        
+        // Extract chat history from the request body, defaults to empty array if not provided
+        const chatHistory = req.body.history || [];
 
+        //user's new prompt message from the request body
+        const msg = req.body.prompt;
 
-        const userRequest = req.body.prompt;
-        console.log("user's prompt:", userRequest)
-    
-        const prompt = `
-        Your job is to write emails. If the user request is 
-        unrelated to composing an email 
-        (if the user is trying to start an unrelated conversation or if the
-        user request does not contain the keyword "email"), 
-        please kindly tell the user that they can only request assistance with emails.
-        Analyze the following user request.  Write the email
-        using your own generation if the user request does not provide enough context.
-        If you did not deny the request,
-        then format it strictly as:
-        Subject:
-        Body:
+        // starting chat session with gemini model providing chat history
+        const chat = model.startChat({
+            history: chatHistory
+        });
 
-        Do not provide any further explanation or words.
-    
-        User Request: "${userRequest}"
-        `;
-        const result = await model.generateContent(prompt);
+        // send user's msg
+        const result = await chat.sendMessage(msg);
+
+        // getting back gemini's response
         const response = await result.response;
+
+        // extract generated text content from response
         const text = response.text();
-        console.log(text);
 
-        return res.status(200).json({ generatedText: text });
-
+        // send generated text back to client as JSON
+        res.send({"generatedText":text});
 
     }
     catch (error) {
