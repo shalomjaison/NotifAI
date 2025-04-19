@@ -20,10 +20,10 @@ const deleteNotification = async (req, res) => {
     console.log("Deleted notification with id " + id);
 
     // Delete associated entries in NotificationRecipient, Claims, Policy, and News
-    await NotificationRecipient.destroy({ where: { notificationId: id } });
-    await ClaimNotification.destroy({ where: { notificationId: id } });
-    await PolicyNotification.destroy({ where: { notificationId: id } });
-    await NewsNotification.destroy({ where: { notificationId: id } });
+    // await NotificationRecipient.destroy({ where: { notificationId: id } });
+    // await ClaimNotification.destroy({ where: { notificationId: id } });
+    // await PolicyNotification.destroy({ where: { notificationId: id } });
+    // await NewsNotification.destroy({ where: { notificationId: id } });
 
     return res
       .status(200)
