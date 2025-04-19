@@ -9,6 +9,7 @@ const cors = require('cors');
 const session = require('express-session'); // Import express-session
 const userRoutes = require('./routes/userRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const genAIRoutes = require('./routes/genAIRoutes');
 const { createUser: createUserController } = require('./controllers/userController'); // importing for mock post request
 const sequelize = require('./db/db');
 const User = require('./models/userModel');
@@ -46,6 +47,7 @@ app.get('/hello-world-demo', (req, res) => {
 
 app.use('/users', userRoutes);
 app.use('/notifications', notificationRoutes);
+app.use('/genAI', genAIRoutes)
 
 const createHardcodedUser = async () => {
   try {

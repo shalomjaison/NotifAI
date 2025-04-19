@@ -1,4 +1,28 @@
 /* client/src/components/Header/Header.css */
+html {
+  overflow: hidden;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #b88fe4;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #7941b5;
+}
+
 .header-container {
     display: flex;
     justify-content: center;
@@ -99,3 +123,11 @@
     background-color: #d7cbf7;
   }
   
+  #genAI {
+    padding: 2px;
+  }
+  #genAI:hover {
+    background-color: #9ebdee;
+    border-radius: 30px;
+    color: rgb(54, 114, 224);
+  }
