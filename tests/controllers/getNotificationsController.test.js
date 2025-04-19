@@ -8,6 +8,7 @@ const NotificationRecipient = require('../../server/models/notificationRecipient
 const PolicyNotification = require('../../server/models/policyModel'); 
 const ClaimNotification = require('../../server/models/claimModel'); 
 const bcrypt = require('bcrypt');
+const { use } = require('react');
 
 // Before all tests, establish a connection to the database
 beforeAll(async () => {
@@ -22,7 +23,7 @@ beforeAll(async () => {
   const hashedPassword = await bcrypt.hash('testpassword', 12);
   await User.create({
     username: 'testemployee',
-    fname: 'test',
+    fname: 'test0',
     lname: 'employee',
     email: 'testemployee@example.com',
     password: hashedPassword,
@@ -31,7 +32,7 @@ beforeAll(async () => {
 
   await User.create({
     username: 'testuser1',
-    fname: 'test',
+    fname: 'test1',
     lname: 'user1',
     email: 'testuser1@example.com',
     password: hashedPassword,
@@ -40,7 +41,7 @@ beforeAll(async () => {
 
   await User.create({
     username: 'testuser2',
-    fname: 'test',
+    fname: 'test2',
     lname: 'user2',
     email: 'testuser2@example.com',
     password: hashedPassword,
@@ -67,7 +68,7 @@ describe('POST /notifications/', () => {
         return new Promise(resolve => setTimeout(resolve, time));
     }
 
-    const defaultRequestBody = {
+    const defaultRequestBody = () => ({
         // most_recent_first: true,
         filters: {
             sent: false,
@@ -75,15 +76,43 @@ describe('POST /notifications/', () => {
 
             }
         }
-    };
+    });
     const oldestDate = '2023-01-01';
     const middleDate = '2023-06-01';
     const newestDate = '2023-12-31';
+
     let employee_cookie = {};
     let user1_cookie = {};
     let user2_cookie = {};
 
     beforeAll(async () => {
+        /**
+         * LOGGING IN FOR EMPLOYEE AND TWO USERS
+         */
+
+        // LOGGING IN EMPLOYEE
+        const loginResponse = await request(app)
+        .post('/users/login')
+        .send({ email: 'testemployee@example.com', password: 'testpassword' });
+        const cookie = loginResponse.headers['set-cookie'];
+
+        employee_cookie = cookie;
+
+        // LOGGING IN USER1
+        const loginResponse_user1 = await request(app)
+        .post('/users/login')
+        .send({ email: 'testuser1@example.com', password: 'testpassword' });
+        const cookie_user1 = loginResponse_user1.headers['set-cookie'];
+
+        user1_cookie = cookie_user1;
+
+        // LOGGING IN USER2
+        const loginResponse_user2 = await request(app)
+        .post('/users/login')
+        .send({ email: 'testuser2@example.com', password: 'testpassword' });
+        const cookie_user2 = loginResponse_user2.headers['set-cookie'];
+
+        user2_cookie = cookie_user2;
 
     });
 
@@ -92,35 +121,17 @@ describe('POST /notifications/', () => {
      */
     it("should return empty list if account has no notifications", async () => {
 
-        /**
-         * Get the session cookie for employee, then test on no notifications
-         */
-        const loginResponse = await request(app)
-        .post('/users/login')
-        .send({ email: 'testemployee@example.com', password: 'testpassword' });
-        const cookie = loginResponse.headers['set-cookie'];
-
-        employee_cookie = cookie;
+        console.log("TESTING FOR EMPTY NOTIFICATIONS");
 
         const response = await request(app)
             .post('/notifications/')
             .set('Cookie', employee_cookie) // Set the session cookie
-            .send(defaultRequestBody);
+            .send(defaultRequestBody());
 
         expect(response.status).toBe(200);  // response should be {notifications: []}
         expect(response.body.notifications).toEqual([]);
 
-        /**
-         * Get the session cookie for user1, then test on no notifications
-         */
-        const loginResponse_user1 = await request(app)
-        .post('/users/login')
-        .send({ email: 'testuser1@example.com', password: 'testpassword' });
-        const cookie_user1 = loginResponse_user1.headers['set-cookie'];
-
-        user1_cookie = cookie_user1;
-
-        const request1 = structuredClone(defaultRequestBody);
+        const request1 = structuredClone(defaultRequestBody());
         request1.filters.type = "NEWS";
 
         const response_user1 = await request(app)
@@ -131,17 +142,7 @@ describe('POST /notifications/', () => {
         expect(response_user1.status).toBe(200);  // response should be {notifications: []}
         expect(response_user1.body.notifications).toEqual([]);
 
-        /**
-         * Get the session cookie for user2, then test on no notifications
-         */
-
-        const loginResponse_user2 = await request(app)
-        .post('/users/login')
-        .send({ email: 'testuser2@example.com', password: 'testpassword' });
-        const cookie_user2 = loginResponse_user2.headers['set-cookie'];
-
-        user2_cookie = cookie_user2;
-        const request2 = structuredClone(defaultRequestBody);
+        const request2 = structuredClone(defaultRequestBody());
         request2.filters.type = "POLICY";
         request2.most_recent_first = true;
 
@@ -156,16 +157,7 @@ describe('POST /notifications/', () => {
 
     it("tests on three notifications", async () => {
 
-        // const { 
-        //     userid,
-        //     type,
-        //     title,
-        //     body,
-        //     recipients, // Array of recipient usernames
-        //     newsDetails,
-        //     claimDetails,
-        //     policyDetails,
-        //  } = req.body
+        console.log("TESTING FOR THREE NOTIFICATIONS ON THREE ACCOUNTS");
 
         const notification1 = {     // oldest creation date, newest expiration date
             userid: "testemployee",
@@ -187,11 +179,17 @@ describe('POST /notifications/', () => {
 
         const notification2 = {    // middle creation date, middle expiration date
             userid: "testuser2",
-            type: "claims",               // news, claim, policy
+            type: "claim",               // news, claim, policy
             title: "Test Notification 2",
             body: "This is a claims notification.",
-            recipients: ["testuser1", "employee"],
-
+            recipients: ["testuser1", "testemployee"],
+    // insuredname: DataTypes.STRING,
+    // claimantname: DataTypes.STRING,
+    // tasktype: DataTypes.STRING,
+    // duedate: DataTypes.DATE,
+    // lineofbusiness: DataTypes.STRING,
+    // priority: DataTypes.STRING,
+    // iscompleted: DataTypes.BOOLEAN,
             claimDetails: {
                 insuredname: "testuser2",
                 claimantname: "testuser2",
@@ -207,6 +205,9 @@ describe('POST /notifications/', () => {
             .set('Cookie', user2_cookie) // Set the session cookie
             .send(notification2);
 
+        console.log("RESPONSE 2", response2.body);
+        console.log(response2.status);
+
         await delay(500);   // notification 2 has middle creation date
 
         const notification3 = {    // newest creation date, oldest expiration date
@@ -214,7 +215,7 @@ describe('POST /notifications/', () => {
             type: "policy",               // news, claim, policy
             title: "Test Notification 3",
             body: "This is a policy notification.",
-            recipients: ["employee"],
+            recipients: ["testemployee"],
             policyDetails: {
                 changestopremium: "none",
                 billingreminderdate: oldestDate,
@@ -229,8 +230,8 @@ describe('POST /notifications/', () => {
         await delay(500);   // notification 2 has middle creation date
 
         /**
-         * After creating 3 notifications, right now, employee should have all 3 notifications, user1 should have 2 notifications (notification 1 and 2),
-         * and user2 should have 1 notification (notification 1)
+         * After creating 3 notifications, right now, employee should receive all 3 notifications, user1 should receive 2 notifications (notification 1 and 2),
+         * and user2 should receive 1 notification (notification 1)
          * 
          * employee -> notification1 -> [everyone]
          * user1 -> notification3 -> [employee]
@@ -246,9 +247,56 @@ describe('POST /notifications/', () => {
 
         console.log("EVERYTHING WORKS??");
 
-        // BEGIN TESTS RECEIVED
-        // BEGIN TESTS SENT
-        // BEGIN TESTS DATES
+        /**
+         * BEGIN TESTS RECEIVED
+         */
+        const request_received = defaultRequestBody();
+        request_received.most_recent_first = true;
+        request_received.filters.sent = false;
+
+        // Employee
+        const response_received_employee = await request(app)
+        .post('/notifications/')
+        .set('Cookie', employee_cookie) // Set the session cookie
+        .send(request_received);
+
+        expect(response_received_employee.status).toBe(200);  // response should be {notifications: []}
+        expect(response_received_employee.body.notifications.length).toEqual(3);
+
+        // User1
+        const response_received_user1 = await request(app)
+        .post('/notifications/')
+        .set('Cookie', user1_cookie) // Set the session cookie
+        .send(request_received);
+
+        expect(response_received_user1.status).toBe(200);  // response should be {notifications: []}
+        expect(response_received_user1.body.notifications.length).toEqual(2);
+
+        // User2
+        const response_received_user2 = await request(app)
+        .post('/notifications/')
+        .set('Cookie', user2_cookie) // Set the session cookie
+        .send(request_received);
+
+        expect(response_received_user2.status).toBe(200);  // response should be {notifications: []}
+        expect(response_received_user2.body.notifications.length).toEqual(1);
+
+        // BEGIN TESTS SENT AND DATE
+        const request_sent = defaultRequestBody();
+
+        request_sent.most_recent_first = true;
+        request_sent.filters.sent = true;
+
+        const response_sent_employee = await request(app)
+        .post('/notifications/')
+        .set('Cookie', employee_cookie) // Set the session cookie
+        .send(request_sent);
+
+        expect(response_sent_employee.status).toBe(200);  // response should be {notifications: []}
+        expect(response_sent_employee.body.notifications.length).toEqual(1);
+
+        console.log(response_sent_employee.body.notifications[0]);
+
         // BEGIN TESTS TYPES
 
     });

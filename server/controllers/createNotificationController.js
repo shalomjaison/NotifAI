@@ -78,6 +78,7 @@ const createNotificationController = async (req, res) => {
                 if (!claimDetails) {
                     return res.status(400).json({ message: "Claim details are required for claim notifications."});
                 }
+                console.log("CREATING Claim details:", claimDetails);
                 await ClaimNotification.create({
                     notificationid: newNotification.id,
                     ...claimDetails,
