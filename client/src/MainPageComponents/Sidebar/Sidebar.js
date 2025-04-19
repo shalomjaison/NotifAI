@@ -14,7 +14,7 @@ const Sidebar = () => {
       <div className="sidebar-logo-container">
         <div className="sidebar-logo-circle">
           <img
-            src="images/duck_creek_logo.jpg" // Path to your image from the public folder
+            src="/images/duck_creek_logo.jpg" // Path to your image from the public folder
             alt="Logo"
             className="sidebar-logo-image"
           />

@@ -1,12 +1,21 @@
 import React from 'react';
 import NotificationIcon from '../NotificationIcon/NotificationIcon';
 import './NotificationItem.css';
+import EmailPage from '../../EmailPopupComponent/EmailPage';  
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 /**
  * NotificationWrapper is an object, with from (String[]), to (String[]), and notification (Object) properties.
  * 
+ * from: is array of strings, usernames of senders
+ * to: is array of strings, usernames of receivers
+ * notification: is object, contains fields of notification info following ER diagram, also contains args field, which is an 
+ * object containing fields specific to a type of notification (duedate, priority) following ER diagram
+ * 
  */
 const NotificationItem = ({ notificationWrapper }) => {
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const notification = notificationWrapper.notification;
   let source = "";
@@ -25,7 +34,9 @@ const NotificationItem = ({ notificationWrapper }) => {
   });
 
   return (
-    <div className="notification-item-container">
+    <div className="notification-item-container" button onClick={() =>{
+      window.location.href= "/main/email/" + notification.id;
+    }}>
       <NotificationIcon source={source} />
 
       <div className="notification-item-content">

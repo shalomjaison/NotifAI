@@ -73,7 +73,7 @@ function MainPage() {
 
   // State for filtered notifications
   // filteredNotifications and notifications are each a list of objects, each object contains three fields: from, to, and notification
-  // fro:m is array of strings, usernames of senders
+  // from: is array of strings, usernames of senders
   // to: is array of strings, usernames of receivers
   // notification: is object, contains fields of notification info following ER diagram, also contains args field, which is an 
   // object containing fields specific to a type of notification (duedate, priority) following ER diagram
