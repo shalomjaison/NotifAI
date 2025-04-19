@@ -45,6 +45,8 @@ const verifyValidRequest = (body) => {
 /**
  * Assumes body is valid json object matching the API data model
  * 
+ * NOTE: due date, expiration date, billing reminder date are all considered same thing, use filter's due_earliest_first to sort
+ * 
  * returns a comparator that takes in a and b, which are two notification objects matching database schema in JSON format
  */
 const getComparator = (body) => {
@@ -96,20 +98,14 @@ const getComparator = (body) => {
         }
     }
     if("most_recent_first" in body && body.most_recent_first){
-        console.log("returning for most_recent_first true comparator");
         return (a, b) => {
-            console.log("most_recent_first true comparator");
             a = Date.parse(a.datecreated);
             b = Date.parse(b.datecreated);
             return b - a;
         }
     }
     if("most_recent_first" in body && !body.most_recent_first){
-        console.log("returning for most_recent_first false comparator");
-
         return (a, b) => {
-            console.log("most_recent_first false comparator");
-
             a = Date.parse(a.datecreated);
             b = Date.parse(b.datecreated);
             return a - b;
@@ -212,12 +208,15 @@ const getNotificationsSent = async (username, body, sent) => {
     }
     else if(type == "CLAIMS"){
         include = [{ model: ClaimNotification}];
+        where.type = "claim"; // Filter for notifications of type "CLAIMS"
     }
     else if(type == "NEWS"){
         include = [{ model: NewsNotification}];
+        where.type = "news"; // Filter for notifications of type "NEWS"
     }
     else{   // POLICY, guaranteed to be policy as already checked for incorrect inputs
         include = [{ model: PolicyNotification}];
+        where.type = "policy"; // Filter for notifications of type "POLICY"
     }
 
     include.push(
@@ -226,6 +225,12 @@ const getNotificationsSent = async (username, body, sent) => {
             attributes: ['recipientid'], // Include only the necessary attributes
         }
     );
+    console.log("where is");
+    console.log(where);
+    console.log("username is");
+    console.log(username);
+    console.log("include is");
+    console.log(include);
 
     const userWithNotifications = await User.findOne({
         where: { username: username }, // Replace 'username' with the appropriate identifier
@@ -243,6 +248,8 @@ const getNotificationsSent = async (username, body, sent) => {
         return [];
     }
 
+    // console.log("userWithNotifications is");
+    // console.log(userWithNotifications);
 
     const notif_list = userWithNotifications.Notifications.map((obj) => {
 
@@ -288,8 +295,6 @@ const getNotificationsSent = async (username, body, sent) => {
         return notification;
     });
 
-    console.log("returning notifications list of size " + notif_list.length);
-    console.log(notif_list);
     return notif_list;
 }
 
@@ -468,6 +473,8 @@ const getNotificationsController = async (req, res) => {
         const username = req.session.user.username;
         const id = req.session.id;
         const email = req.session.email;
+
+        console.log("username is " + username);
 
         const validRequest = verifyValidRequest(req.body);
         if(validRequest != "OK"){
