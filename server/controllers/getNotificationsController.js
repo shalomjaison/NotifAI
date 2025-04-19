@@ -170,11 +170,70 @@ const getFilters = (body, user_id) => {
 };
 
 /**
- * Does nothing for now
+ * Same as getNotificationsReceived, but for sent notifications
  * 
  */
-const getNotificationsSent = async (username) => {
-    return [];
+const getNotificationsSent = async (username, body) => {
+    let type = "ALL";
+    if("type" in body.filters){
+        type = body.filters.type;
+    }
+    let include = [];
+
+    if(type == "ALL"){
+        include = [
+            { model: NewsNotification},
+            { model: ClaimNotification},
+            { model: PolicyNotification},
+        ];
+    }
+    else if(type == "CLAIMS"){
+        include = [{ model: ClaimNotification}];
+    }
+    else if(type == "NEWS"){
+        include = [{ model: NewsNotification}];
+    }
+    else{   // POLICY, guaranteed to be policy as already checked for incorrect inputs
+        include = [{ model: PolicyNotification}];
+    }
+
+    const userWithNotifications = await User.findOne({
+        where: { username: username }, // Replace 'username' with the appropriate identifier
+        include: [
+          {
+            model: Notification,
+            include: include,
+            through: { attributes: [] }, // Exclude the join table attributes
+            where: {userid: username},
+            },
+        ],
+      });
+
+    if(userWithNotifications == null || !("Notifications" in userWithNotifications) || userWithNotifications.Notifications == null){
+        return [];
+    }
+
+
+    const notif_list = userWithNotifications.Notifications.map((obj) => {
+
+        const notification = obj.dataValues;
+
+        if("ClaimNotification" in notification && notification.ClaimNotification != null){
+            delete notification.ClaimNotification;
+            notification.args = obj.ClaimNotification.dataValues;    // put all properties of ClaimNotification into args
+        }
+        else if("NewsNotification" in notification && notification.NewsNotification != null){
+            delete notification.NewsNotification;
+            notification.args = obj.NewsNotification.dataValues;    // put all properties of NewsNotification into args
+        }
+        else if("PolicyNotification" in notification && notification.PolicyNotification != null){
+            delete notification.PolicyNotification;
+            notification.args = obj.PolicyNotification.dataValues;    // put all properties of PolicyNotification into args
+        }
+        return notification;
+    });
+    
+    return notif_list;
 }
 
 /**
