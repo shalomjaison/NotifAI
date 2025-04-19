@@ -2,13 +2,14 @@ const request = require('supertest');
 const { app, startServer } = require('../../server/server'); 
 const sequelize = require('../../server/db/db'); 
 const User = require('../../server/models/userModel'); 
-const Notification = require('../../server/models/notificationModel'); 
-const NewsNotification = require('../../server/models/newsModel'); 
-const NotificationRecipient = require('../../server/models/notificationRecipientModel'); 
-const PolicyNotification = require('../../server/models/policyModel'); 
-const ClaimNotification = require('../../server/models/claimModel'); 
+// const Notification = require('../../server/models/notificationModel'); 
+// const NewsNotification = require('../../server/models/newsModel'); 
+// const NotificationRecipient = require('../../server/models/notificationRecipientModel'); 
+// const PolicyNotification = require('../../server/models/policyModel'); 
+// const ClaimNotification = require('../../server/models/claimModel'); 
 const bcrypt = require('bcrypt');
-const { use } = require('react');
+const { experiments } = require('webpack');
+// const { use } = require('react');
 
 // Before all tests, establish a connection to the database
 beforeAll(async () => {
@@ -170,12 +171,12 @@ describe('POST /notifications/', () => {
                 type: "breaking news",
             }
         }
-        const response = await request(app)
+        let response = await request(app)
             .post('/notifications/create')
             .set('Cookie', employee_cookie) // Set the session cookie
             .send(notification1);
 
-        await delay(500);   // notification 1 has oldest creation date
+        await delay(1100);   // notification 1 has oldest creation date
 
         const notification2 = {    // middle creation date, middle expiration date
             userid: "testuser2",
@@ -183,13 +184,6 @@ describe('POST /notifications/', () => {
             title: "Test Notification 2",
             body: "This is a claims notification.",
             recipients: ["testuser1", "testemployee"],
-    // insuredname: DataTypes.STRING,
-    // claimantname: DataTypes.STRING,
-    // tasktype: DataTypes.STRING,
-    // duedate: DataTypes.DATE,
-    // lineofbusiness: DataTypes.STRING,
-    // priority: DataTypes.STRING,
-    // iscompleted: DataTypes.BOOLEAN,
             claimDetails: {
                 insuredname: "testuser2",
                 claimantname: "testuser2",
@@ -200,15 +194,12 @@ describe('POST /notifications/', () => {
                 iscompleted: false,
             }
         }
-        const response2 = await request(app)
+        response = await request(app)
             .post('/notifications/create')
             .set('Cookie', user2_cookie) // Set the session cookie
             .send(notification2);
 
-        console.log("RESPONSE 2", response2.body);
-        console.log(response2.status);
-
-        await delay(500);   // notification 2 has middle creation date
+        await delay(1100);   // notification 2 has middle creation date
 
         const notification3 = {    // newest creation date, oldest expiration date
             userid: "testuser1",
@@ -222,12 +213,12 @@ describe('POST /notifications/', () => {
             }
         }
 
-        const response3 = await request(app)
+        response = await request(app)
             .post('/notifications/create')
             .set('Cookie', user1_cookie) // Set the session cookie
             .send(notification3);
 
-        await delay(500);   // notification 2 has middle creation date
+        await delay(1100);   // notification 2 has middle creation date
 
         /**
          * After creating 3 notifications, right now, employee should receive all 3 notifications, user1 should receive 2 notifications (notification 1 and 2),
@@ -237,9 +228,9 @@ describe('POST /notifications/', () => {
          * user1 -> notification3 -> [employee]
          * user2 -> notification2 -> [employee, user1]
          * 
-         * notification1: oldest creation date, newest expiration date
-         * notification2: middle creation date, middle expiration date
-         * notification3: newest creation date, oldest expiration date
+         * notification1: oldest creation date, newest expiration date, news type
+         * notification2: middle creation date, middle due date, claim type
+         * notification3: newest creation date, oldest reminder date, policy type
          * 
          * notification 1 should be sent by employee, notification 2 should be sent by user2, and notification 3 should be sent by user1
          * 
@@ -254,34 +245,87 @@ describe('POST /notifications/', () => {
         request_received.most_recent_first = true;
         request_received.filters.sent = false;
 
-        // Employee
-        const response_received_employee = await request(app)
+        // Employee, 3 received notifications
+        response = await request(app)
         .post('/notifications/')
         .set('Cookie', employee_cookie) // Set the session cookie
         .send(request_received);
 
-        expect(response_received_employee.status).toBe(200);  // response should be {notifications: []}
-        expect(response_received_employee.body.notifications.length).toEqual(3);
+        expect(response.status).toBe(200);  // response should be {notifications: []}
+        expect(response.body.notifications.length).toEqual(3);    // should be notif3, notif2, notif1
+
+        console.log("TEST DATE");
+        console.log(response.body.notifications[0].notification.datecreated);
+        console.log(response.body.notifications[1].notification.datecreated);
+        console.log(response.body.notifications[2].notification.datecreated);
+
+        // Check order of notifications by most recent first
+        expect(response.body.notifications[0].notification.type).toEqual("policy");
+        expect(response.body.notifications[1].notification.type).toEqual("claim");
+        expect(response.body.notifications[2].notification.type).toEqual("news");
+
+        for (let i = 1; i < 3; i++) {
+            const a = Date.parse(response.body.notifications[i - 1].notification.datecreated);
+            const b = Date.parse(response.body.notifications[i].notification.datecreated);
+            expect(a).toBeGreaterThan(b);
+        }
+
+        // Employee, 1 received policy notification
+        let requestbody = defaultRequestBody();
+        requestbody.filters.type = "POLICY";
+
+        console.log("REQUEST BODY");
+        console.log(requestbody);
+        response = await request(app)
+        .post('/notifications/')
+        .set('Cookie', employee_cookie) // Set the session cookie
+        .send(requestbody);
+
+        expect(response.status).toBe(200);  // response should be {notifications: []}
+        expect(response.body.notifications.length).toEqual(1);   // should be notif3
+        expect(response.body.notifications[0].notification.type).toEqual("policy");
+
+        // Employee, 3 received notifications by due date/expiration date/reminder date
+        requestbody = defaultRequestBody();
+        requestbody.filters.args.due_earliest_first = true;
+
+        response = await request(app)
+        .post('/notifications/')
+        .set('Cookie', employee_cookie) // Set the session cookie
+        .send(requestbody);
+
+        expect(response.status).toBe(200);  // response should be {notifications: []}
+        expect(response.body.notifications.length).toEqual(3);   // should be notif3, notif2, notif1
+        expect(response.body.notifications[0].notification.type).toEqual("policy");
+        expect(response.body.notifications[1].notification.type).toEqual("claim");
+        expect(response.body.notifications[2].notification.type).toEqual("news");
 
         // User1
-        const response_received_user1 = await request(app)
+        const request_received_oldest_first = defaultRequestBody();
+        request_received_oldest_first.most_recent_first = false;
+        request_received_oldest_first.filters.sent = false;
+
+        response = await request(app)
         .post('/notifications/')
         .set('Cookie', user1_cookie) // Set the session cookie
-        .send(request_received);
+        .send(request_received_oldest_first);
 
-        expect(response_received_user1.status).toBe(200);  // response should be {notifications: []}
-        expect(response_received_user1.body.notifications.length).toEqual(2);
-
+        expect(response.status).toBe(200);  // response should be {notifications: []}
+        expect(response.body.notifications.length).toEqual(2);   // should be notif1, notif2
+        expect(response.body.notifications[0].notification.type).toEqual("news");
+        expect(response.body.notifications[1].notification.type).toEqual("claim");
+        expect(Date.parse(response.body.notifications[0].notification.datecreated)).toBeLessThan(Date.parse(response.body.notifications[1].notification.datecreated));
+        
         // User2
-        const response_received_user2 = await request(app)
+        response = await request(app)
         .post('/notifications/')
         .set('Cookie', user2_cookie) // Set the session cookie
         .send(request_received);
 
-        expect(response_received_user2.status).toBe(200);  // response should be {notifications: []}
-        expect(response_received_user2.body.notifications.length).toEqual(1);
+        expect(response.status).toBe(200);  // response should be {notifications: []}
+        expect(response.body.notifications.length).toEqual(1);
 
-        // BEGIN TESTS SENT AND DATE
+        // BEGIN TESTS SENT
         const request_sent = defaultRequestBody();
 
         request_sent.most_recent_first = true;
@@ -297,7 +341,6 @@ describe('POST /notifications/', () => {
 
         console.log(response_sent_employee.body.notifications[0]);
 
-        // BEGIN TESTS TYPES
 
     });
 

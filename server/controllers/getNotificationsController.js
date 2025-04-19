@@ -56,11 +56,17 @@ const getComparator = (body) => {
             else if("duedate" in a.args){
                 a = Date.parse(a.args.duedate);
             }
+            else if("billingreminderdate" in a.args){
+                a = Date.parse(a.args.billingreminderdate);
+            }
             if("expirationdate" in b.args){
                 b = Date.parse(b.args.expirationdate);
             }
             else if("duedate" in b.args){
                 b = Date.parse(b.args.duedate);
+            }
+            else if("billingreminderdate" in b.args){
+                b = Date.parse(b.args.billingreminderdate);
             }
 
             return a - b;
@@ -74,25 +80,36 @@ const getComparator = (body) => {
             else if("duedate" in a.args){
                 a = Date.parse(a.args.duedate);
             }
+            else if("billingreminderdate" in a.args){
+                a = Date.parse(a.args.billingreminderdate);
+            }
             if("expirationdate" in b.args){
                 b = Date.parse(b.args.expirationdate);
             }
             else if("duedate" in b.args){
                 b = Date.parse(b.args.duedate);
             }
-
+            else if("billingreminderdate" in b.args){
+                b = Date.parse(b.args.billingreminderdate);
+            }
             return b - a;
         }
     }
-    if("most_recent_first" in body.filters.args && !body.filters.args.most_recent_first){
+    if("most_recent_first" in body && body.most_recent_first){
+        console.log("returning for most_recent_first true comparator");
         return (a, b) => {
+            console.log("most_recent_first true comparator");
             a = Date.parse(a.datecreated);
             b = Date.parse(b.datecreated);
             return b - a;
         }
     }
-    if("most_recent_first" in body.filters.args && !body.filters.args.most_recent_first){
+    if("most_recent_first" in body && !body.most_recent_first){
+        console.log("returning for most_recent_first false comparator");
+
         return (a, b) => {
+            console.log("most_recent_first false comparator");
+
             a = Date.parse(a.datecreated);
             b = Date.parse(b.datecreated);
             return a - b;
@@ -271,6 +288,8 @@ const getNotificationsSent = async (username, body, sent) => {
         return notification;
     });
 
+    console.log("returning notifications list of size " + notif_list.length);
+    console.log(notif_list);
     return notif_list;
 }
 
@@ -455,23 +474,16 @@ const getNotificationsController = async (req, res) => {
             return res.status(400).json({ reason: validRequest });
         }
 
-        console.log("valid request, getting notifications");
         // let notifications = (req.body.filters.sent) ? (await getNotificationsSent(username, req.body)) : (await getNotificationsReceived(username, req.body));   
         let notifications = await getNotificationsSent(username, req.body, req.body.filters.sent);   
  
-        console.log("valid request, getting notifications2");
-
         const comparator = getComparator(req.body);
 
         const filters = getFilters(req.body, id);   // array of functions
 
-        console.log("valid request, getting notifications3");
-
         filters.forEach((fil) => {
             notifications = notifications.filter(fil);
         });
-
-        console.log("valid request, getting notifications4");
 
         notifications.sort(comparator);
 
