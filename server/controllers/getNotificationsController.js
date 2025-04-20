@@ -191,7 +191,7 @@ const getFilters = (body, user_id) => {
  * such as ClaimNotification, NewsNotification, PolicyNotification
  * 
  */
-const getNotificationsSent = async (username, body, sent) => {
+const getNotifications = async (username, body, sent) => {
     let type = "ALL";
     if("type" in body.filters){
         type = body.filters.type;
@@ -334,8 +334,7 @@ const getNotificationsController = async (req, res) => {
             return res.status(400).json({ reason: validRequest });
         }
 
-        // let notifications = (req.body.filters.sent) ? (await getNotificationsSent(username, req.body)) : (await getNotificationsReceived(username, req.body));   
-        let notifications = await getNotificationsSent(username, req.body, req.body.filters.sent);   
+        let notifications = await getNotifications(username, req.body, req.body.filters.sent);   
  
         const comparator = getComparator(req.body);
 
