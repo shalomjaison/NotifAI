@@ -101,7 +101,20 @@ const GenAI = () => {
 
                         {message.role === 'model' && (
                             <div>
-                                <h4>Gemini:</h4>
+
+                                <h4>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    width={40}
+                                    height={40}
+                                    color={"#e9d5ff"}
+                                    fill={"none"}
+                                    id = "genAI2"
+                                  >
+                                <path d="M3 12C7.97056 12 12 7.97056 12 3C12 7.97056 16.0294 12 21 12C16.0294 12 12 16.0294 12 21C12 16.0294 7.97056 12 3 12Z" stroke="currentColor" strokeWidth="2.5" strokeLinejoin="round" />
+                                </svg>
+                                Gemini:</h4>
                                 {/* Pass raw text to ReactMarkdown for formatting */}
                                 <ReactMarkdown>
                                     {message.parts[0].text}
