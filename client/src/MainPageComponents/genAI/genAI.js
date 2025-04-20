@@ -119,7 +119,7 @@ const GenAI = () => {
             <div className="input-area-container">
                 <textarea
                     className="genai-prompt-textarea"
-                    placeholder="ó‿ó say anything"
+                    placeholder="ó‿ó say sumthin"
                     rows="3" 
                     cols="60"
                     value={prompt}
