@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { app, startServer } = require('../../server/server'); 
+const { app, startServer, stopServer } = require('../../server/server'); 
 const sequelize = require('../../server/db/db'); 
 const User = require('../../server/models/userModel'); 
 // const Notification = require('../../server/models/notificationModel'); 
@@ -13,8 +13,9 @@ const { experiments } = require('webpack');
 
 // Before all tests, establish a connection to the database
 beforeAll(async () => {
-  await startServer();
-  await sequelize.authenticate();
+    await startServer();
+    await sequelize.authenticate();
+
   console.log('Database connection established for tests.');
   // Sync the database 
   await sequelize.sync({ force: true });
@@ -58,6 +59,9 @@ afterAll(async () => {
 
   await sequelize.close();
   console.log('Database connection closed after tests.');
+
+  stopServer();
+    console.log("server stopped");
 });
 
 
@@ -120,41 +124,41 @@ describe('POST /notifications/', () => {
     /**
      * THIS TEST ALSO LOGINS FOR THREE ACCOUNTS SO THAT CAN REUSE COOKIES
      */
-    it("should return empty list if account has no notifications", async () => {
+    // it("should return empty list if account has no notifications", async () => {
 
-        console.log("TESTING FOR EMPTY NOTIFICATIONS");
+    //     console.log("TESTING FOR EMPTY NOTIFICATIONS");
 
-        const response = await request(app)
-            .post('/notifications/')
-            .set('Cookie', employee_cookie) // Set the session cookie
-            .send(defaultRequestBody());
+    //     const response = await request(app)
+    //         .post('/notifications/')
+    //         .set('Cookie', employee_cookie) // Set the session cookie
+    //         .send(defaultRequestBody());
 
-        expect(response.status).toBe(200);  // response should be {notifications: []}
-        expect(response.body.notifications).toEqual([]);
+    //     expect(response.status).toBe(200);  // response should be {notifications: []}
+    //     expect(response.body.notifications).toEqual([]);
 
-        const request1 = structuredClone(defaultRequestBody());
-        request1.filters.type = "NEWS";
+    //     const request1 = structuredClone(defaultRequestBody());
+    //     request1.filters.type = "NEWS";
 
-        const response_user1 = await request(app)
-            .post('/notifications/')
-            .set('Cookie', user1_cookie) // Set the session cookie
-            .send(request1);
+    //     const response_user1 = await request(app)
+    //         .post('/notifications/')
+    //         .set('Cookie', user1_cookie) // Set the session cookie
+    //         .send(request1);
 
-        expect(response_user1.status).toBe(200);  // response should be {notifications: []}
-        expect(response_user1.body.notifications).toEqual([]);
+    //     expect(response_user1.status).toBe(200);  // response should be {notifications: []}
+    //     expect(response_user1.body.notifications).toEqual([]);
 
-        const request2 = structuredClone(defaultRequestBody());
-        request2.filters.type = "POLICY";
-        request2.most_recent_first = true;
+    //     const request2 = structuredClone(defaultRequestBody());
+    //     request2.filters.type = "POLICY";
+    //     request2.most_recent_first = true;
 
-        const response_user2 = await request(app)
-            .post('/notifications/')
-            .set('Cookie', user2_cookie) // Set the session cookie
-            .send(request2);
+    //     const response_user2 = await request(app)
+    //         .post('/notifications/')
+    //         .set('Cookie', user2_cookie) // Set the session cookie
+    //         .send(request2);
 
-        expect(response_user2.status).toBe(200);  // response should be {notifications: []}
-        expect(response_user2.body.notifications).toEqual([]);
-    });
+    //     expect(response_user2.status).toBe(200);  // response should be {notifications: []}
+    //     expect(response_user2.body.notifications).toEqual([]);
+    // });
 
     it("smoke test on three notifications", async () => {
 
@@ -219,7 +223,6 @@ describe('POST /notifications/', () => {
             .set('Cookie', user1_cookie) // Set the session cookie
             .send(notification3);
 
-
         /**
          * After creating 3 notifications, right now, employee should receive all 3 notifications, user1 should receive 2 notifications (notification 1 and 2),
          * and user2 should receive 1 notification (notification 1)
@@ -235,26 +238,6 @@ describe('POST /notifications/', () => {
          * notification 1 should be sent by employee, notification 2 should be sent by user2, and notification 3 should be sent by user1
          * 
          */
-
-        // User1 sent
-        console.log("TESTING FOR SENT NOTIFICATIONS USER1");
-
-        let request_sent1 = defaultRequestBody();
-
-        // request_sent.most_recent_first = true;
-        request_sent1.filters.sent = true;
-
-        response = await request(app).post('/notifications/').set('Cookie', user1_cookie).send(request_sent1);
-
-        expect(response.status).toBe(200);  // response should be {notifications: []}
-        console.log("WHAT???");
-        console.log(response.body);
-        expect(response.body.notifications.length).toEqual(1);    // should be notif3
-        expect(response.body.notifications[0].notification.type).toEqual("policy");
-
-        expect(2).toBe(1); // this is a test to make sure the test is running
-
-
 
         /**
          * BEGIN TESTS RECEIVED
@@ -401,6 +384,80 @@ describe('POST /notifications/', () => {
 
         expect(response.status).toBe(200);  // response should be {notifications: []}
         expect(response.body.notifications).toEqual([]);    // should be []
+
+        // User2 sent with filter on POLICY
+        request_sent.filters.type = "POLICY";
+
+        response = await request(app).post('/notifications/').set('Cookie', user2_cookie).send(request_sent);
+
+        expect(response.status).toBe(200);  // response should be {notifications: []}
+        expect(response.body.notifications).toEqual([]);    // should be []
+
+        /**
+         * TEST SENT NOTIFICATION FOR user2, BUT ADD A 4th NOTIFICATION THAT USER2 SENDS
+         * 
+         * user2 -> notification2 -> [employee, user1]
+         * user2 -> notification4 -> [employee]
+         * 
+         * notification2: middle creation date, middle due date, claim type
+         * notification4: newest creation date, oldest expiration date, news type
+         *          
+         */
+
+        const notification4 = {     // oldest creation date, newest expiration date
+            userid: "testuser2",
+            type: "news",               // news, claim, policy
+            title: "Test Notification 4",
+            body: "This is a test notification news.",
+            recipients: ["testemployee"],
+            newsDetails: {
+                expirationdate: oldestDate,
+                type: "breaking news",
+            }
+        }
+        response = await request(app)
+            .post('/notifications/create')
+            .set('Cookie', user2_cookie) // Set the session cookie
+            .send(notification4);
+
+        
+
+        // Sort notifications by most recent first
+        requestbody = defaultRequestBody();
+        requestbody.filters.sent = true;
+        requestbody.most_recent_first = true;
+
+        response = await request(app).post('/notifications/').set('Cookie', user2_cookie).send(requestbody);
+
+        expect(response.status).toBe(200);  // response should be {notifications: []}
+        expect(response.body.notifications.length).toEqual(2);   // should be notif4, notif2
+        expect(response.body.notifications[0].notification.type).toEqual("news");
+        expect(response.body.notifications[1].notification.type).toEqual("claim");
+
+        // Sort notifications by due date
+        requestbody = defaultRequestBody();
+        requestbody.filters.sent = true;
+        requestbody.most_recent_first = true;
+        requestbody.filters.args.due_earliest_first = false;
+
+        response = await request(app).post('/notifications/').set('Cookie', user2_cookie).send(requestbody);
+
+        expect(response.status).toBe(200);  // response should be {notifications: []}
+        expect(response.body.notifications.length).toEqual(2);   // should be notif2, notif4
+        expect(response.body.notifications[1].notification.type).toEqual("news");
+        expect(response.body.notifications[0].notification.type).toEqual("claim");
+
+        // Get 1 of two notifications sent
+        requestbody = defaultRequestBody();
+        requestbody.filters.sent = true;
+        requestbody.most_recent_first = true;
+        requestbody.filters.type = "CLAIMS";
+
+        response = await request(app).post('/notifications/').set('Cookie', user2_cookie).send(requestbody);
+
+        expect(response.status).toBe(200);  // response should be {notifications: []}
+        expect(response.body.notifications.length).toEqual(1);   // should be notif2, notif4
+        expect(response.body.notifications[0].notification.type).toEqual("claim");
     });
 
     

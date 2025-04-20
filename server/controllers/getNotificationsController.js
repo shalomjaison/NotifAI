@@ -232,26 +232,37 @@ const getNotificationsSent = async (username, body, sent) => {
     console.log("include is");
     console.log(include);
 
-    const userWithNotifications = await User.findOne({
-        where: { username: username }, // Replace 'username' with the appropriate identifier
-        include: [
-          {
-            model: Notification,
-            include: include,
-            through: { attributes: [] }, // Exclude the join table attributes
-            where: where
-            },
-        ],
-      });
+    let notif_list = [];
 
-    if(userWithNotifications == null || !("Notifications" in userWithNotifications) || userWithNotifications.Notifications == null){
-        return [];
+    if(!sent){
+        const userWithNotifications = await User.findOne({
+            where: { username: username }, // Replace 'username' with the appropriate identifier
+            include: [
+              {
+                model: Notification,
+                include: include,
+                through: { attributes: [] }, // Exclude the join table attributes
+                where: where
+                },
+            ],
+        });
+
+        if(userWithNotifications == null || !("Notifications" in userWithNotifications) || userWithNotifications.Notifications == null){
+            return [];
+        }
+        notif_list = userWithNotifications.Notifications;
+    }
+    else{
+        notif_list = await Notification.findAll({
+            where: where, // Apply the filter for sent notifications
+            include: include,
+        });
     }
 
-    // console.log("userWithNotifications is");
-    // console.log(userWithNotifications);
+    console.log("notif_list is");
+    console.log(notif_list);
 
-    const notif_list = userWithNotifications.Notifications.map((obj) => {
+    const notif_wrapper_list = notif_list.map((obj) => {
 
         const notification = obj.dataValues;
 
@@ -295,7 +306,7 @@ const getNotificationsSent = async (username, body, sent) => {
         return notification;
     });
 
-    return notif_list;
+    return notif_wrapper_list;
 }
 
 /**
