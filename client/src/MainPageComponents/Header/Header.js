@@ -21,7 +21,7 @@ const Header = ({ userData }) => {
   return (
     <header className="header-container">
       <h1 className="header-title">
-        {userData ? `Hi ${userData.fname} <3` : 'You are not signed in'} {/* Changed message */}
+        NOTIFAI
       </h1>
 
       <div className="header-actions">
