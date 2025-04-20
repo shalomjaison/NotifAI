@@ -37,7 +37,7 @@ html {
     font-size: 42px;
     font-weight: bold;
     margin: 0;
-    font-family: 'Quicksand', 'sans-serif';
+    font-family: "KoHo", sans-serif;
   }
   
   .header-actions {
@@ -96,10 +96,11 @@ html {
   }
   
   .dropdown-greeting {
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 0rem;
-    margin-top: 0rem;
-    font-family: "Jaldi", sans-serif;
+    margin-top: 0.5rem;
+    font-family: "Roboto", sans-serif;
+    /* font-family: "Assistant", sans-serif; */
     font-weight: 500;
     font-size: 2rem;
   }
@@ -107,16 +108,15 @@ html {
   .dropdown-btn {
     display: block;
     width: 100%;
-    margin-top: 0.4rem;
-    margin-bottom: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
     padding: 0.5rem;
-    font-weight: 500;
     background-color: rgb(241, 228, 251);
     cursor: pointer;
     transition: background 0.3s ease;
     border: 2px solid #111111;
     border-radius: 16px;
-    font-family: "Jaldi", sans-serif;
+    font-family: "Assistant", sans-serif;
     font-weight: 500;
     font-size: 0.9rem;
   }

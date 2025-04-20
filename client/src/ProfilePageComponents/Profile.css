@@ -10,22 +10,22 @@
 }
 
 .notifai-text {
-    font-size: 4rem;
+    font-size: 42px;
     color: #000;
     margin-bottom: 0rem;
     margin-top: 0rem;
-    font-family: "Playfair Display", serif;
-    font-weight: 400;
+    font-family: "KoHo", sans-serif;
+    font-weight: bold;
     font-style: normal;
     cursor: pointer;
 }
   
 .section-title {
-    font-size: 1.6rem;
+    font-size: 21px;
     font-weight: 600;
-    color: #111111;
+    color: #4e4d4d;
     margin-bottom: 2rem;
-    margin-top: 0rem;
+    margin-top: 1rem;
 }
 
 .profile-card {
@@ -38,7 +38,8 @@
 }
 
 .card-title {
-    font-size: 1.5rem;
+    font-family: "Roboto", sans-serif;
+    font-size: 1.3rem;
     color: #222;
     font-weight: 700;
     margin-bottom: 1rem;
@@ -53,6 +54,7 @@
 }
 
 .info-row {
+    font-family: "Assistant", sans-serif;
     display: flex;
     justify-content: space-between;
     padding: 0.4rem 0;
