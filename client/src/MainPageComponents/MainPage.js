@@ -6,6 +6,7 @@ import Search from "./Search/Search";
 import NotificationList from "./NotificationList/NotificationList";
 import ClaimsAlert from "./ClaimsAlert/ClaimsAlert";
 import Reminders from "./Reminders/Reminders";
+import GenAI from "./genAI/genAI"
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
@@ -17,6 +18,12 @@ function MainPage() {
 
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isGenAIVisible, setIsGenAIVisible] = useState(false); // state for Gemini visibility
+
+  const toggleGenAI = () => {
+    setIsGenAIVisible(prevState => !prevState);
+    console.log(isGenAIVisible)
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -73,7 +80,7 @@ function MainPage() {
 
   // State for filtered notifications
   // filteredNotifications and notifications are each a list of objects, each object contains three fields: from, to, and notification
-  // fro:m is array of strings, usernames of senders
+  // from: is array of strings, usernames of senders
   // to: is array of strings, usernames of receivers
   // notification: is object, contains fields of notification info following ER diagram, also contains args field, which is an 
   // object containing fields specific to a type of notification (duedate, priority) following ER diagram
@@ -162,7 +169,7 @@ function MainPage() {
       {/* Main content area */}
       <div style={{ flexGrow: 1, padding: '20px', overflow: 'auto' }}>
         {/* Header component */}
-        <Header userData={userData} />
+        <Header userData={userData} onGenAIClick={toggleGenAI} />
 
         <div style={{
           display: 'flex',
@@ -201,15 +208,15 @@ function MainPage() {
           </div>
 
           {/* Right sidebar - claims and reminders */}
-          <div style={{ flexBasis: '30%' }}>
+          <div style={{ flexBasis: '30%'}}>
             {/* Claims alert */}
             <ClaimsAlert />
-
             {/* Reminders section */}
             <Reminders reminders={reminders} />
           </div>
         </div>
       </div>
+      {isGenAIVisible && <GenAI />}
     </div>
   );
 }
