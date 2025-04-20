@@ -1,59 +1,73 @@
 import "./genAI.css";
-// Make sure useEffect is imported
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import ReactMarkdown from 'react-markdown'; // for text formatting
+
 
 const initialHistory = [];
 
 const GenAI = () => {
     const [prompt, setPrompt] = useState('');
-    const [response, setResponse] = useState('');
     const [chatHistory, setChatHistory] = useState(initialHistory);
     const [isLoading, setIsLoading] = useState(false);
     const textareaRef = useRef(null);
+    const chatDisplayRef = useRef(null); 
     const [focusRequested, setFocusRequested] = useState(false);
+
 
     useEffect(() => {
         if (focusRequested && textareaRef.current) {
             textareaRef.current.focus();
             setFocusRequested(false);
         }
-    }, [focusRequested]); 
+    }, [focusRequested]);
+
+
+    useEffect(() => {
+        if (chatDisplayRef.current) {
+            chatDisplayRef.current.scrollTop = chatDisplayRef.current.scrollHeight;
+        }
+    }, [chatHistory]); 
 
     const handlePromptChange = (event) => {
         setPrompt(event.target.value);
     }
 
     const promptHandler = async () => {
-        const currentPrompt = prompt;
-        if (!currentPrompt.trim()) return;
+        const currentPrompt = prompt.trim(); 
+        if (!currentPrompt) return;
 
         setIsLoading(true);
-        setResponse('');
-        setPrompt('');
+
+        setPrompt(''); 
+
+
+        const newUserMessage = { role: "user", parts: [{ text: currentPrompt }] };
+        setChatHistory(prevHistory => [...prevHistory, newUserMessage]);
+
 
         try {
+
+            const historyForAPI = chatHistory; 
+
             const result = await axios.post("http://localhost:3000/genAI/gemini-prompt", {
                 prompt: currentPrompt,
-                history: chatHistory
+                history: historyForAPI 
             });
 
             const aiResponseText = result.data.generatedText;
-            setResponse(aiResponseText);
 
-            setChatHistory(prevHistory => [
-                ...prevHistory,
-                { role: "user", parts: [{ text: currentPrompt }] },
-                { role: "model", parts: [{ text: aiResponseText }]}
-            ]);
+            const aiMessage = { role: "model", parts: [{ text: aiResponseText }] };
+            setChatHistory(prevHistory => [...prevHistory, aiMessage]);
+  
 
         } catch (error) {
             console.error("uh oh, error sending prompt:", error);
-            setResponse("uh oh, error fetching response");
-            setPrompt(currentPrompt); // restore prompt on error
+            const errorMessage = { role: "model", parts: [{ text: "uh oh, error fetching response" }] };
+            setChatHistory(prevHistory => [...prevHistory, errorMessage]);
         } finally {
             setIsLoading(false);
-            setFocusRequested(true);
+            setFocusRequested(true); // Request focus back to the textarea
         }
     }
 
@@ -66,32 +80,65 @@ const GenAI = () => {
 
     return (
         <div className="promptContainer">
-            <div className="gemini-response-display">
-                <h4>Gemini Response:</h4>
-                <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
-                    {isLoading ? "Generating response..." : response}
-                </pre>
+            <div className="gemini-response-display" ref={chatDisplayRef}>
+                {chatHistory.length === 0 && !isLoading && (
+                    <div className="chat-placeholder">
+                        Ask me for assistance! ♡
+                    </div>
+                )}
+
+                {chatHistory.map((message, index) => (
+                    <div key={index} className={`chat-message ${message.role === 'user' ? 'user-message' : 'model-message'}`}>
+
+                        {message.role === 'user' && (
+                            message.parts[0].text.split('\n').map((line, i) => (
+                                <React.Fragment key={i}>
+                                    {line}
+                                    <br />
+                                </React.Fragment>
+                            ))
+                        )}
+
+                        {message.role === 'model' && (
+                            <div>
+                                <h4>Gemini:</h4>
+                                {/* Pass raw text to ReactMarkdown for formatting */}
+                                <ReactMarkdown>
+                                    {message.parts[0].text}
+                                </ReactMarkdown>
+                            </div>
+                        )}
+                    </div>
+                ))}
+                {isLoading && (
+                    <div className="chat-message model-message loading-indicator">
+                        <span>Thinking...</span>
+                    </div>
+                )}
             </div>
-            <textarea
-                className="genai-prompt-textarea"
-                placeholder="Ask for help!"
-                rows="10"
-                cols="60"
-                value={prompt}
-                onChange={handlePromptChange}
-                onKeyDown={handleKeyDown}
-                disabled={isLoading} 
-                ref={textareaRef}
-            />
-            <button
-                id="send"
-                onClick={promptHandler}
-                disabled={isLoading || !prompt.trim()}
-            >
-                {isLoading ? 'Sending...' : 'Send'}
-            </button>
+            <div className="input-area-container">
+                <textarea
+                    className="genai-prompt-textarea"
+                    placeholder="ó‿ó say anything"
+                    rows="3" 
+                    cols="60"
+                    value={prompt}
+                    onChange={handlePromptChange}
+                    onKeyDown={handleKeyDown}
+                    disabled={isLoading}
+                    ref={textareaRef}
+                />
+                <button
+                    id="send"
+                    onClick={promptHandler}
+                    disabled={isLoading || !prompt.trim()} 
+                >
+                    <i className="material-icons">send</i>
+                </button>
+            </div>
         </div>
     )
 }
 
 export default GenAI;
+
