@@ -89,11 +89,13 @@ const viewUsers = async () => {
   }
 };
 
+let server = null;
+
 const startServer = async () => {
   try {
     await sequelize.sync({ force: true });
     await createHardcodedUser();
-    app.listen(port, () => {
+    server = app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
     await viewUsers();
@@ -102,8 +104,15 @@ const startServer = async () => {
   }
 };
 
+const stopServer = async () => {
+  if (server != null) {
+      server.close(() => {
+          console.log('Server stopped.');
+      });
+  }
+};
 
-module.exports = { app, startServer }; // exporting for testing with jest
+module.exports = { app, startServer, stopServer }; // exporting for testing with jest
 
 
 /*  ensures that startServer() is 

@@ -26,7 +26,7 @@ class Filter extends React.Component {
         // although this seems like copy pasta from getDefaultFilterRequest, this is needed for initial render of UI
         this.currentFilterRequest = {
             most_recent_first: true,
-            max_notifications: 50,
+            // max_notifications: 50,
             filters: {
                 sent: false,
                 args: {
@@ -69,7 +69,7 @@ class Filter extends React.Component {
     getDefaultFilterRequest(){
         const output = {
             most_recent_first: true,
-            max_notifications: 50,
+            // max_notifications: 50,
             filters: {
                 sent: false,
                 args: {

@@ -45,6 +45,8 @@ const verifyValidRequest = (body) => {
 /**
  * Assumes body is valid json object matching the API data model
  * 
+ * NOTE: due date, expiration date, billing reminder date are all considered same thing, use filter's due_earliest_first to sort
+ * 
  * returns a comparator that takes in a and b, which are two notification objects matching database schema in JSON format
  */
 const getComparator = (body) => {
@@ -56,11 +58,17 @@ const getComparator = (body) => {
             else if("duedate" in a.args){
                 a = Date.parse(a.args.duedate);
             }
+            else if("billingreminderdate" in a.args){
+                a = Date.parse(a.args.billingreminderdate);
+            }
             if("expirationdate" in b.args){
                 b = Date.parse(b.args.expirationdate);
             }
             else if("duedate" in b.args){
                 b = Date.parse(b.args.duedate);
+            }
+            else if("billingreminderdate" in b.args){
+                b = Date.parse(b.args.billingreminderdate);
             }
 
             return a - b;
@@ -74,24 +82,29 @@ const getComparator = (body) => {
             else if("duedate" in a.args){
                 a = Date.parse(a.args.duedate);
             }
+            else if("billingreminderdate" in a.args){
+                a = Date.parse(a.args.billingreminderdate);
+            }
             if("expirationdate" in b.args){
                 b = Date.parse(b.args.expirationdate);
             }
             else if("duedate" in b.args){
                 b = Date.parse(b.args.duedate);
             }
-
+            else if("billingreminderdate" in b.args){
+                b = Date.parse(b.args.billingreminderdate);
+            }
             return b - a;
         }
     }
-    if("most_recent_first" in body.filters.args && !body.filters.args.most_recent_first){
+    if("most_recent_first" in body && body.most_recent_first){
         return (a, b) => {
             a = Date.parse(a.datecreated);
             b = Date.parse(b.datecreated);
             return b - a;
         }
     }
-    if("most_recent_first" in body.filters.args && !body.filters.args.most_recent_first){
+    if("most_recent_first" in body && !body.most_recent_first){
         return (a, b) => {
             a = Date.parse(a.datecreated);
             b = Date.parse(b.datecreated);
@@ -170,162 +183,126 @@ const getFilters = (body, user_id) => {
 };
 
 /**
- * Does nothing for now
- * 
- */
-const getNotificationsSent = async (username) => {
-    return [];
-}
-
-/**
- * Gets all notifications that a user received by type
+ * Gets all notifications that a user received by type and sent/received
  * 
  * Returns a list of json objects. The immediate keys inside each json object are properties of the Notification data model.
+ * THERE IS ONE EXCEPTION: the "from" and "to" key are both list of strings, which contains senders receivers
  * Each json object also has a property called args, which is a json object that contains all the properties of the notification type data model, 
  * such as ClaimNotification, NewsNotification, PolicyNotification
  * 
  */
-const getNotificationsReceived = async (username, body) => {
+const getNotifications = async (username, body, sent) => {
     let type = "ALL";
     if("type" in body.filters){
         type = body.filters.type;
     }
+    let include = [];
+    let where = {};
+
+    if(sent){
+        where = {userid: username};
+    }
+
     if(type == "ALL"){
-
-        const userWithNotifications = await User.findOne({
-            where: { username: username }, // Replace 'username' with the appropriate identifier
-            include: [
-              {
-                model: Notification,
-                include: [
-                    { model: NewsNotification},
-                    { model: ClaimNotification},
-                    { model: PolicyNotification},
-                ],
-                through: { attributes: [] }, // Exclude the join table attributes
-              },
-            ],
-          });
-
-        if(userWithNotifications == null || !("Notifications" in userWithNotifications) || userWithNotifications.Notifications == null){
-            return [];
-        }
-
-        const notif_list = userWithNotifications.Notifications.map((obj) => {
-
-            const notification = obj.dataValues;
-
-            if("ClaimNotification" in notification && notification.ClaimNotification != null){
-                delete notification.ClaimNotification;
-                notification.args = obj.ClaimNotification.dataValues;    // put all properties of ClaimNotification into args
-            }
-            else if("NewsNotification" in notification && notification.NewsNotification != null){
-                delete notification.NewsNotification;
-                notification.args = obj.NewsNotification.dataValues;    // put all properties of NewsNotification into args
-            }
-            else if("PolicyNotification" in notification && notification.PolicyNotification != null){
-                delete notification.PolicyNotification;
-                notification.args = obj.PolicyNotification.dataValues;    // put all properties of PolicyNotification into args
-            }
-            return notification;
-        });
-        return notif_list;
+        include = [
+            { model: NewsNotification},
+            { model: ClaimNotification},
+            { model: PolicyNotification}
+        ];
     }
     else if(type == "CLAIMS"){
-
-        const userWithNotifications = await User.findOne({
-            where: { username: username }, // Replace 'username' with the appropriate identifier
-            include: [
-              {
-                model: Notification,
-                include: [
-                    {
-                        model: ClaimNotification,
-                    }
-                ],
-                through: { attributes: [] }, // Exclude the join table attributes
-                where: {type: "claim"}, // Filter for notifications of type "CLAIMS"
-              },
-            ],
-          });
-        
-        if(userWithNotifications == null || !("Notifications" in userWithNotifications) || userWithNotifications.Notifications == null){
-            return [];
-        }
-
-        const notif_list = userWithNotifications.Notifications.map((obj) => {
-            
-            const notification = obj.dataValues;
-            delete notification.ClaimNotification;
-            notification.args = obj.ClaimNotification.dataValues;    // put all properties of NewsNotification into args
-            return notification;
-        });
-        return notif_list;
+        include = [{ model: ClaimNotification}];
+        where.type = "claim"; // Filter for notifications of type "CLAIMS"
     }
     else if(type == "NEWS"){
+        include = [{ model: NewsNotification}];
+        where.type = "news"; // Filter for notifications of type "NEWS"
+    }
+    else{   // POLICY, guaranteed to be policy as already checked for incorrect inputs
+        include = [{ model: PolicyNotification}];
+        where.type = "policy"; // Filter for notifications of type "POLICY"
+    }
+
+    include.push(
+        { 
+            model: NotificationRecipient,
+            attributes: ['recipientid'], // Include only the necessary attributes
+        }
+    );
+
+    let notif_list = [];
+
+    if(!sent){
         const userWithNotifications = await User.findOne({
             where: { username: username }, // Replace 'username' with the appropriate identifier
             include: [
               {
                 model: Notification,
-                include: [
-                    {
-                        model: NewsNotification,
-                    }
-                ],
+                include: include,
                 through: { attributes: [] }, // Exclude the join table attributes
-                where: {type: "news"}, // Filter for notifications of type "CLAIMS"
-              },
+                where: where
+                },
             ],
-          });
+        });
 
         if(userWithNotifications == null || !("Notifications" in userWithNotifications) || userWithNotifications.Notifications == null){
             return [];
         }
+        notif_list = userWithNotifications.Notifications;
+    }
+    else{
+        notif_list = await Notification.findAll({
+            where: where, // Apply the filter for sent notifications
+            include: include,
+        });
+    }
 
-        const notif_list = userWithNotifications.Notifications.map((obj) => {
-            const notification = obj.dataValues;
+    const notif_wrapper_list = notif_list.map((obj) => {
+
+        const notification = obj.dataValues;
+
+        if("ClaimNotification" in notification && notification.ClaimNotification != null){
+            delete notification.ClaimNotification;
+            notification.args = obj.ClaimNotification.dataValues;    // put all properties of ClaimNotification into args
+        }
+        else if("NewsNotification" in notification && notification.NewsNotification != null){
             delete notification.NewsNotification;
             notification.args = obj.NewsNotification.dataValues;    // put all properties of NewsNotification into args
-            return notification;
-        });
-
-        return notif_list;
-    }
-    else if(type == "POLICY"){   // POLICY
-
-        const userWithNotifications = await User.findOne({
-            where: { username: username }, // Replace 'username' with the appropriate identifier
-            include: [
-              {
-                model: Notification,
-                include: [
-                    {
-                        model: PolicyNotification,
-                    }
-                ],
-                through: { attributes: [] }, // Exclude the join table attributes
-                where: {type: "policy"}, // Filter for notifications of type "CLAIMS"
-              },
-            ],
-          });
-
-        if(userWithNotifications == null || !("Notifications" in userWithNotifications) || userWithNotifications.Notifications == null){
-            return [];
+        }
+        else if("PolicyNotification" in notification && notification.PolicyNotification != null){
+            delete notification.PolicyNotification;
+            notification.args = obj.PolicyNotification.dataValues;    // put all properties of PolicyNotification into args
         }
 
-        const notif_list = userWithNotifications.Notifications.map((obj) => {
-            const notification = obj.dataValues;
+        if("ClaimNotification" in notification && notification.ClaimNotification == null){
+            delete notification.ClaimNotification;
+        }
+        if("NewsNotification" in notification && notification.NewsNotification == null){
+            delete notification.NewsNotification;
+        }
+        if("PolicyNotification" in notification && notification.PolicyNotification == null){
             delete notification.PolicyNotification;
-            notification.args = obj.PolicyNotification.dataValues;    // put all properties of NewsNotification into args
-            return notification;
+        }
+
+        const from = [];
+        const to = [];
+
+        from.push(notification.userid);
+
+        notification.NotificationRecipients.forEach((rec) => {
+            to.push(rec.recipientid);
         });
+    
 
-        return notif_list;
+        notification.from = from;
+        notification.to = to;
+        delete notification.NotificationRecipients; // remove the NotificationRecipients property
+        
+        return notification;
+    });
 
-    }
-    return [];
-};
+    return notif_wrapper_list;
+}
 
 /**
  * Used to get notifications from the database with some filters/sorting done on it
@@ -357,7 +334,7 @@ const getNotificationsController = async (req, res) => {
             return res.status(400).json({ reason: validRequest });
         }
 
-        let notifications = (req.body.filters.sent) ? (await getNotificationsSent(username)) : (await getNotificationsReceived(username, req.body));   
+        let notifications = await getNotifications(username, req.body, req.body.filters.sent);   
  
         const comparator = getComparator(req.body);
 
@@ -374,25 +351,18 @@ const getNotificationsController = async (req, res) => {
             notifications = notifications.slice(0, req.body.max_notifications);
         }
 
-        // formatting list of notifications to include send and receiver names
-        if(req.body.filters.sent){
-            notifications = notifications.map((x) => {
-                return {
-                    from: [username],
-                    to: [],
-                    notification: x,
-                };
-            });
-        }
-        else{
-            notifications = notifications.map((x) => {
-                return {
-                    from: [],
-                    to: [username],
-                    notification: x,
-                };
-            });
-        }
+        // formatting list of notifications to include send and receiver names as part of wrapper
+        notifications = notifications.map((x) => {
+            const from = x.from;
+            const to = x.to;
+            delete x.from;
+            delete x.to;
+            return {
+                from: from,
+                to: to,
+                notification: x,
+            };
+        });
 
         console.log("returning notifications list of size " + notifications.length);
         return res.status(200).json({notifications: notifications}); 
