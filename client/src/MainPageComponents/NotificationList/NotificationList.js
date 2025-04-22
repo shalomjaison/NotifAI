@@ -8,7 +8,7 @@
   // notification: is object, contains fields of notification info following ER diagram, also contains args field, which is an 
   // object containing fields specific to a type of notification (duedate, priority) following ER diagram
 
-  const NotificationList = ({ notifications = [] }) => {
+  const NotificationList = ({ notifications = [], onNotificationSelect }) => {
     
     const [currentPage, setCurrentPage] = useState(1);
     // Setting a smaller number to make pagination visible with fewer items
@@ -47,6 +47,7 @@
             <NotificationItem 
               key={notificationWrapper.notification.id} 
               notificationWrapper={notificationWrapper} 
+              onNotificationSelect={onNotificationSelect} 
             />
           ))
         ) : (
