@@ -14,6 +14,8 @@ const { createUser: createUserController } = require('./controllers/userControll
 const sequelize = require('./db/db');
 const User = require('./models/userModel');
 
+const calendarRoutes = require('./routes/calendar');
+
 const app = express();
 app.use(
   cors({
@@ -22,6 +24,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Configure express-session middleware
 app.use(
@@ -37,6 +40,7 @@ app.use(
     },
   })
 );
+app.use('/api/calendar', require('./routes/calendar'));
 
 const port = 3000;
 
@@ -95,7 +99,7 @@ let server = null;
 
 const startServer = async () => {
   try {
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ alter: true });
     await createHardcodedUser();
     server = app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
