@@ -7,7 +7,18 @@ const router  = express.Router();
 const User    = require('../models/userModel');
 const upload  = multer({ dest: 'uploads/' });
 
-router.post('/upload-calendar', upload.single('calendar'), async (req, res) => {
+/**
+ * Middleware: ensure user is logged in
+ */
+function requireLogin(req, res, next) {
+    if (!req.session?.user) {
+      console.warn('⚠️ User is not logged in');
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
+    next();
+  }
+
+router.post('/upload-calendar', requireLogin,upload.single('calendar'), async (req, res) => {
   try {
     console.log(' Session user before upload:', req.session.user);
 
@@ -29,7 +40,7 @@ router.post('/upload-calendar', upload.single('calendar'), async (req, res) => {
   }
 });
 
-router.get('/reminders', async (req, res) => {
+router.get('/reminders',requireLogin, async (req, res) => {
   try {
     console.log('Session user on /reminders:', req.session.user);
 
