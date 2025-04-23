@@ -24,7 +24,7 @@ const Reminders = () => {
       setReminders(res.data.events);
       setTotalPages(res.data.totalPages);
     } catch (err) {
-      console.error('❌ Error fetching reminders:', err);
+      console.error(' Error fetching reminders:', err);
     }
   };
   const handleFileChange = (e) => {
@@ -50,7 +50,7 @@ const Reminders = () => {
       await fetchReminders(1);
       setPage(1);
     } catch (err) {
-      console.error('❌ Upload failed:', err);
+      console.error(' Upload failed:', err);
     } finally {
       setUploading(false);
     }

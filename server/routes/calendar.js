@@ -9,29 +9,29 @@ const upload  = multer({ dest: 'uploads/' });
 
 router.post('/upload-calendar', upload.single('calendar'), async (req, res) => {
   try {
-    console.log('🧠 Session user before upload:', req.session.user);
+    console.log(' Session user before upload:', req.session.user);
 
     const rawData = fs.readFileSync(req.file.path, 'utf-8');
-    console.log('📂 Uploaded .ics content (first 300 chars):\n', rawData.slice(0,300));
+    console.log('Uploaded .ics content (first 300 chars):\n', rawData.slice(0,300));
 
     // update by username
     const [updatedCount] = await User.update(
       { calendar_ics: rawData },
       { where: { username: req.session.user.username } }
     );
-    console.log('✅ Rows updated:', updatedCount);
+    console.log('Rows updated:', updatedCount);
 
     fs.unlinkSync(req.file.path);
-    return res.send('✅ Calendar uploaded');
+    return res.send('Calendar uploaded');
   } catch (err) {
-    console.error('❌ Upload failed:', err);
+    console.error(' Upload failed:', err);
     return res.status(500).send('Upload error');
   }
 });
 
 router.get('/reminders', async (req, res) => {
   try {
-    console.log('🧠 Session user on /reminders:', req.session.user);
+    console.log('Session user on /reminders:', req.session.user);
 
     // find by username
     const user = await User.findOne({
@@ -39,7 +39,7 @@ router.get('/reminders', async (req, res) => {
     });
 
     if (!user?.calendar_ics) {
-      console.warn('⚠️ No calendar data found for user');
+      console.warn('No calendar data found for user');
       return res.json({ events: [], page: 1, total: 0, totalPages: 0 });
     }
 
@@ -51,7 +51,7 @@ router.get('/reminders', async (req, res) => {
       .filter(e => e.type === 'VEVENT' && e.start && new Date(e.start) > new Date())
       .sort((a,b) => new Date(a.start) - new Date(b.start));
 
-    console.log(`📅 Parsed ${allEvents.length} future events`);
+    console.log(`Parsed ${allEvents.length} future events`);
 
     const slice = allEvents.slice(offset, offset + +limit).map(e => ({
       summary:  e.summary,
@@ -67,7 +67,7 @@ router.get('/reminders', async (req, res) => {
       totalPages: Math.ceil(allEvents.length / +limit),
     });
   } catch (err) {
-    console.error('❌ Calendar parse error:', err);
+    console.error(' Calendar parse error:', err);
     return res.status(500).send('Failed to load reminders');
   }
 });
