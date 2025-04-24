@@ -21,7 +21,7 @@
     justify-content: center;
     margin-bottom: 30px;
     position: absolute;
-    right: 20px;
+    right: 15px;
     top: 20px;
     border: none;
     background: transparent;
@@ -44,9 +44,6 @@
     opacity: 0.6;
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="%23e9d5ff"><text x="0" y="25" font-size="19">❤</text></svg>'), auto; 
 }
-
-
-
 
 .filter-menu-container{
     display: flex;
