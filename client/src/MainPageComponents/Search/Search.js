@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Search.css';
 
-const Search = ({ onSearch = () => {}, placeholder = "Search" }) => {
+const Search = ({ onSearch = () => {}, placeholder = "Search",  }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   // Handle input changes
