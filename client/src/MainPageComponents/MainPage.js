@@ -191,18 +191,10 @@ function MainPage() {
           <div style={{ flexBasis: '70%' }}>
 
             {/* Search and Filter */}
-            <div style={{display: 'flex'}}>
+            <div  className="search-filter-wrapper" style={{position: 'relative'}}>
               {/* Search component with onSearch handler */}
-              <div style={{flex: 1}}>
-              {/* <div> */}
                 <Search onSearch={handleSearch} />
-              </div>
-
-              <div style={{width: '15%' }}>
-              {/* <div> */}
-                {/* <Filter/> */}
                 {filter.renderButton()}
-              </div>
             </div>
 
             {/*Filter Bubbles and Filter Select */}
