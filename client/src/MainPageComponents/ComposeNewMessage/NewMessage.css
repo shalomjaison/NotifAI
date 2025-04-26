@@ -109,7 +109,42 @@ label{
 .emailType:checked{
     color: #6366f1;
     border: 1px #6366f1;
+}
 
+.email-deadline-container{
+
+}
+
+.news-details-container{
+
+}
+
+.claim-details-container{
+
+}
+
+.select-claim-priority{
+
+}
+
+.select-insured-name{
+
+}
+
+.select-claimant-name{
+
+}
+
+.select-line-of-buisness{
+
+}
+
+.policy-details-container{
+
+}
+
+.select-changes-to-premium{
+    width: 10;
 }
 
 .search-recipient-container-box{
