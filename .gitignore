@@ -1,2 +1,4 @@
 node_modules/
 client/public/main.js
+coverage/
+.env

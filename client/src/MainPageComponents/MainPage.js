@@ -6,7 +6,9 @@ import Search from "./Search/Search";
 import NotificationList from "./NotificationList/NotificationList";
 import ClaimsAlert from "./ClaimsAlert/ClaimsAlert";
 import Reminders from "./Reminders/Reminders";
+import GenAI from "./genAI/genAI"
 import axios from 'axios';
+import EmailPopup from '../EmailPopupComponent/EmailPopup/EmailPopup'; 
 import { useState, useEffect } from 'react';
 
 // Main component to handle routing
@@ -17,6 +19,14 @@ function MainPage() {
 
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isGenAIVisible, setIsGenAIVisible] = useState(false); // state for Gemini visibility
+  const [selectedNotificationWrapper, setSelectedNotificationWrapper] = useState(null); // track emailPopup visibility
+
+
+  const toggleGenAI = () => {
+    setIsGenAIVisible(prevState => !prevState);
+    console.log(isGenAIVisible)
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -73,7 +83,7 @@ function MainPage() {
 
   // State for filtered notifications
   // filteredNotifications and notifications are each a list of objects, each object contains three fields: from, to, and notification
-  // fro:m is array of strings, usernames of senders
+  // from: is array of strings, usernames of senders
   // to: is array of strings, usernames of receivers
   // notification: is object, contains fields of notification info following ER diagram, also contains args field, which is an 
   // object containing fields specific to a type of notification (duedate, priority) following ER diagram
@@ -134,6 +144,14 @@ function MainPage() {
     }
   };
 
+  const handleNotificationSelect = (notificationWrapper) => {
+    setSelectedNotificationWrapper(notificationWrapper);
+  };
+
+  const handleBackFromPopup = () => {
+    setSelectedNotificationWrapper(null); // Clear the selected notification to hide popup
+  };
+
   // Sample reminders - link to API later
   const reminders = [
     {
@@ -162,7 +180,7 @@ function MainPage() {
       {/* Main content area */}
       <div style={{ flexGrow: 1, padding: '20px', overflow: 'auto' }}>
         {/* Header component */}
-        <Header userData={userData} />
+        <Header userData={userData} onGenAIClick={toggleGenAI} />
 
         <div style={{
           display: 'flex',
@@ -173,18 +191,10 @@ function MainPage() {
           <div style={{ flexBasis: '70%' }}>
 
             {/* Search and Filter */}
-            <div style={{display: 'flex'}}>
+            <div  className="search-filter-wrapper" style={{position: 'relative'}}>
               {/* Search component with onSearch handler */}
-              <div style={{flex: 1}}>
-              {/* <div> */}
                 <Search onSearch={handleSearch} />
-              </div>
-
-              <div style={{width: '15%' }}>
-              {/* <div> */}
-                {/* <Filter/> */}
                 {filter.renderButton()}
-              </div>
             </div>
 
             {/*Filter Bubbles and Filter Select */}
@@ -197,19 +207,34 @@ function MainPage() {
             </div>
 
             {/* Notification list with filtered notifications */}
-            <NotificationList notifications={filteredNotifications} />
+            {/* Conditionally render NotificationList or EmailPopup */}
+            {selectedNotificationWrapper ? (
+              <EmailPopup 
+                subject={selectedNotificationWrapper.notification.title} 
+                fromEmail={selectedNotificationWrapper.from.join(', ')} // Format array to string
+                toEmail={selectedNotificationWrapper.to.join(', ')}     // Format array to string
+                content={selectedNotificationWrapper.notification.body}
+                onBack={handleBackFromPopup}
+                onDelete={() => { /* TBD */ }}
+              />
+            ) : (
+              <NotificationList 
+                notifications={filteredNotifications} 
+                onNotificationSelect={handleNotificationSelect} 
+              />
+            )}
           </div>
 
           {/* Right sidebar - claims and reminders */}
-          <div style={{ flexBasis: '30%' }}>
+          <div style={{ flexBasis: '30%'}}>
             {/* Claims alert */}
             <ClaimsAlert />
-
             {/* Reminders section */}
             <Reminders reminders={reminders} />
           </div>
         </div>
       </div>
+      {isGenAIVisible && <GenAI />}
     </div>
   );
 }

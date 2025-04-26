@@ -3,10 +3,13 @@
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 16px;
-    /* float: left; */
+  width: 100%;
 }
 
 .search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;;
   display: flex;
   align-items: center;
   background-color: white;

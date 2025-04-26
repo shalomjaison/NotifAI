@@ -3,7 +3,9 @@ import './Header.css';
 import LogoutButton from '../LogoutButton/LogoutButton';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-const Header = ({ userData }) => {
+
+
+const Header = ({ userData, onGenAIClick }) => {
   const navigate = useNavigate(); // Initialize useNavigate
   const [menuOpen, setMenuOpen] = useState(false);
   const handleProfileClick = () => {
@@ -21,10 +23,23 @@ const Header = ({ userData }) => {
   return (
     <header className="header-container">
       <h1 className="header-title">
-        {userData ? `Hi ${userData.fname} <3` : 'You are not signed in'} {/* Changed message */}
+        NOTIFAI
       </h1>
 
       <div className="header-actions">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width={40}
+          height={40}
+          color={"#e9d5ff"}
+          fill={"none"}
+          onClick={onGenAIClick} // <-- Call the function passed from MainPage
+          style={{ cursor: 'pointer' }} // <-- Add pointer cursor
+          id = "genAI"
+        >
+          <path d="M3 12C7.97056 12 12 7.97056 12 3C12 7.97056 16.0294 12 21 12C16.0294 12 12 16.0294 12 21C12 16.0294 7.97056 12 3 12Z" stroke="currentColor" strokeWidth="2.5" strokeLinejoin="round" />
+        </svg>
         <div className="header-profile-image-container" onClick={() => {
             console.log("Toggling dropdown");
             setMenuOpen(!menuOpen);

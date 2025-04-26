@@ -9,6 +9,7 @@ const cors = require('cors');
 const session = require('express-session'); // Import express-session
 const userRoutes = require('./routes/userRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const genAIRoutes = require('./routes/genAIRoutes');
 const { createUser: createUserController } = require('./controllers/userController'); // importing for mock post request
 const sequelize = require('./db/db');
 const User = require('./models/userModel');
@@ -46,6 +47,7 @@ app.get('/hello-world-demo', (req, res) => {
 
 app.use('/users', userRoutes);
 app.use('/notifications', notificationRoutes);
+app.use('/genAI', genAIRoutes)
 
 const createHardcodedUser = async () => {
   try {
@@ -89,11 +91,13 @@ const viewUsers = async () => {
   }
 };
 
+let server = null;
+
 const startServer = async () => {
   try {
     await sequelize.sync({ force: true });
     await createHardcodedUser();
-    app.listen(port, () => {
+    server = app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
     await viewUsers();
@@ -102,8 +106,15 @@ const startServer = async () => {
   }
 };
 
+const stopServer = async () => {
+  if (server != null) {
+      server.close(() => {
+          console.log('Server stopped.');
+      });
+  }
+};
 
-module.exports = { app, startServer }; // exporting for testing with jest
+module.exports = { app, startServer, stopServer }; // exporting for testing with jest
 
 
 /*  ensures that startServer() is 

@@ -2,7 +2,14 @@
   import NotificationItem from '../NotificationItem/NotificationItem';
   import './NotificationList.css';
 
-  const NotificationList = ({ notifications = [] }) => {
+  // notifications is a list of objects, each object contains three fields: from, to, and notification
+  // from: is array of strings, usernames of senders
+  // to: is array of strings, usernames of receivers
+  // notification: is object, contains fields of notification info following ER diagram, also contains args field, which is an 
+  // object containing fields specific to a type of notification (duedate, priority) following ER diagram
+
+  const NotificationList = ({ notifications = [], onNotificationSelect }) => {
+    
     const [currentPage, setCurrentPage] = useState(1);
     // Setting a smaller number to make pagination visible with fewer items
     const [itemsPerPage] = useState(10);
@@ -40,6 +47,7 @@
             <NotificationItem 
               key={notificationWrapper.notification.id} 
               notificationWrapper={notificationWrapper} 
+              onNotificationSelect={onNotificationSelect} 
             />
           ))
         ) : (

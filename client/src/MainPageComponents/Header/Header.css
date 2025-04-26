@@ -1,4 +1,30 @@
 /* client/src/components/Header/Header.css */
+html {
+  overflow: hidden;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #b88fe4;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #7941b5;
+}
+
 .header-container {
     display: flex;
     justify-content: center;
@@ -11,7 +37,7 @@
     font-size: 42px;
     font-weight: bold;
     margin: 0;
-    font-family: 'Quicksand', 'sans-serif';
+    font-family: "KoHo", sans-serif;
   }
   
   .header-actions {
@@ -70,10 +96,11 @@
   }
   
   .dropdown-greeting {
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 0rem;
-    margin-top: 0rem;
-    font-family: "Jaldi", sans-serif;
+    margin-top: 0.5rem;
+    font-family: "Roboto", sans-serif;
+    /* font-family: "Assistant", sans-serif; */
     font-weight: 500;
     font-size: 2rem;
   }
@@ -81,16 +108,15 @@
   .dropdown-btn {
     display: block;
     width: 100%;
-    margin-top: 0.4rem;
-    margin-bottom: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
     padding: 0.5rem;
-    font-weight: 500;
     background-color: rgb(241, 228, 251);
     cursor: pointer;
     transition: background 0.3s ease;
     border: 2px solid #111111;
     border-radius: 16px;
-    font-family: "Jaldi", sans-serif;
+    font-family: "Assistant", sans-serif;
     font-weight: 500;
     font-size: 0.9rem;
   }
@@ -99,3 +125,11 @@
     background-color: #d7cbf7;
   }
   
+  #genAI {
+    padding: 2px;
+  }
+  #genAI:hover {
+    background-color:#ddcaf4;
+    border-radius: 30px;
+    color:#c49eec;
+  }

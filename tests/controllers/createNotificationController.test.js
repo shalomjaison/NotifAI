@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { app, startServer } = require('../../server/server'); 
+const { app, startServer, stopServer } = require('../../server/server'); 
 const sequelize = require('../../server/db/db'); 
 const User = require('../../server/models/userModel'); 
 const Notification = require('../../server/models/notificationModel'); 
@@ -59,6 +59,9 @@ afterAll(async () => {
 
   await sequelize.close();
   console.log('Database connection closed after tests.');
+  
+  stopServer();
+  console.log("server stopped");
 });
 
 describe('POST /notifications/create', () => {
