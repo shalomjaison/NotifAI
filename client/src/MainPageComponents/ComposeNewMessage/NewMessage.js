@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchRecipient from '../SearchRecipient/SearchRecipient';
 import './NewMessage.css';
 import axios from 'axios';
 
 const NewMessage = () => {
     
+    const [userData, setUserData] = useState(null);
+
     {/*All email types */}
     const [subject, setSubject] = useState('');
     const [emailType, setEmailType] = useState('');
@@ -26,73 +28,113 @@ const NewMessage = () => {
 
     {/*Other useStates */}
     const [message, setMessage] = useState('');
+  
+    useEffect(() => {
+      const fetchUserData = async () => {
+        try {
+          const response = await axios.get('http://localhost:3000/users/me', {
+            withCredentials: true,
+          });
+          setUserData(response.data.user);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        } finally {
+        //   setIsLoading(false);
+        }
+      };
+  
+      fetchUserData();
+    }, []);
 
     const handleNewMessage = async (e) => {
         e.preventDefault();
         
+        let newsDetails = null;
+        let claimDetails = null;
+        let policyDetails = null;
+
         if (emailType === 'news') {
-        messageData.newsDetails = {
-            expirationdate: deadline,
-            type: taskType,
-        };
+        // messageData.newsDetails = {
+        //     expirationdate: deadline,
+        //     type: taskType,
+        // };
+            newsDetails = {
+                expirationdate: deadline,
+                type: taskType,
+            };
         } else if (emailType === 'claim') {
-        messageData.claimDetails = {
-            priority: priority,
-            duedate: deadline,
-            insuredname: insuredName,
-            claimantname: claimantName,
-            tasktype: taskType,
-            lineofbusiness: lineOfBusiness,
-            iscompleted: FALSE,
-        };
+            // messageData.claimDetails = {
+            //     priority: priority,
+            //     duedate: deadline,
+            //     insuredname: insuredName,
+            //     claimantname: claimantName,
+            //     tasktype: taskType,
+            //     lineofbusiness: lineOfBusiness,
+            //     iscompleted: FALSE,
+            // };
+            claimDetails = {
+                priority: priority,
+                duedate: deadline,
+                insuredname: insuredName,
+                claimantname: claimantName,
+                tasktype: taskType,
+                lineofbusiness: lineOfBusiness,
+                iscompleted: false,
+            };
         } else if (emailType === 'policy') {
-        messageData.policyDetails = {
-            changestopremium: changesToPremium,
-            billingreminderdate: deadline,
-        };
+            // messageData.policyDetails = {
+            //     changestopremium: changesToPremium,
+            //     billingreminderdate: deadline,
+            // };
+            policyDetails = {
+                changestopremium: changesToPremium,
+                billingreminderdate: deadline,
+            };
         };
 
-        useEffect(() => {
-            const fetchUserId = async () => {
-                try {
-                const response = await axios.get('http://localhost:3000/users/me', {
-                    withCredentials: true,
-                });
-                setUserId(response.data.user.id);
-                } catch (error) {
-                console.error('Error fetching user data:', error);
-                } finally {
-                setIsLoading(false);
-                }
-            };
+        // useEffect(() => {
+        //     const fetchUserId = async () => {
+        //         try {
+        //         const response = await axios.get('http://localhost:3000/users/me', {
+        //             withCredentials: true,
+        //         });
+        //         setUserId(response.data.user.id);
+        //         } catch (error) {
+        //         console.error('Error fetching user data:', error);
+        //         } finally {
+        //         setIsLoading(false);
+        //         }
+        //     };
         
-            fetchUserId();
-        }, []);
+        //     fetchUserId();
+        // }, []);
 
         try {
-            const response = await axios.post('http://localhost:9500/create', {
-                userid,
-                type,
-                title,
-                body,
-                recipients,
-                newsDetails,
-                claimDetails,
-                policyDetails,
-            });
+            const response = await axios.post('http://localhost:3000/notifications/create', {
+                userid: userData.id,
+                type: emailType,
+                title: subject,
+                body: body,
+                recipients: [recipient],
+                newsDetails: newsDetails,
+                claimDetails: claimDetails,
+                policyDetails: policyDetails,
+            }, {withCredentials: true});
+
+            console.log("message sent");
 
             if (response.status === 201) {
-                setConsoleMessage(response.data.consoleMessage);
-                window.location.href="/";
+                // setConsoleMessage(response.data.consoleMessage);
+                window.location.href="/main";
               }
 
         } catch (error) {
             console.error("NewMessage error:", error.response?.data || error.consoleMessage);
-            setConsoleMessage(error.response?.data?.consoleMessage || "New Notification failed.");
+            // setConsoleMessage(error.response?.data?.consoleMessage || "New Notification failed.");
         }
     };
 
-    console.log('New Notification created :)', newUser.toJSON());
+    // console.log('New Notification created :)', newUser.toJSON());
 
     return (
         <div className='new-mail-wrapper'>
