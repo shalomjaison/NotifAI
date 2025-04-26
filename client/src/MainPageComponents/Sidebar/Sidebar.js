@@ -17,6 +17,7 @@ import NewMessage from '../ComposeNewMessage/NewMessage';
 
 
 const sidebarItems = [
+  { id: 'compose', label: 'Compose', icon: <Mail size={20} /> },
   { id: 'inbox', label: 'Inbox', icon: <Inbox size={20} /> },
   { id: 'important', label: 'Important', icon: <Star size={20} /> },
   { id: 'sent', label: 'Sent', icon: <Send size={20} /> },
@@ -36,19 +37,23 @@ const sidebarItems = [
 
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState('inbox');
-  /*
-  const [activeItem, setActiveItem] = useState('messages');
-
-  const handleItemClick = (item) => {
-    setActiveItem(item);
-  };
 
   const [PopUpOpen, setPopUpOpen] = useState(false);
 
-  const togglePopUp = () => {
-    setPopUpOpen(!PopUpOpen);
+  // const togglePopUp = () => {
+  //   setPopUpOpen(!PopUpOpen);
+  // };
+
+  const handleItemClick = (item_id) => {
+    setActiveItem(item_id);
+    if(item_id == "compose"){
+      setPopUpOpen(true);
+    }
+    else{
+      setPopUpOpen(false);
+    }
   };
-  */
+
   return (
     <div className="sidebar-container">
       <div className="sidebar-logo-container">
@@ -58,25 +63,23 @@ const Sidebar = () => {
         <span>NOTIFAI</span>
       </div>
 
-      {/* <button className="sidebar-edit-button" onClick={togglePopUp}> */}
-
-      {/* {PopUpOpen && (
-        <div className="popup-container">
-          <div className="popup-content">
-            <NewMessage />
-          </div>
-        </div>
-      )} */}
-       
-
       <div className="sidebar-components">
+
+        {PopUpOpen && (
+          <div className="popup-container">
+            <div className="popup-content">
+              <NewMessage />
+            </div>
+          </div>
+        )}
+
         {sidebarItems.map((item) => {
           if (!item.children) {
             return (
               <button 
                 key={item.id} 
                 className={`sidebar-item ${activeItem === item.id ? 'active' : ''}`}
-                onClick={() => setActiveItem(item.id)}
+                onClick={() => handleItemClick(item.id)}
                 >
                 {item.icon}
                 <span>{item.label}</span>
