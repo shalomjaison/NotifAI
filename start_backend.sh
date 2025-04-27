@@ -2,4 +2,6 @@
 
 echo STARTING BACKEND APPLICATION
 
+export BACKEND_USES_DOCKER=0
+
 node ./server/server.js
