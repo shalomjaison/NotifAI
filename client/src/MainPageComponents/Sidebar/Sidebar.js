@@ -34,6 +34,7 @@ const sidebarItems = [
 
 const Sidebar = () => {
   const [activeItem, setActiveItem] = useState('inbox');
+  const [PopUpOpen, setPopUpOpen] = useState(false);
   return (
     <div className="sidebar-container">
       <div className="sidebar-logo-container">
@@ -44,6 +45,15 @@ const Sidebar = () => {
       </div>
 
       <div className="sidebar-components">
+        <button 
+          key={"compose"} 
+          className={`sidebar-item-compose ${PopUpOpen ? 'active' : ''}`}
+          >
+          <div className="icon-container">
+            {<Pencil/>}
+          </div>
+          <span>{"Compose"}</span>
+        </button>
         {sidebarItems.map((item) => {
           if (!item.children) {
             return (

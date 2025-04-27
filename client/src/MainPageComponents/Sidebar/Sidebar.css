@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #efefef; /* Light purple background */
+  background-color: #efefef;
   width: 80px;
   padding: 16px 0;
   overflow: hidden;
@@ -14,7 +14,7 @@
 }
 
 .sidebar-components {
-  margin-top: 80px;
+  margin-top: 50px;
 }
 
 .sidebar-item, .sidebar-logo-container {
@@ -37,6 +37,7 @@
   width: 100%;
   position: relative;
   transition: background-color 0.3s ease;
+  border-radius: 80px;
 }
 
 .sidebar-item .icon-container {
@@ -50,12 +51,16 @@
   flex-shrink: 0;
 }
 
+.sidebar-item:hover {
+  background-color: #dadada;
+}
+
 .sidebar-item.active .icon-container::before {
   content: '';
   position: absolute;
   width: 50px;
   height: 50px;
-  background-color: #DCD1E9; /* Lilac color */
+  background-color: #DCD1E9;
   border-radius: 50%;
   z-index: -1;
   opacity: 1;
@@ -63,10 +68,8 @@
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Active state when sidebar is expanded/hovered */
 .sidebar-container:hover .sidebar-item.active {
-  background-color: #DCD1E9; /* Lilac color */
-  /* transition: background-color 0.4s ease-in-out; */
+  background-color: #DCD1E9;
   width: 100%;
 }
 
@@ -75,6 +78,7 @@
   transform: scale(0.5);
 }
 
+.sidebar-item-compose span,
 .sidebar-item span{
   display: inline-block;
   opacity: 0;
@@ -87,6 +91,7 @@
   transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
 }
 
+.sidebar-container:hover .sidebar-item-compose span,
 .sidebar-container:hover .sidebar-item span {
   opacity: 1;
   visibility: visible;
@@ -159,4 +164,42 @@
 .sidebar-container:hover .sidebar-logo svg {
   transform: scale(0.8);
 }
-  
+
+.sidebar-item-compose {
+  display: flex;
+  align-items: center;
+  border: none;
+  background-color: rgb(252, 138, 103);
+  margin: 0 auto 35px auto;
+  cursor: pointer;
+  padding: 8px 10px;
+  gap: 12px;
+  width: 60%;
+  position: relative;
+  transition: background-color 0.3s ease;
+  border-radius: 80px;
+  flex-shrink: 0;
+  height: 54px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.sidebar-container:hover .sidebar-item-compose {
+  width: 80%;
+  margin: 0 auto 35px auto;
+}
+
+.sidebar-item-compose .icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 48px;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-item-compose:hover {
+  background-color: lightgoldenrodyellow;
+}
