@@ -178,8 +178,9 @@ const NewMessage = () => {
 
             {/*deadline for all types*/}
             <div className="email-deadline-container">
+                <p>Deadline</p>
                 <input
-                    type="text"
+                    type="datetime-local"
                     placeholder="Deadline"
                     className="email-deadline"
                     value={deadline}
@@ -189,18 +190,23 @@ const NewMessage = () => {
             </div>
 
             {/*Task type for news and claim types*/}
-            <div className="news-claims-task-type-container">
-                <input
-                    type="text"
-                    placeholder="Type of Task"
-                    className="news-claims-task-type"
-                    value={taskType}
-                    onChange={(e) => setTaskType(e.target.value)}
-                    required
-                />
-            </div>
+
+            {emailType == "claim" || emailType == "news" && (
+                <div className="news-claims-task-type-container">
+                    <input
+                        type="text"
+                        placeholder="Type of Task"
+                        className="news-claims-task-type"
+                        value={taskType}
+                        onChange={(e) => setTaskType(e.target.value)}
+                        required
+                    />
+                </div>
+            )}
 
             {/*claims info*/}
+
+            {emailType == "claim" && (
             <div className="claim-details-container">
                 <div className="select-claim-priority">
                     <input
@@ -246,23 +252,26 @@ const NewMessage = () => {
                         />
                 </div>
             </div>
+            )}
 
             {/*policy info*/}
 
-            <div className="policy-details-container">
+            {emailType == "policy" && (
+                <div className="policy-details-container">
 
-                <div className="select-changes-to-premium">
-                    <input
-                        type="text"
-                        placeholder="Changes To Premium"
-                        className="changes-to-premium-input"
-                        value={changesToPremium}
-                        onChange={(e) => setChangesToPremium(e.target.value)}
-                        required
-                        />
+                    <div className="select-changes-to-premium">
+                        <input
+                            type="text"
+                            placeholder="Changes To Premium"
+                            className="changes-to-premium-input"
+                            value={changesToPremium}
+                            onChange={(e) => setChangesToPremium(e.target.value)}
+                            required
+                            />
+                    </div>
+
                 </div>
-
-            </div>
+            )}
 
             <div className="search-recipient-container-box">
                 <SearchRecipient onSearch={setRecipient}/>
