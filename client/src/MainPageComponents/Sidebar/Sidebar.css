@@ -20,19 +20,61 @@
 .sidebar-item, .sidebar-logo-container {
   display: flex;
   align-items: center;
+}
+
+.sidebar-logo-container {
   margin-left: 20px;
 }
 
 .sidebar-item {
   font-family: "Roboto", sans-serif;
   border: none;
-  margin-top: 25px;
-  margin-bottom: 25px;
+  margin: 0;
   background: none;
   cursor: pointer;
-  padding: 10px 12px;
+  padding: 4px 0px;
   gap: 12px;
+  width: 100%;
+  position: relative;
+  transition: background-color 0.3s ease;
 }
+
+.sidebar-item .icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 48px;
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.sidebar-item.active .icon-container::before {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: #DCD1E9; /* Lilac color */
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Active state when sidebar is expanded/hovered */
+.sidebar-container:hover .sidebar-item.active {
+  background-color: #DCD1E9; /* Lilac color */
+  /* transition: background-color 0.4s ease-in-out; */
+  width: 100%;
+}
+
+.sidebar-container:hover .sidebar-item.active .icon-container::before {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
 .sidebar-item span{
   display: inline-block;
   opacity: 0;
