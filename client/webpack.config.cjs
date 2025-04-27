@@ -1,5 +1,8 @@
 const path = require("path");
 const webpack = require("webpack");
+const dotenv = require('dotenv');
+
+dotenv.config(); // Load .env file
 
 /*We are basically telling webpack to take index.js from entry. Then check for all file extensions in resolve. 
 After that apply all the rules in module.rules and produce the output and place it in main.js in the public folder.*/
@@ -61,6 +64,7 @@ module.exports = {
      * This is what enables users to leave off the extension when importing
      */
     extensions: [".js", ".jsx", ".json", ".css"],
+    fallback: { 'process/browser': require.resolve('process/browser'), }
   },
   module: {
     /** "rules"
@@ -83,4 +87,12 @@ module.exports = {
       },
     ],
   },
+
+  plugins: [
+
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+    new webpack.EnvironmentPlugin(['BACKEND_PORT']) // adds these environment variables in .env file to process.env for react app
+  ]
 };

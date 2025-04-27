@@ -12,6 +12,10 @@ import Login from "./LoginPageComponents/Login/Login";
 import SignUp from "./SignUpComponents/SignUp";
 import Profile from "./ProfilePageComponents/Profile";
 
+const backendPort = process.env.BACKEND_PORT || 3000;
+
+console.log("port is ", backendPort);
+
 // Create the router
 const router = createBrowserRouter([
   {

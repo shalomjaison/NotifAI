@@ -4,6 +4,9 @@
 # NOTE: need Docker daemon running, can be done by having Docker Desktop app running
 
 echo STARTING BACKEND
+
+cp .env ./server   
+
 docker build -t notifai-server ./server
 # docker run -it --rm backend
 

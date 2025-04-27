@@ -4,6 +4,9 @@
 # NOTE: need Docker daemon running, can be done by having Docker Desktop app running
 
 echo STARTING FRONTEND
+
+cp .env ./client
+
 docker build -t notifai-client ./client
 
 # note: first 9500 is port on host machine (maybe macbook or windows), 

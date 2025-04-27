@@ -13,11 +13,19 @@ const genAIRoutes = require('./routes/genAIRoutes');
 const { createUser: createUserController } = require('./controllers/userController'); // importing for mock post request
 const sequelize = require('./db/db');
 const User = require('./models/userModel');
+require('dotenv').config();
+
+const deploymentMode = process.env.DEPLOYMENT_MODE || 0;  // 1 for deployment, 0 for development
+const frontendHost = process.env.FRONTEND_HOST || "localhost";  
+const frontendPort = process.env.FRONTEND_PORT || "9500";
+
+const clientURL = 'http://' + frontendHost + ':' + frontendPort;    // no restrictions during development mode
+console.log("client url: ", clientURL);
 
 const app = express();
 app.use(
   cors({
-    origin: 'http://localhost:9500', // Allow requests from your React app
+    origin: clientURL, // Allow requests from your React app
     credentials: true, // Allow cookies to be sent
   })
 );
@@ -40,10 +48,12 @@ app.use(
 
 const port = 3000;
 
-app.get('/hello-world-demo', (req, res) => {
-  console.log('/hello-world-demo get request received');
-  res.send({ text: 'Hello from the backend123!' });
-});
+if(deploymentMode == 0){
+  app.get('/hello-world-demo', (req, res) => {
+    console.log('/hello-world-demo get request received');
+    res.send({ text: 'Hello from the backend123!' });
+  });
+}
 
 app.use('/users', userRoutes);
 app.use('/notifications', notificationRoutes);
@@ -95,10 +105,15 @@ let server = null;
 
 const startServer = async () => {
   try {
-    await sequelize.sync({ force: true });
-    await createHardcodedUser();
+    const force = (deploymentMode == 1) ? (false) : (true);
+    await sequelize.sync({ force: force });
+
+    if(deploymentMode == 0){
+      await createHardcodedUser();
+    }
+
     server = app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
+      console.log(`Server is running on port ${port}, deployment mode is ${deploymentMode} (1 for deployment, 0 for development)`);
     });
     await viewUsers();
   } catch (error) {
