@@ -52,7 +52,9 @@ const Sidebar = () => {
                 className={`sidebar-item ${activeItem === item.id ? 'active' : ''}`}
                 onClick={() => setActiveItem(item.id)}
                 >
-                {item.icon}
+                <div className="icon-container">
+                  {item.icon}
+                </div>
                 <span>{item.label}</span>
               </button>
             );
