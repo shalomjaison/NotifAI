@@ -23,10 +23,14 @@ const createUserController = async (req, res) => {
 // fetches all users from database
 const getAllUsersController = async (req, res) => {
     try {
-        const users = await User.findAll(); 
-        res.status(200).json(users); 
+        const users = await User.findAll({
+            attributes: { exclude: ['password'] } // Exclude the password field
+        });
+        res.status(200).json(users);
     } catch (error) {
         console.error('Error fetching users:', error.message);
+        // Send an error response
+        res.status(500).json({ message: 'Failed to fetch users' });
     }
 };
 
