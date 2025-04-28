@@ -18,8 +18,12 @@ require('dotenv').config();
 const deploymentMode = process.env.DEPLOYMENT_MODE || 0;  // 1 for deployment, 0 for development
 const frontendHost = process.env.FRONTEND_HOST || "localhost";  
 const frontendPort = process.env.FRONTEND_PORT || "9500";
+const USING_DOCKER = process.env.USING_DOCKER || 0;   // exported inside start_container_backend.sh
+let backendHost = process.env.BACKEND_HOST || "localhost";  
 
-const backendHost = process.env.BACKEND_HOST || "localhost";  
+if(USING_DOCKER == 1){
+  backendHost = "0.0.0.0"
+}
 
 const clientURL = 'http://' + frontendHost + ':' + frontendPort;
 console.log("client url: ", clientURL);
@@ -116,7 +120,8 @@ const startServer = async () => {
     }
 
     server = app.listen(port, backendHost, () => {
-        console.log(`Server is running on port ${port}, deployment mode is ${deploymentMode} (1 for deployment, 0 for development)`);
+    // server = app.listen(port, () => {
+        console.log(`Server is running on port ${port}, on host ${backendHost}, deployment mode is ${deploymentMode} (1 for deployment, 0 for development)`);
     });
     await viewUsers();
   } catch (error) {

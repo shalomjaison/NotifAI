@@ -7,7 +7,7 @@ const DB_PASS = process.env.DB_PASS || '256325';
 const DB_HOST = process.env.DB_HOST || 'localhost';
 const DB_PORT = process.env.DB_PORT || 5432;
 
-const host = (process.env.BACKEND_USES_DOCKER == 1) ? ("host.docker.internal") : (DB_HOST);
+const host = (process.env.USING_DOCKER == 1) ? ("host.docker.internal") : (DB_HOST);
 
 const sequelize = new Sequelize({ 
     dialect: 'postgres',

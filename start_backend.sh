@@ -2,7 +2,7 @@
 
 echo STARTING BACKEND APPLICATION
 
-export BACKEND_USES_DOCKER=0
+export USING_DOCKER=0
 
 cp .env ./server
 
