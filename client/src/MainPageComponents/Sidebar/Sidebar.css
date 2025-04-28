@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #efefef; /* Light purple background */
+  background-color: #efefef;
   width: 80px;
   padding: 16px 0;
   overflow: hidden;
@@ -14,25 +14,71 @@
 }
 
 .sidebar-components {
-  margin-top: 80px;
+  margin-top: 50px;
 }
 
 .sidebar-item, .sidebar-logo-container {
   display: flex;
   align-items: center;
+}
+
+.sidebar-logo-container {
   margin-left: 20px;
 }
 
 .sidebar-item {
   font-family: "Roboto", sans-serif;
   border: none;
-  margin-top: 25px;
-  margin-bottom: 25px;
+  margin: 0;
   background: none;
   cursor: pointer;
-  padding: 10px 12px;
+  padding: 4px 0px;
   gap: 12px;
+  width: 100%;
+  position: relative;
+  transition: background-color 0.3s ease;
+  border-radius: 80px;
 }
+
+.sidebar-item .icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 48px;
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.sidebar-item:hover {
+  background-color: #dadada;
+}
+
+.sidebar-item.active .icon-container::before {
+  content: '';
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: #DCD1E9;
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.sidebar-container:hover .sidebar-item.active {
+  background-color: #DCD1E9;
+  width: 100%;
+}
+
+.sidebar-container:hover .sidebar-item.active .icon-container::before {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+.sidebar-item-compose span,
 .sidebar-item span{
   display: inline-block;
   opacity: 0;
@@ -45,6 +91,7 @@
   transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
 }
 
+.sidebar-container:hover .sidebar-item-compose span,
 .sidebar-container:hover .sidebar-item span {
   opacity: 1;
   visibility: visible;
@@ -118,152 +165,41 @@
   transform: scale(0.8);
 }
 
-.popup-contianer{
-  position: relative;
-  width: 50%;
-  height: 50%;
+.sidebar-item-compose {
+  display: flex;
   align-items: center;
-  display: sticky;
-  gap: 50px;
+  border: none;
+  background-color: #FFBE8F;
+  margin: 0 auto 35px auto;
+  cursor: pointer;
+  padding: 8px 10px;
+  gap: 12px;
+  width: 60%;
+  position: relative;
+  transition: background-color 0.3s ease;
+  border-radius: 80px;
+  flex-shrink: 0;
+  height: 54px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
 }
-.popup-content{
-  position: absolute;
-  background-color: white;
-  padding-top: 0;
-  align-items: stretch;
-  display: sticky;
-  border-radius: 2%;
-  top: 40%;
-  height: 60%;
-  right: 16%;
-  border-top: none;
+
+.sidebar-container:hover .sidebar-item-compose {
+  width: 80%;
+  margin: 0 auto 35px auto;
 }
 
-  .sidebar-add-button {
-    margin-top: auto;
-    margin-bottom: 16px;
-    color: #6b7280;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
+.sidebar-item-compose .icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 48px;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-  /*
-  Unresolved merge conflict from compose branch placed here, maybe we still need some of them
-  */
-
-/* .sidebar-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    background-color: #e9d5ff; Light purple background
-    width: 80px;
-    padding: 16px 0;
-  } */
-  
-  /* .sidebar-logo-container {
-    margin-bottom: 16px;
-  } */
-  
-  /* .sidebar-logo-circle {
-    background-color: white;
-    border-radius: 50%;
-    padding: 8px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;  Ensure image stays within the circle 
-  } */
-  
-  /* .sidebar-logo-image {
-    width: 30px;
-    height: 30px;
-    object-fit: contain;  Ensures the image maintains its aspect ratio 
-  } */
-  
-  /* .sidebar-menu-button-container {
-    margin-bottom: 24px;
-  } */
-  
-  /* .sidebar-menu-button {
-    color: #6b7280;
-    background: none;
-    border: none;
-    cursor: pointer;
-  } */
-  
-  /* .sidebar-edit-button-container {
-    margin-bottom: 32px;
-  } */
-  
-  /* .sidebar-edit-button {
-    background-color: #fce7f3;  Light pink 
-    padding: 8px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-  } */
-  
-  /* .sidebar-nav-items {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 28px;
-    width: 100%;
-  } */
-  
-  /* .sidebar-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: #6b7280;
-    background: none;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    position: relative;
-    padding-bottom: 4px;
-  } */
-  
-  /* .sidebar-nav-item.active {
-    color: #6366f1;
-  } */
-  
-  /* .sidebar-nav-item-active-indicator {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 3px;
-    height: 24px;
-    background-color: #6366f1;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
-  } */
-  
-  /* .sidebar-nav-item-text-container {
-    font-size: 10px;
-    margin-top: 4px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  } */
-  
-  /* .sidebar-nav-item-text {
-    font-size: 10px;
-    margin-top: 4px;
-  } */
-  
-  /* .sidebar-add-button {
-    margin-top: auto;
-    margin-bottom: 16px;
-    color: #6b7280;
-    background: none;
-    border: none;
-    cursor: pointer;
-  } */
-
-  
+.sidebar-item-compose:hover {
+  background-color: lightgoldenrodyellow;
+}
