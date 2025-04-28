@@ -59,17 +59,29 @@ router.get('/reminders',requireLogin, async (req, res) => {
 
     const parsed = ical.parseICS(user.calendar_ics);
     const allEvents = Object.values(parsed)
-      .filter(e => e.type === 'VEVENT' && e.start && new Date(e.start) > new Date())
+      .filter(e => e.type === 'VEVENT' && e.start > new Date() && e.end > new Date())
       .sort((a,b) => new Date(a.start) - new Date(b.start));
 
     console.log(`Parsed ${allEvents.length} future events`);
 
-    const slice = allEvents.slice(offset, offset + +limit).map(e => ({
-      summary:  e.summary,
-      start:    e.start,
-      end:      e.end,
-      location: e.location || '',
-    }));
+    const slice = allEvents
+    .slice(offset, offset + Number(limit))
+      .map(e => {
+              const ev = {
+                summary:  e.summary,
+                start:    e.start,
+                end:      e.end,
+                location: e.location || ''
+              };
+          
+              // optionally add members if there are ATTENDEE lines
+              const raw = e.attendee || e.attendeeList;
+              if (raw) {
+                const list = Array.isArray(raw) ? raw : [raw];
+                ev.members = list.map(a => typeof a === 'string' ? a : a.val);
+              }
+              return ev;
+            });
 
     return res.json({
       events:     slice,
