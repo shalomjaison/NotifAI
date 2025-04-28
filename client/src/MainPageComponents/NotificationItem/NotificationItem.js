@@ -20,6 +20,16 @@ const NotificationItem = ({ notificationWrapper, onNotificationSelect }) => {
     source = notification.source;
   }
 
+  const formattedDate = new Date(notification.datecreated).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+
+  const contentPreview = notification.body ? 
+    (notification.body.length > 80 ? notification.body.substring(0, 80) + '...' : notification.body) : '';
+  
+
   let senders = "From: ";
   notificationWrapper.from.forEach((username) => {
     senders += username + ", ";
@@ -35,28 +45,24 @@ const NotificationItem = ({ notificationWrapper, onNotificationSelect }) => {
         onClick={() => onNotificationSelect(notificationWrapper)} // Call the passed function
         style={{ cursor: 'pointer' }} // Add cursor style for better UX
       >
-      <NotificationIcon source={source} />
+      <div className="notif-icon-container">
+        <NotificationIcon source={source} />
+      </div>
 
       <div className="notification-item-content">
         <div className="notification-item-header">
-          <h3 className="notification-item-sender">
-            {senders} {notification.source === 'Slack' ? '(from Slack)' : ''}
-          </h3>
-          <h3 className="notification-item-sender">
-            {receivers}
+          <h3 className="notification-item-title">
+          {notification.title}
+          {source === 'Slack' && <span className="notification-source"> (from Slack)</span>}
           </h3>
           <span className="notification-item-time">
-            {new Date(notification.datecreated).toDateString()}
+            {formattedDate}
           </span>
         </div>
 
-        <p className="notification-item-message">
-          {notification.title}
-        </p>
-
-        {notification.details && (
-          <p className="notification-item-details">
-            {notification.body}
+        {contentPreview && (
+          <p className="notification-item-preview">
+            {contentPreview}
           </p>
         )}
       </div>
