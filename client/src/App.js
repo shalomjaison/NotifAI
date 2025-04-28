@@ -12,9 +12,14 @@ import Login from "./LoginPageComponents/Login/Login";
 import SignUp from "./SignUpComponents/SignUp";
 import Profile from "./ProfilePageComponents/Profile";
 
+const deploymentMode = process.env.DEPLOYMENT_MODE || 0;  // 1 for deployment, 0 for development
 const backendPort = process.env.BACKEND_PORT || 3000;
+const backendHost = process.env.BACKEND_HOST || "localhost";
+const backendBaseURL = 'http://' + backendHost + ':' + backendPort;
 
-console.log("port is ", backendPort);
+if(deploymentMode == 0){
+  console.log("development mode, backend port is " + backendPort + ", backend host is " + backendHost);
+}
 
 // Create the router
 const router = createBrowserRouter([
@@ -41,3 +46,4 @@ function App() {
 }
 
 export default App;
+export { deploymentMode, backendPort, backendHost, backendBaseURL };

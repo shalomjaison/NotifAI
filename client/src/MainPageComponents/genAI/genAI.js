@@ -2,7 +2,7 @@ import "./genAI.css";
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown'; // for text formatting
-
+import { deploymentMode, backendPort, backendHost, backendBaseURL } from '../../App';
 
 const initialHistory = [];
 
@@ -50,7 +50,7 @@ const GenAI = () => {
 
             const historyForAPI = chatHistory; 
 
-            const result = await axios.post("http://localhost:3000/genAI/gemini-prompt", {
+            const result = await axios.post(backendBaseURL + "/genAI/gemini-prompt", {
                 prompt: currentPrompt,
                 history: historyForAPI 
             });

@@ -11,6 +11,8 @@ import axios from 'axios';
 import EmailPopup from '../EmailPopupComponent/EmailPopup/EmailPopup'; 
 import { useState, useEffect } from 'react';
 
+import { deploymentMode, backendPort, backendHost, backendBaseURL } from '../App';
+
 // Main component to handle routing
 function MainPage() { 
 
@@ -31,7 +33,7 @@ function MainPage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/users/me', {
+        const response = await axios.get(backendBaseURL + '/users/me', {
           withCredentials: true,
         });
         setUserData(response.data.user);

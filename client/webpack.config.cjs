@@ -4,6 +4,20 @@ const dotenv = require('dotenv');
 
 dotenv.config(); // Load .env file
 
+const frontendPort = process.env.FRONTEND_PORT || "9500";
+
+const pluginList = [];
+
+if(process.env.BACKEND_PORT != undefined){
+  pluginList.push("BACKEND_PORT");
+}
+if(process.env.DEPLOYMENT_MODE != undefined){
+  pluginList.push("DEPLOYMENT_MODE");
+}
+if(process.env.BACKEND_HOST != undefined){
+  pluginList.push("BACKEND_HOST");
+}
+
 /*We are basically telling webpack to take index.js from entry. Then check for all file extensions in resolve. 
 After that apply all the rules in module.rules and produce the output and place it in main.js in the public folder.*/
 
@@ -36,7 +50,7 @@ module.exports = {
     /** "port"
      * port of dev server
      */
-    port: "9500",
+    port: frontendPort,
     /** "static"
      * This property tells Webpack what static file it should serve
      */
@@ -93,6 +107,6 @@ module.exports = {
     new webpack.ProvidePlugin({
       process: 'process/browser',
     }),
-    new webpack.EnvironmentPlugin(['BACKEND_PORT']) // adds these environment variables in .env file to process.env for react app
+    new webpack.EnvironmentPlugin(pluginList) // adds these environment variables in .env file to process.env for react app
   ]
 };

@@ -19,7 +19,9 @@ const deploymentMode = process.env.DEPLOYMENT_MODE || 0;  // 1 for deployment, 0
 const frontendHost = process.env.FRONTEND_HOST || "localhost";  
 const frontendPort = process.env.FRONTEND_PORT || "9500";
 
-const clientURL = 'http://' + frontendHost + ':' + frontendPort;    // no restrictions during development mode
+const backendHost = process.env.BACKEND_HOST || "localhost";  
+
+const clientURL = 'http://' + frontendHost + ':' + frontendPort;
 console.log("client url: ", clientURL);
 
 const app = express();
@@ -40,7 +42,8 @@ app.use(
     cookie: {
       httpOnly: true, // Make the cookie only accessible via HTTP(S)
       secure: false, // Set to true in production (when using HTTPS)
-      sameSite: 'Strict', // Prevent CSRF attacks
+      // sameSite: 'Strict', // Prevent CSRF attacks
+      sameSite: 'Lax', // Allow cookies in cross-origin requests
       maxAge: 1000 * 60 * 60 * 24, // Cookie expires after 1 day
     },
   })
@@ -112,8 +115,8 @@ const startServer = async () => {
       await createHardcodedUser();
     }
 
-    server = app.listen(port, () => {
-      console.log(`Server is running on port ${port}, deployment mode is ${deploymentMode} (1 for deployment, 0 for development)`);
+    server = app.listen(port, backendHost, () => {
+        console.log(`Server is running on port ${port}, deployment mode is ${deploymentMode} (1 for deployment, 0 for development)`);
     });
     await viewUsers();
   } catch (error) {
