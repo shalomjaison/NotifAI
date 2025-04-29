@@ -19,9 +19,11 @@ const deploymentMode = process.env.DEPLOYMENT_MODE || 0;  // 1 for deployment, 0
 const frontendHost = process.env.FRONTEND_HOST || "localhost";  
 const frontendPort = process.env.FRONTEND_PORT || "9500";
 const USING_DOCKER = process.env.USING_DOCKER || 0;   // exported inside start_container_backend.sh
-let backendHost = process.env.BACKEND_HOST || "localhost";  
 
-if(USING_DOCKER == 1){
+let backendHost = process.env.BACKEND_HOST || "localhost";  
+const backendPort = process.env.BACKEND_PORT || "3000";
+
+if(USING_DOCKER == 1 || deploymentMode == 1){
   backendHost = "0.0.0.0"
 }
 
@@ -53,7 +55,7 @@ app.use(
   })
 );
 
-const port = 3000;
+// const port = 3000;
 
 if(deploymentMode == 0){
   app.get('/hello-world-demo', (req, res) => {
@@ -109,6 +111,7 @@ const viewUsers = async () => {
 };
 
 let server = null;
+console.log(`Server is running on port ${backendPort}, on host ${backendHost}, deployment mode is ${deploymentMode} (1 for deployment, 0 for development)`);
 
 const startServer = async () => {
   try {
@@ -119,9 +122,9 @@ const startServer = async () => {
       await createHardcodedUser();
     }
 
-    server = app.listen(port, backendHost, () => {
+    server = app.listen(backendPort, backendHost, () => {
     // server = app.listen(port, () => {
-        console.log(`Server is running on port ${port}, on host ${backendHost}, deployment mode is ${deploymentMode} (1 for deployment, 0 for development)`);
+        console.log(`Server is running on port ${backendPort}, on host ${backendHost}, deployment mode is ${deploymentMode} (1 for deployment, 0 for development)`);
     });
     await viewUsers();
   } catch (error) {
