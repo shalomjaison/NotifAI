@@ -1,41 +1,79 @@
 .notification-item-container {
-    background-color: #f3f4f6;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 16px;
-    display: flex;
-    gap: 16px;
-  }
+  background-color: #EFEFEF;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 5px;
+  display: flex;
+  gap: 16px;
+  transform: translateY(0);
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  height: 43px;
+  overflow: hidden;
+
+}
+
+.notification-item-container:hover {
+  background-color: #d8d7d7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
   
-  .notification-item-content {
-    flex-grow: 1;
-  }
+.notification-item-content {
+  flex-grow: 1;
+}
   
-  .notification-item-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 4px;
-  }
+.notification-item-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
   
-  .notification-item-sender {
-    margin: 0;
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
-  .notification-item-time {
-    color: #6b7280;
-    font-size: 14px;
-  }
-  
-  .notification-item-message {
-    margin: 0;
-    font-size: 14px;
-  }
-  
-  .notification-item-details {
-    margin: 4px 0 0 0;
-    font-size: 14px;
-    color: #6b7280;
-  }
-  
+.notification-item-title {
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 550;
+  position: relative;
+  overflow: hidden;
+}
+
+.notification-item-time {
+  font-family: "Roboto", sans-serif;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.notification-item-preview {
+  color: #6b7280;
+  font-family: "Assistant", sans-serif;
+  margin: 0;
+  font-size: 15px;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease, margin 0.3s ease;
+  overflow: hidden;
+}
+
+.notification-item-container:hover .notification-item-preview {
+  max-height: 60px; /* Adjust based on your expected content height */
+  opacity: 1;
+  margin-top: 5px;
+}
+
+.notification-item-details {
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.notif-icon-container {
+  border: 2px solid;
+  border-radius: 50%;
+  transform: scale(1);
+  transition: transform 0.2s ease;
+}
+
+.notification-item-container:hover .notif-icon-container {
+  transform: scale(1.1);
+}
+

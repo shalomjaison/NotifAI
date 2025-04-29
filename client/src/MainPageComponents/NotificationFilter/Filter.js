@@ -133,10 +133,9 @@ class Filter extends React.Component {
             
                         <button onClick={toggleDropdown}>
                             <div className="filter-icon">
-                                <span className="filter-text">Filter</span>
                                 {/* Filter icon SVG */}
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                                <svg width="29px" height="29" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 5L10 5M10 5C10 6.10457 10.8954 7 12 7C13.1046 7 14 6.10457 14 5M10 5C10 3.89543 10.8954 3 12 3C13.1046 3 14 3.89543 14 5M14 5L20 5M4 12L16 12M16 12C16 13.1046 16.8954 14 18 14C19.1046 14 20 13.1046 20 12C20 10.8954 19.1046 10 18 10C16.8954 10 16 10.8954 16 12ZM8 19L20 19M8 19C8 17.8954 7.10457 17 6 17C4.89543 17 4 17.8954 4 19C4 20.1046 4.89543 21 6 21C7.10457 21 8 20.1046 8 19Z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round"/>
                                 </svg>
                             </div>
                         </button>
@@ -334,6 +333,9 @@ class Filter extends React.Component {
                     <p>Select One</p>
                     {postedRecentButton()}
                     {postedOldestButton()}
+                    {/* experimental: all notifs have some sort of due date */}
+                    {dueEarliestButton()}   
+                    {dueLatestButton()}
 
                     <p>Select One</p>
                     {sentButton()}
@@ -581,7 +583,7 @@ class Filter extends React.Component {
                         {/* Column for selecting notification type */}
                         <div className="filter-menu-column" style={{ width: "33%", height: "300px"}}>
 
-                            <div>
+                            <div className="menu-item">
                                 <button onClick={setClaims} className="filter-menu-row" style={{backgroundColor: (this.currentFilterRequest.filters.type == "CLAIMS") ? ('#CBC3E3') : ("white")}}>
                                     <p>Claims</p>
                                 </button>
