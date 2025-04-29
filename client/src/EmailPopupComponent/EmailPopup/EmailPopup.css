@@ -50,10 +50,11 @@
   flex-direction: column;
   background-color: white;
   border-radius: 6px;
-  padding: 16px; /* Important: Creates space for the absolute element */
+  padding: 25px; /* Important: Creates space for the absolute element */
   line-height: 1.5;
   font-size: 0.95rem;
   overflow: auto;
+  width:fit-content;
 }
 
 .summarize {

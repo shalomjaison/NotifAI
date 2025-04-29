@@ -4,18 +4,18 @@
   padding: 16px;
   margin-bottom: 16px;
   width: 100%;
+  display: flex;
 }
 
 .search-input-wrapper {
   position: relative;
   display: flex;
   align-items: center;;
-  display: flex;
-  align-items: center;
   background-color: white;
   border-radius: 8px;
   padding: 8px 16px;
   transition: box-shadow 0.2s ease;
+  width: 100%;
 }
 
 .search-input-wrapper:focus-within {
