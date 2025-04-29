@@ -20,9 +20,7 @@ function EmailPopup({
   // Handler for the summarize button click
   const handleSummarizeClick = () => {
     // Call the original function passed via props
-    if (onGenAIClick) {
-      onGenAIClick();
-    }
+    onGenAIClick();
 
     // Trigger the flash animation
     setIsFlashing(true);

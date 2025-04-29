@@ -13,7 +13,6 @@ const GenAI =  forwardRef((props, ref) => {
     const textareaRef = useRef(null);
     const chatDisplayRef = useRef(null); 
     const [focusRequested, setFocusRequested] = useState(false);
-    const [isGeminiFlashing, setIsGeminiFlashing] = useState(false); 
 
 
     useEffect(() => {

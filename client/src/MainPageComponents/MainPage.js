@@ -30,6 +30,13 @@ function MainPage() {
     console.log(isGenAIVisible)
   };
 
+  const showGenAI = () => {
+    // Only update state if it's not already visible,
+    if (!isGenAIVisible) {
+        setIsGenAIVisible(true);
+    }
+  };
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -220,7 +227,7 @@ function MainPage() {
                 content={selectedNotificationWrapper.notification.body}
                 onBack={handleBackFromPopup}
                 onDelete={() => { /* TBD */ }}
-                onGenAIClick={toggleGenAI}
+                onGenAIClick={showGenAI}
               />
             ) : (
               <NotificationList 
