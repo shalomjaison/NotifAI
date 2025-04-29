@@ -92,23 +92,6 @@ const NewMessage = () => {
             };
         };
 
-        // useEffect(() => {
-        //     const fetchUserId = async () => {
-        //         try {
-        //         const response = await axios.get('http://localhost:3000/users/me', {
-        //             withCredentials: true,
-        //         });
-        //         setUserId(response.data.user.id);
-        //         } catch (error) {
-        //         console.error('Error fetching user data:', error);
-        //         } finally {
-        //         setIsLoading(false);
-        //         }
-        //     };
-        
-        //     fetchUserId();
-        // }, []);
-
         try {
             const response = await axios.post('http://localhost:3000/notifications/create', {
                 userid: userData.id,

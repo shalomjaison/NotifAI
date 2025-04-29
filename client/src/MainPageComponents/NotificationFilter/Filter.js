@@ -333,6 +333,9 @@ class Filter extends React.Component {
                     <p>Select One</p>
                     {postedRecentButton()}
                     {postedOldestButton()}
+                    {/* experimental: all notifs have some sort of due date */}
+                    {dueEarliestButton()}   
+                    {dueLatestButton()}
 
                     <p>Select One</p>
                     {sentButton()}
