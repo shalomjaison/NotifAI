@@ -95,7 +95,7 @@ let server = null;
 
 const startServer = async () => {
   try {
-    await sequelize.sync({ force: true });
+    await sequelize.sync({ force: false });
     await createHardcodedUser();
     server = app.listen(port, () => {
       console.log(`Server is running on port ${port}`);

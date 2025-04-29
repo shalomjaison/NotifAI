@@ -1,4 +1,5 @@
 import React from 'react';
+import { CSSTransition } from 'react-transition-group'; 
 import Sidebar from "./Sidebar/Sidebar";
 import Header from "./Header/Header";
 import Filter from "./NotificationFilter/Filter";
@@ -9,7 +10,7 @@ import Reminders from "./Reminders/Reminders";
 import GenAI from "./genAI/genAI"
 import axios from 'axios';
 import EmailPopup from '../EmailPopupComponent/EmailPopup/EmailPopup'; 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // Main component to handle routing
 function MainPage() { 
@@ -19,14 +20,16 @@ function MainPage() {
 
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isGenAIVisible, setIsGenAIVisible] = useState(false); // state for Gemini visibility
-  const [selectedNotificationWrapper, setSelectedNotificationWrapper] = useState(null); // track emailPopup visibility
+  const [isGenAIVisible, setIsGenAIVisible] = useState(false); 
+  const genAiRef = useRef(null); // 3. Create ref for the GenAI node
+  const [selectedNotificationWrapper, setSelectedNotificationWrapper] = useState(null); 
 
 
   const toggleGenAI = () => {
     setIsGenAIVisible(prevState => !prevState);
     console.log(isGenAIVisible)
   };
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -209,6 +212,7 @@ function MainPage() {
             {/* Notification list with filtered notifications */}
             {/* Conditionally render NotificationList or EmailPopup */}
             {selectedNotificationWrapper ? (
+              
               <EmailPopup 
                 subject={selectedNotificationWrapper.notification.title} 
                 fromEmail={selectedNotificationWrapper.from.join(', ')} // Format array to string
@@ -216,6 +220,7 @@ function MainPage() {
                 content={selectedNotificationWrapper.notification.body}
                 onBack={handleBackFromPopup}
                 onDelete={() => { /* TBD */ }}
+                onGenAIClick={toggleGenAI}
               />
             ) : (
               <NotificationList 
@@ -234,7 +239,16 @@ function MainPage() {
           </div>
         </div>
       </div>
-      {isGenAIVisible && <GenAI />}
+      <CSSTransition
+        nodeRef={genAiRef}         // 5a. Pass the ref
+        in={isGenAIVisible}             // 5b. Control based on state
+        timeout={500}              // 5c. Match CSS animation duration (0.5s)
+        classNames="genai-slide"   // 5d. Base name for CSS classes
+        unmountOnExit              // 5e. Remove from DOM after exit animation
+      >
+        {/* 6. Render GenAI and pass the ref down */}
+        <GenAI ref={genAiRef} />
+      </CSSTransition>
     </div>
   );
 }

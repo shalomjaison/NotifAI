@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import "./EmailPopup.css";
+
+
+
 
 function EmailPopup({
   subject,
@@ -8,7 +11,33 @@ function EmailPopup({
   content,
   onBack,
   onDelete,
+  onGenAIClick
 }) {
+
+  const [isFlashing, setIsFlashing] = useState(false);
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false); 
+
+  // Handler for the summarize button click
+  const handleSummarizeClick = () => {
+    // Call the original function passed via props
+    if (onGenAIClick) {
+      onGenAIClick();
+    }
+
+    // Trigger the flash animation
+    setIsFlashing(true);
+
+    setTimeout(() => {
+      setIsFlashing(false);
+    }, 600); 
+  };
+
+  const showTooltip = () => setIsTooltipVisible(true);
+  const hideTooltip = () => setIsTooltipVisible(false);
+
+
+
+
   return (
     <div className="email-popup-container">
       {/* Header bar with back button, subject, and delete icon */}
@@ -24,7 +53,6 @@ function EmailPopup({
         <div className="email-popup-subject-line">
           <strong>Subject Line:</strong> {subject}
         </div>
-
         <button
           className="email-popup-trash-button"
           onClick={onDelete}
@@ -61,7 +89,25 @@ function EmailPopup({
       </div>
 
       {/* Body of the email */}
-      <div className="email-popup-message-body">{content}</div>
+      <div className="email-popup-message-body">
+        {content}
+        <button
+        
+          className={`summarize ${isFlashing ? 'flash-active' : ''}`} 
+          onClick={handleSummarizeClick}
+          onMouseEnter={showTooltip} // Show tooltip on hover enter
+          onMouseLeave={hideTooltip} // Hide tooltip on hover leave
+        >
+          <img src="/images/sparkles.png" 
+          alt="Summarize/Generate AI" 
+          />
+          {isTooltipVisible && (
+            <span className="custom-tooltip">
+              Summarize with AI ✧˖°.
+            </span>
+          )}
+        </button>
+        </div>
     </div>
   );
 }

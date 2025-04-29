@@ -1,18 +1,19 @@
 import "./genAI.css";
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, forwardRef } from 'react'; // 1. Import forwardRef
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown'; // for text formatting
 
 
 const initialHistory = [];
 
-const GenAI = () => {
+const GenAI =  forwardRef((props, ref) => {
     const [prompt, setPrompt] = useState('');
     const [chatHistory, setChatHistory] = useState(initialHistory);
     const [isLoading, setIsLoading] = useState(false);
     const textareaRef = useRef(null);
     const chatDisplayRef = useRef(null); 
     const [focusRequested, setFocusRequested] = useState(false);
+    const [isGeminiFlashing, setIsGeminiFlashing] = useState(false); 
 
 
     useEffect(() => {
@@ -59,8 +60,7 @@ const GenAI = () => {
 
             const aiMessage = { role: "model", parts: [{ text: aiResponseText }] };
             setChatHistory(prevHistory => [...prevHistory, aiMessage]);
-  
-
+            
         } catch (error) {
             console.error("uh oh, error sending prompt:", error);
             const errorMessage = { role: "model", parts: [{ text: "uh oh, error fetching response" }] };
@@ -79,7 +79,7 @@ const GenAI = () => {
     }
 
     return (
-        <div className="promptContainer">
+        <div className="promptContainer" ref={ref}>
             <div className="gemini-response-display" ref={chatDisplayRef}>
                 {chatHistory.length === 0 && !isLoading && (
                     <div className="chat-placeholder">
@@ -151,7 +151,7 @@ const GenAI = () => {
             </div>
         </div>
     )
-}
+});
 
 export default GenAI;
 
