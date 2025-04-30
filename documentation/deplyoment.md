@@ -55,10 +55,19 @@ work, not just one provided by Azure. But, Azure has 100 credit (dollar) plan fo
 1. Sign into VM via ssh. Use command ssh [username]@[public VM ip address], and type in password if chose username and password for authentication. **I prefer to access VM through VS Code's ssh     extension, as it allows me to open/edit files much easier.** Here is a link https://code.visualstudio.com/docs/remote/ssh
 2. Clone repository from Github into VM using git clone [url to github]. This will create the directory NotifAI. Git should be already installed on VM.
    
-4. Install nodejs and npm. **NOTE: traditional way to install, sudo apt install nodejs, would not work because that gives outdated version of nodejs, incompatible with our app**. I found this that works instead for nodejs: "curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -", then "sudo apt-get install --yes nodejs". Found on this link https://stackoverflow.com/questions/34594314/why-do-i-get-old-versions-of-nodejs-and-npm-when-installing-with-apt-get
+4. Install nodejs and npm. **NOTE: traditional way to install, sudo apt install nodejs, would not work because that gives outdated version of nodejs, incompatible with our app**. I found this that works instead for nodejs:
+
+```
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+```
+```
+sudo apt-get install --yes nodejs
+```
+
+Found on this link https://stackoverflow.com/questions/34594314/why-do-i-get-old-versions-of-nodejs-and-npm-when-installing-with-apt-get
    
-6. Check if nodejs is installed using node -v, also check npm using npm -v, I think above command also installs npm, if not, try "sudo apt install npm" (hopefully this won't be updated).
-7. Enter NotifAI directory, run ./installation.sh. There should be no issues here (hopefully).
+7. Check if nodejs is installed using node -v, also check npm using npm -v, I think above command also installs npm, if not, try "sudo apt install npm" (hopefully this won't be updated).
+8. Enter NotifAI directory, run ./installation.sh. There should be no issues here (hopefully).
    
 9. Run command "sudo apt install postgresql", backend needs local database. Connect to database using
 
