@@ -14,6 +14,8 @@ const { createUser: createUserController } = require('./controllers/userControll
 const sequelize = require('./db/db');
 const User = require('./models/userModel');
 
+const calendarRoutes = require('./routes/calendar');
+
 const app = express();
 app.use(
   cors({
@@ -22,6 +24,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Configure express-session middleware
 app.use(
@@ -37,6 +40,7 @@ app.use(
     },
   })
 );
+app.use('/api/calendar', require('./routes/calendar'));
 
 const port = 3000;
 
@@ -78,6 +82,35 @@ const createHardcodedUser = async () => {
     } else {
       console.log('User already exists in the database womp womp.');
     }
+
+    const existingEmployee = await User.findOne({
+      where: {
+        fname: 'Joy',
+        lname: 'Smiles',
+        username: 'joy_smiles',
+        email: 'joy_smiles@gmail.com',
+        role: 'employee',
+      },
+    });
+    if (!existingEmployee) {
+      const mockRequest = {
+        body: {
+          fname: 'Joy',
+          lname: 'Smiles',
+          username: 'joy_smiles',
+          email: 'joy_smiles@gmail.com',
+          password: '123',
+          role: 'employee',
+        },
+      };
+      await createUserController(mockRequest);
+      console.log(
+        'Mock post request for creating employee sent successfully from server.js wahoo!'
+      );
+    } else {
+      console.log('Employee already exists in the database womp womp.');
+    }
+
   } catch (error) {
     console.error('Error hardcoding user:', error);
   }
@@ -95,7 +128,8 @@ let server = null;
 
 const startServer = async () => {
   try {
-    await sequelize.sync({ force: false });
+    await sequelize.sync({ alter: true }); // Sync the database
+    console.log('Database synced successfully');
     await createHardcodedUser();
     server = app.listen(port, () => {
       console.log(`Server is running on port ${port}`);

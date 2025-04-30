@@ -44,7 +44,8 @@ npm install express-session
 echo STARTING INSTALLATION PG
 npm install pg
 npm install sequelize pg pg-hstore
-
+npm install multer
+npm install node-ical
 # css-loader (frontend)
 echo INSTALLING CSS-LOADER
 npm install --save-dev css-loader
