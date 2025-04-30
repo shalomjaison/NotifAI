@@ -42,9 +42,41 @@ work, not just one provided by Azure. But, Azure has 100 credit (dollar) plan fo
    
 <img width="974" alt="Screenshot 2025-04-30 at 2 54 10 PM" src="https://github.com/user-attachments/assets/a2d35b43-f41e-47cc-afd7-bce002b1310d" />
 
-6. For Size, **This is very important**. Our application is currently around 350 MB in files including dependencies, but I estimate that our application needs around **4 GB** total. Storage is also needed for nodejs, npm, and postgres. To be safe, however, I recommend 8 GB of memory and 4 GB of RAM. For Size, I chose the Bv2 from the B series. 30$ a month, ow. For authentication, choose ssh key if comfortable with that, otherwise go with the old fashioned username and password. For inbound port rules, **Must allow ssh port 22**, that is how we will enter the VM through the SSH (secure shell) protocol.
+6. For Size, **This is very important**. Our application is currently around 350 MB in files including dependencies, but I estimate that our application needs around **4 GB** total. Storage is also needed for nodejs, npm, git, and postgres. To be safe, however, I recommend 8 GB of memory and 4 GB of RAM. For Size, I chose the Bv2 from the B series. 30$ a month, ow. For authentication, choose ssh key if comfortable with that, otherwise go with the old fashioned username and password. **Save your username and password somewhere, for ssh key need to go to VM in azure portal to request for a key to be generated.** For inbound port rules, **Must allow ssh port 22**, that is how we will enter the VM through the SSH (secure shell) protocol. After that, click review and create. No need to worry about other tabs apart from Basics tab.
 
 <img width="974" alt="Screenshot 2025-04-30 at 3 00 52 PM" src="https://github.com/user-attachments/assets/0801a791-1b23-40f4-9663-08d4f6f66242" />
 
+7. Azure VM now created! View the VM on the Azure platform. Here is what is looks like. In red is a button for refreshing VM, might find it helpful, also in red is public ip address. 
+
+<img width="1317" alt="Screenshot 2025-04-30 at 3 22 36 PM" src="https://github.com/user-attachments/assets/f9e5e5f6-c01b-42b8-99be-173f3893a7d1" />
 
 ## If already have Ubuntu Cloud VM
+
+1. Sign into VM via ssh. Use command ssh [username]@[public VM ip address], and type in password if chose username and password for authentication. **I prefer to access VM through VS Code's ssh     extension, as it allows me to open/edit files much easier.** Here is a link https://code.visualstudio.com/docs/remote/ssh
+2. Clone repository from Github into VM using git clone [url to github]. This will create the directory NotifAI. Git should be already installed on VM.
+   
+4. Install nodejs and npm. **NOTE: traditional way to install, sudo apt install nodejs, would not work because that gives outdated version of nodejs, incompatible with our app**. I found this that works instead for nodejs: "curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -", then "sudo apt-get install --yes nodejs". Found on this link https://stackoverflow.com/questions/34594314/why-do-i-get-old-versions-of-nodejs-and-npm-when-installing-with-apt-get
+   
+6. Check if nodejs is installed using node -v, also check npm using npm -v, I think above command also installs npm, if not, try "sudo apt install npm" (hopefully this won't be updated).
+7. Enter NotifAI directory, run ./installation.sh. There should be no issues here (hopefully).
+   
+9. Run command "sudo apt install postgresql", backend needs local database. Connect to database using
+
+```
+sudo -u postgres psql
+```
+Run command in psql shell
+
+```
+ALTER USER postgres with encrypted password 'your_password';
+```
+Then create database called "users" by typing in psql shell:
+```
+CREATE DATABASE users;
+```
+    
+Password and database name can be anything, can configure environment variable so that your password and database works. Postgres with Ubuntu is based on this link https://documentation.ubuntu.com/server/how-to/databases/install-postgresql/index.html
+
+10. Create .env file in NotifAI root directory, copy all of .env.example into .env, modify .env so that matches your setup. Both frontend and backend should have VM's public ip address (found on Azure portal). ***Be sure to set BACKEND_IN_VIRTUAL_MACHINE = 1***.
+
+11. Now, on Azure portal, allow ports for frontend and backend to be used. In my example, it is 9500 and 3000. 
