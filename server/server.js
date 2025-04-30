@@ -128,7 +128,7 @@ let server = null;
 
 const startServer = async () => {
   try {
-    await await sequelize.sync({ alter: true }); // Sync the database
+    await sequelize.sync({ alter: true }); // Sync the database
     console.log('Database synced successfully');
     await createHardcodedUser();
     server = app.listen(port, () => {
