@@ -82,6 +82,35 @@ const createHardcodedUser = async () => {
     } else {
       console.log('User already exists in the database womp womp.');
     }
+
+    const existingEmployee = await User.findOne({
+      where: {
+        fname: 'Joy',
+        lname: 'Smiles',
+        username: 'joy_smiles',
+        email: 'joy_smiles@gmail.com',
+        role: 'employee',
+      },
+    });
+    if (!existingEmployee) {
+      const mockRequest = {
+        body: {
+          fname: 'Joy',
+          lname: 'Smiles',
+          username: 'joy_smiles',
+          email: 'joy_smiles@gmail.com',
+          password: '123',
+          role: 'employee',
+        },
+      };
+      await createUserController(mockRequest);
+      console.log(
+        'Mock post request for creating employee sent successfully from server.js wahoo!'
+      );
+    } else {
+      console.log('Employee already exists in the database womp womp.');
+    }
+
   } catch (error) {
     console.error('Error hardcoding user:', error);
   }
