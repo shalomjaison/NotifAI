@@ -79,4 +79,31 @@ Password and database name can be anything, can configure environment variable s
 
 10. Create .env file in NotifAI root directory, copy all of .env.example into .env, modify .env so that matches your setup. Both frontend and backend should have VM's public ip address (found on Azure portal). ***Be sure to set BACKEND_IN_VIRTUAL_MACHINE = 1***.
 
-11. Now, on Azure portal, allow ports for frontend and backend to be used. In my example, it is 9500 and 3000. 
+11. Now, on Azure portal, allow ports for frontend and backend to be used. In my example, it is 9500 and 3000. Click on Network Setting under Networking on your virtual machine dashboard. Then, click Create Port Rule for Inbound Port.
+    
+<img width="1045" alt="Screenshot 2025-04-30 at 3 44 15 PM" src="https://github.com/user-attachments/assets/73109a36-a6a6-4520-975e-52bc917e15c2" />
+
+12. Choose * for source, and ports for frontend and backend as destination (9500,3000). This means users can connect to ports 9500 and 3000 on VM from any port. Protocol is TCP, Action is allow. Then do the same for Outbound Port by clicking Create Port Rule, then Outbound Port. This time, choose ports for frontend and backend (9500,3000) as source, and * as destination. This means that frontend and backend at those ports can send response to user at any of the user's ports. Below example is for inbound.
+    
+<img width="1038" alt="Screenshot 2025-04-30 at 3 48 02 PM" src="https://github.com/user-attachments/assets/3b8f9568-db34-40c9-bb00-5a46da8d7880" />
+
+13. Try ./start_backend.sh, and ./start_frontend.sh, and type http://[VM public ip address]:[frontend port number]. You should be able to sign in and use app!
+
+14. Right now, if exit ssh, frontend and backend shuts down too. To enable it that they run at all times, instead of ./start_frontend.sh or ./start_backend.sh, do:
+    
+```
+nohup ./start_backend > backend_log &
+```
+```
+nohup ./start_frontend > frontend_log &
+```
+This command starts both frontend and backend in the background, as prevents them from terminating on shell exit. Also, console output from frontend and backend go into files called backend_log and frontend_log. When sign back into shell, those two programs will still be running, to termiante them, run 
+```
+sudo ss -lptn 'sport = :<port number>'
+```
+This returns the process id running at the port number, then run
+```
+kill <process id>
+```
+This terminates the process. An example is below with port number 3000. 
+<img width="1401" alt="Screenshot 2025-04-30 at 3 55 27 PM" src="https://github.com/user-attachments/assets/c4751553-ece0-40b4-bc43-5691f0a4cfc9" />
