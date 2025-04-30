@@ -151,10 +151,10 @@ const getFilters = (body, user_id) => {
 
             if(key == "is_completed"){
                 if(body.filters.args.is_completed){
-                    output.push((notification) => ("is_completed" in notification.args && notification.args.is_completed));
+                    output.push((notification) => ("iscompleted" in notification.args && notification.args.iscompleted));
                 }
                 else{
-                    output.push((notification) => (!("is_completed" in notification.args) || !notification.args.is_completed));
+                    output.push((notification) => (!("iscompleted" in notification.args) || !notification.args.iscompleted));
                 }
             }
             else if(key == "is_overdue"){
