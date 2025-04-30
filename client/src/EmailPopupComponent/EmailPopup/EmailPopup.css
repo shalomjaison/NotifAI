@@ -4,9 +4,16 @@
   background-color: #e9e2f3;
   padding: 20px;
   border-radius: 8px;
-  width: 95%;
-  height: 80%;
+  min-height: 70vh;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.email-popup-container p {
+  width: fit-content; 
 }
 
 .email-popup-header {
@@ -53,8 +60,9 @@
   padding: 25px; /* Important: Creates space for the absolute element */
   line-height: 1.5;
   font-size: 0.95rem;
-  overflow: auto;
-  width:fit-content;
+  overflow-y: auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .summarize {

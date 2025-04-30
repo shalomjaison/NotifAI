@@ -88,9 +88,8 @@ function EmailPopup({
 
       {/* Body of the email */}
       <div className="email-popup-message-body">
-        {content}
+        <p>{content}</p>
         <button
-        
           className={`summarize ${isFlashing ? 'flash-active' : ''}`} 
           onClick={handleSummarizeClick}
           onMouseEnter={showTooltip} // Show tooltip on hover enter

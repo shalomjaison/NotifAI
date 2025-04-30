@@ -183,7 +183,7 @@ function MainPage() {
   }
   
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
+    <div style={{ display: 'flex', height: '100vh', flexBasis: '30%', flexShrink: 0 }}>
       {/* Sidebar component */}
       <Sidebar />
 
@@ -220,15 +220,29 @@ function MainPage() {
             {/* Conditionally render NotificationList or EmailPopup */}
             {selectedNotificationWrapper ? (
               
-              <EmailPopup 
-                subject={selectedNotificationWrapper.notification.title} 
-                fromEmail={selectedNotificationWrapper.from.join(', ')} // Format array to string
-                toEmail={selectedNotificationWrapper.to.join(', ')}     // Format array to string
-                content={selectedNotificationWrapper.notification.body}
-                onBack={handleBackFromPopup}
-                onDelete={() => { /* TBD */ }}
-                onGenAIClick={showGenAI}
-              />
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              width: '100%',
+              paddingRight: '20px', // prevents it from touching the right edge
+            }}>
+              <div style={{
+                flexGrow: 1,
+                maxWidth: '70vw', // adjusts with screen size
+                minWidth: '300px'
+              }}>
+                <EmailPopup
+                  subject={selectedNotificationWrapper.notification.title}
+                  fromEmail={selectedNotificationWrapper.from.join(', ')}
+                  toEmail={selectedNotificationWrapper.to.join(', ')}
+                  content={selectedNotificationWrapper.notification.body}
+                  onBack={handleBackFromPopup}
+                  onDelete={() => {}}
+                  onGenAIClick={showGenAI}
+                />
+              </div>
+            </div>
             ) : (
               <NotificationList 
                 notifications={filteredNotifications} 
