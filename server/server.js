@@ -19,11 +19,12 @@ const deploymentMode = process.env.DEPLOYMENT_MODE || 0;  // 1 for deployment, 0
 const frontendHost = process.env.FRONTEND_HOST || "localhost";  
 const frontendPort = process.env.FRONTEND_PORT || "9500";
 const USING_DOCKER = process.env.USING_DOCKER || 0;   // exported inside start_container_backend.sh
+const BACKEND_IN_VIRTUAL_MACHINE = process.env.BACKEND_IN_VIRTUAL_MACHINE || 0;
 
 let backendHost = process.env.BACKEND_HOST || "localhost";  
 const backendPort = process.env.BACKEND_PORT || "3000";
 
-if(USING_DOCKER == 1 || deploymentMode == 1){
+if(USING_DOCKER == 1 || BACKEND_IN_VIRTUAL_MACHINE == 1){
   backendHost = "0.0.0.0"
 }
 
