@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./EmailPopup.css";
+import axios from 'axios';
 
 
 
@@ -11,16 +12,21 @@ function EmailPopup({
   content,
   onBack,
   onDelete,
-  onGenAIClick
+  onGenAIClick,
+  onSummaryReceived,
+  onSummarizeStart,
+  onSummarizeEnd,
+  isLoading
 }) {
 
   const [isFlashing, setIsFlashing] = useState(false);
   const [isTooltipVisible, setIsTooltipVisible] = useState(false); 
 
   // Handler for the summarize button click
-  const handleSummarizeClick = () => {
+  const handleSummarizeClick = async () => {
     // Call the original function passed via props
     onGenAIClick();
+    onSummarizeStart();
 
     // Trigger the flash animation
     setIsFlashing(true);
@@ -28,6 +34,35 @@ function EmailPopup({
     setTimeout(() => {
       setIsFlashing(false);
     }, 600); 
+
+    const summaryContent = {
+      subject: subject,
+      from: fromEmail,
+      to: toEmail,
+      content: content};
+
+    const requestBody = {
+      prompt: JSON.stringify(summaryContent),
+      history: [] 
+    };
+    try {        
+        const response = await axios.post('http://localhost:3000/genAI/gemini-prompt',
+          requestBody, // Send the structured body
+          { withCredentials: true }
+      );
+
+      console.log("summarize info sent to gemeni: " + response.data)
+
+      if (response.data && response.data.generatedText) {
+        onSummaryReceived(response.data.generatedText);
+      } else {
+        onSummaryReceived("Sorry! I couldn't generate a summary (empty response).");
+      }
+    } catch (error) {
+      console.error("Error summarizing:", error.response?.data || error.consoleMessage);
+    } finally {
+      onSummarizeEnd();
+    }
   };
 
   const showTooltip = () => setIsTooltipVisible(true);
@@ -89,6 +124,7 @@ function EmailPopup({
           onClick={handleSummarizeClick}
           onMouseEnter={showTooltip} // Show tooltip on hover enter
           onMouseLeave={hideTooltip} // Hide tooltip on hover leave
+          disabled={isLoading}
         >
           <img src="/images/sparkles.png" 
           alt="Summarize/Generate AI" 

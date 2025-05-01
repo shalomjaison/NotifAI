@@ -4,12 +4,8 @@ import axios from 'axios';
 import ReactMarkdown from 'react-markdown'; // for text formatting
 
 
-const initialHistory = [];
-
-const GenAI =  forwardRef((props, ref) => {
+const GenAI =  forwardRef(({ chatHistory, setChatHistory, isLoading, setIsLoading }, ref) => {
     const [prompt, setPrompt] = useState('');
-    const [chatHistory, setChatHistory] = useState(initialHistory);
-    const [isLoading, setIsLoading] = useState(false);
     const textareaRef = useRef(null);
     const chatDisplayRef = useRef(null); 
     const [focusRequested, setFocusRequested] = useState(false);
@@ -38,13 +34,14 @@ const GenAI =  forwardRef((props, ref) => {
         if (!currentPrompt) return;
 
         setIsLoading(true);
-
         setPrompt(''); 
 
 
         const newUserMessage = { role: "user", parts: [{ text: currentPrompt }] };
-        setChatHistory(prevHistory => [...prevHistory, newUserMessage]);
 
+        const updatedHistoryForState = [...chatHistory, newUserMessage];
+        const historyForAPI = chatHistory;
+        setChatHistory(updatedHistoryForState);
 
         try {
 

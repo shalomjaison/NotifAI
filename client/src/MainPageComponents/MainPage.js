@@ -19,15 +19,24 @@ function MainPage() {
   filter.addSubscriber(x => {console.log("hi, notifications retrieved after updating filter is"); console.log(x); });
 
   const [userData, setUserData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isUserDataLoading, setIsUserDataLoading] = useState(true); 
+  const [isAILoading, setIsAILoading] = useState(false); // *** Use this for AI operations ***
+
   const [isGenAIVisible, setIsGenAIVisible] = useState(false); 
   const genAiRef = useRef(null); // 3. Create ref for the GenAI node
   const [selectedNotificationWrapper, setSelectedNotificationWrapper] = useState(null); 
+  const [genAIChatHistory, setGenAIChatHistory] = useState([]);
+
 
 
   const toggleGenAI = () => {
-    setIsGenAIVisible(prevState => !prevState);
-    console.log(isGenAIVisible)
+    setIsGenAIVisible(prevIsVisible => {
+      const nextIsVisible = !prevIsVisible; // Determine the *next* state
+      if (prevIsVisible && !nextIsVisible) {
+        setGenAIChatHistory([]);
+      }
+      return nextIsVisible;
+    });
   };
 
   const showGenAI = () => {
@@ -37,6 +46,27 @@ function MainPage() {
     }
   };
 
+  const handleSummaryReceived = (summaryText) => {
+    if (summaryText) {
+      // Format summary as a message object (matching GenAI's structure)
+      const summaryMessage = { role: "model", parts: [{ text: summaryText }] };
+      setGenAIChatHistory(prevHistory => [...prevHistory, summaryMessage]);
+    }
+  };
+
+  const handleSummarizeStart = () => {
+    setIsAILoading(true);
+    const userSummarizeRequestMessage = {
+      role: "user",
+      parts: [{ text: "Summarize the current email/notification." }] 
+    };
+    setGenAIChatHistory(prevHistory => [...prevHistory, userSummarizeRequestMessage]);
+  };
+
+  const handleSummarizeEnd = () => {
+    setIsAILoading(false);
+
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -48,7 +78,7 @@ function MainPage() {
       } catch (error) {
         console.error('Error fetching user data:', error);
       } finally {
-        setIsLoading(false);
+        setIsUserDataLoading(false);
       }
     };
 
@@ -178,7 +208,7 @@ function MainPage() {
     }
   ];
   
-  if (isLoading) {
+  if (isUserDataLoading) {
     return <div>Loading...</div>;
   }
   
@@ -240,6 +270,10 @@ function MainPage() {
                   onBack={handleBackFromPopup}
                   onDelete={() => {}}
                   onGenAIClick={showGenAI}
+                  onSummaryReceived={handleSummaryReceived}
+                  onSummarizeStart={handleSummarizeStart}
+                  onSummarizeEnd={handleSummarizeEnd}
+                  isLoading={isAILoading}
                 />
               </div>
             </div>
@@ -268,7 +302,13 @@ function MainPage() {
         unmountOnExit              // 5e. Remove from DOM after exit animation
       >
         {/* 6. Render GenAI and pass the ref down */}
-        <GenAI ref={genAiRef} />
+        <GenAI 
+        ref={genAiRef}
+        chatHistory={genAIChatHistory} // Pass the state down
+        setChatHistory={setGenAIChatHistory} // Pass the setter function down
+        isLoading={isAILoading}
+        setIsLoading={setIsAILoading}
+        />
       </CSSTransition>
     </div>
   );
