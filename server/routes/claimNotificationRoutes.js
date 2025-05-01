@@ -15,9 +15,6 @@ const router = express.Router();
 //   }); //debug message to check if the router is working
 router.use(authMiddleware);
 
-// GET  /notifications/claims/high-priority
-router.get('/high-priority', getHighPriorityClaims);
-
 // POST /notifications/claims/:id/mark-read
 router.post('/:id/mark-read', markClaimRead);
 
