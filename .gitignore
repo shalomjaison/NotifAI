@@ -2,3 +2,6 @@ node_modules/
 client/public/main.js
 coverage/
 .env
+.DS_Store
+client/.DS_Store
+server/.DS_Store
