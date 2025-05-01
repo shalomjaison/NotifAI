@@ -84,11 +84,6 @@ function EmailPopup({
         <div>
           <strong>To:</strong> {toEmail}
         </div>
-      </div>
-
-      {/* Body of the email */}
-      <div className="email-popup-message-body">
-        <p>{content}</p>
         <button
           className={`summarize ${isFlashing ? 'flash-active' : ''}`} 
           onClick={handleSummarizeClick}
@@ -104,7 +99,12 @@ function EmailPopup({
             </span>
           )}
         </button>
-        </div>
+      </div>
+
+      {/* Body of the email */}
+      <div className="email-popup-message-body">
+        <p>{content}</p>
+      </div>
     </div>
   );
 }

@@ -57,7 +57,7 @@
   flex-direction: column;
   background-color: white;
   border-radius: 6px;
-  padding: 25px; /* Important: Creates space for the absolute element */
+  padding: 16px; /* Important: Creates space for the absolute element */
   line-height: 1.5;
   font-size: 0.95rem;
   overflow-y: auto;
@@ -66,9 +66,7 @@
 }
 
 .summarize {
-  position: absolute;
-  top: 10px;  
-  right: 10px; 
+  position: relative;
   background-color: transparent;
   border: none;
   padding: 0; 
@@ -76,6 +74,9 @@
   cursor: pointer; 
   line-height: 0; 
   border-radius: 100%;
+  align-self: flex-end;
+  bottom: 40px;
+  margin-bottom: -45px;
 }
 
 .summarize img {
