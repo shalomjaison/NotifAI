@@ -13,10 +13,19 @@ const genAIRoutes = require('./routes/genAIRoutes');
 const { createUser: createUserController } = require('./controllers/userController'); // importing for mock post request
 const sequelize = require('./db/db');
 const User = require('./models/userModel');
+const claimNotificationRoutes = require('./routes/claimNotificationRoutes');
+
+
 
 const calendarRoutes = require('./routes/calendar');
 
 const app = express();
+
+app.use((req, res, next) => {
+  console.log(`➡️ [APP] ${req.method} ${req.url}`);
+  next();
+});
+
 app.use(
   cors({
     origin: 'http://localhost:9500', // Allow requests from your React app
@@ -41,6 +50,10 @@ app.use(
   })
 );
 app.use('/api/calendar', require('./routes/calendar'));
+app.use('/users', userRoutes);
+app.use('/notifications/claims',    claimNotificationRoutes);
+app.use('/notifications', notificationRoutes);
+app.use('/genAI', genAIRoutes)
 
 const port = 3000;
 
@@ -49,9 +62,7 @@ app.get('/hello-world-demo', (req, res) => {
   res.send({ text: 'Hello from the backend123!' });
 });
 
-app.use('/users', userRoutes);
-app.use('/notifications', notificationRoutes);
-app.use('/genAI', genAIRoutes)
+
 
 const createHardcodedUser = async () => {
   try {
@@ -128,7 +139,8 @@ let server = null;
 
 const startServer = async () => {
   try {
-    await sequelize.sync({ alter: true }); // Sync the database
+    await User.sync({ force: true });
+    await sequelize.sync({force:true}); // Sync the database
     console.log('Database synced successfully');
     await createHardcodedUser();
     server = app.listen(port, () => {

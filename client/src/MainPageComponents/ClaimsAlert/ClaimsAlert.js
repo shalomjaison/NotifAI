@@ -1,40 +1,106 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 import './ClaimsAlert.css';
 
-const ClaimsAlert = () => {
+export default function ClaimsAlert(){
+  const [queue,   setQueue]   = useState([]);
+  const [current, setCurrent] = useState(null);
+
+  // 1) fetch on mount — now using the generic list endpoint
+  useEffect(() => {
+    const body = {
+      most_recent_first: true,
+      filters: {
+        sent:   false,
+        type:   'CLAIMS',
+        read:   false,
+        args:   { priority: 'HIGH_PRIORITY' }
+      }
+    };
+
+    axios
+      .post(
+        'http://localhost:3000/notifications',  // your list route
+        body,
+        { withCredentials: true }
+      )
+      .then(res => {
+        console.log('📬 fetched claims:', res.data.notifications);
+        // the controller returns an array of objects { from, to, notification }
+        // so map into our { id, args } shape
+        const notes = res.data.notifications.map(n => ({
+          id:   n.notification.id,
+          args: n.notification.args
+        }));
+        setQueue(notes);
+      })
+      .catch(console.error);
+  }, []);
+
+   // 2) whenever current is null and there’s still something in queue, show the next one
+   useEffect(() => {
+    if (!current && queue.length > 0) {
+      const [next, ...rest] = queue;
+      setCurrent(next);
+      setQueue(rest);
+    }
+  }, [queue, current]);
+
+  useEffect(() => {
+    if (current) {
+      const timer = setTimeout(() => setCurrent(null), 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [current]);
+
+  // // 2) dequeue and show
+  // useEffect(() => {
+  //   if (!current && queue.length) {
+  //     const next = queue[0];
+  //     setCurrent(next);
+  //     setQueue(q => q.slice(1));
+  //     const t = setTimeout(() => dismiss(next.id), 10000);
+  //     return () => clearTimeout(t);
+  //   }
+  // }, [queue, current]);
+
+  // 3) dismiss & mark read (you already have this)
+  const dismiss = (id) => {
+    setCurrent(null);
+    axios.post(`http://localhost:3000/notifications/claims/${id}/mark-read`, {}, { withCredentials: true })
+      .catch(console.error);
+  };
+
+  if (!current) return null;
+  const { id, args } = current;
+
   return (
     <div className="claims-alert-container">
       <div className="claims-alert-header">
         <div>
-          <h3 className="claims-alert-title">
-            Claims Priority Message
-          </h3>
+          <h3 className="claims-alert-title">Claims Priority Message</h3>
           <span className="claims-alert-timestamp">Just now</span>
         </div>
-        <button className="claims-alert-close-button">
+        <button
+          className="claims-alert-close-button"
+          onClick={() => dismiss(id)}
+        >
           ×
         </button>
       </div>
-
       <div className="claims-alert-content">
-        <div className="claims-alert-icon-container">
-          {/* Bell icon SVG */}
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b91c1c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-          </svg>
-        </div>
-        <p className="claims-alert-message">
-          You have $50 due tommorrow
-        </p>
+        <div className="claims-alert-icon-container">{/* bell SVG */}</div>
+        <p className="claims-alert-message">{`Task: ${args.tasktype}`}</p>
+        <p className="claims-alert-message">{`Due: ${new Date(
+          args.duedate
+        ).toLocaleString()}`}</p>
       </div>
-
-      <button className="claims-alert-open-button">
+      <button
+        className="claims-alert-open-button"
+        onClick={() => console.log('open', id)}
+      >
         Open
       </button>
     </div>
   );
-};
-
-export default ClaimsAlert;
-
+}

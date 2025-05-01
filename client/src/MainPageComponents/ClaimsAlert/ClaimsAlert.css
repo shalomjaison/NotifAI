@@ -1,68 +1,23 @@
 .claims-alert-container {
-    background-color: #fee2e2;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 24px;
-    border: 1px solid #fecaca;
-  }
-  
-  .claims-alert-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 8px;
-  }
-  
-  .claims-alert-title {
-    margin: 0;
-    font-size: 16px;
-    font-weight: bold;
-    color: #b91c1c;
-  }
-  
-  .claims-alert-timestamp {
-    font-size: 14px;
-    color: #b91c1c;
-  }
-  
-  .claims-alert-close-button {
-    background-color: transparent;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    color: #b91c1c;
-  }
-  
-  .claims-alert-content {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-  
-  .claims-alert-icon-container {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: #fef2f2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .claims-alert-message {
-    margin: 0;
-    font-size: 14px;
-    color: #b91c1c;
-  }
-  
-  .claims-alert-open-button {
-    background-color: #ef4444;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    padding: 6px 16px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  
+  position: fixed; top:1rem; right:1rem; width:320px;
+  background:#fee2e2; border:1px solid #fca5a5; border-radius:8px;
+  box-shadow:0 4px 8px rgba(0,0,0,0.1); padding:1rem; z-index:1000;
+  animation:fadeIn .3s ease-out;
+}
+.claims-alert-header { display:flex; justify-content:space-between; }
+.claims-alert-title { margin:0; color:#b91c1c; }
+.claims-alert-timestamp { font-size:.85rem; color:#b91c1c; }
+.claims-alert-close-button {
+  background:transparent; border:none; font-size:1.2rem; cursor:pointer; color:#b91c1c;
+}
+.claims-alert-content { display:flex; align-items:center; margin:1rem 0; }
+.claims-alert-icon-container { margin-right:.5rem; }
+.claims-alert-message { margin:0; color:#b91c1c; }
+.claims-alert-open-button {
+  background:#b91c1c; color:white; border:none; padding:.5rem 1rem; border-radius:4px;
+  cursor:pointer; font-weight:500;
+}
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(-10px) }
+  to   { opacity:1; transform:translateY(0) }
+}

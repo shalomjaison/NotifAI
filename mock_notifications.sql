@@ -34,7 +34,8 @@ INSERT INTO Notifications (userid, type, title, body, isread, isarchived, datecr
 
 -- claims
 ('joy_smiles', 'claim', 'Accident claim pending', 'your claim has successfully processed and is awaiting final authorization for release', false, false, NOW()),
-('joy_smiles', 'claim', 'Documents required', 'your claims have incomplete documents please go to the portal and submit the required documents', false, false, NOW());
+('joy_smiles', 'claim', 'Documents required', 'your claims have incomplete documents please go to the portal and submit the required documents', false, false, NOW()),
+('joy_smiles', 'claim', 'request for appointment', 'your next steps to accept your claim require an appoinment to you nearest insurance liason. Please do so at your convenience by May 10,2025.', false, false, NOW());
 
 -- Insert into NewsNotifications table (30 inserts)
 INSERT INTO NewsNotifications (notificationid, expirationdate, type) VALUES
@@ -71,7 +72,8 @@ INSERT INTO NewsNotifications (notificationid, expirationdate, type) VALUES
 
 INSERT INTO claimnotifications (notificationid, insuredname, claimantname, tasktype,       duedate,     lineofbusiness, priority, iscompleted) VALUES
 (31, 'John Doe', 'John Doe', 'Upload Photos & Estimate', '2025-05-05', 'Auto',     'LOW_PRIORITY',   false),
-(32, 'John Doe', 'John Doe', 'Submit Documentation',    '2025-05-10', 'Property', 'HIGH_PRIORITY', false);
+(32, 'John Doe', 'John Doe', 'Submit Documentation',    '2025-05-10', 'Property', 'HIGH_PRIORITY', false),
+(33,'John Doe', 'John Doe', 'Appointment', '2025-05-10','Renters Insurance', 'HIGH_PRIORITY', false);
 
 -- Insert into NotificationRecipient table (30 inserts - all to john_doe)
 INSERT INTO NotificationRecipients (notificationid, recipientid, datesent) VALUES
@@ -108,4 +110,5 @@ INSERT INTO NotificationRecipients (notificationid, recipientid, datesent) VALUE
 
 -- 31 and 32 are claims
 (31, 'john_doe', NOW()),
-(32, 'john_doe', NOW());
+(32, 'john_doe', NOW()),
+(33, 'john_doe', NOW());
