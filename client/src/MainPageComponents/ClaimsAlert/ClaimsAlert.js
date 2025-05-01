@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import './ClaimsAlert.css';
 
-export default function ClaimsAlert(){
+                        // func that opens notif and mark as read
+export default function ClaimsAlert({selectNotifFunc}){
   const [queue,   setQueue]   = useState([]);
   const [current, setCurrent] = useState(null);
 
@@ -69,6 +70,21 @@ export default function ClaimsAlert(){
       .catch(console.error);
   };
 
+  const open = async (id) => {
+    console.log('open', id); 
+          
+    try {
+      // Getting Notification Wrapper for selecting and opening it
+      const response = await axios.get("http://localhost:3000/notifications/" + id, { withCredentials: true }); // send cookies with request
+      const notifWrapper = response.data;
+      selectNotifFunc(notifWrapper);
+      setCurrent(null);
+
+    } catch (error) {
+      console.error("Error with opening claims message:" + error);
+    }
+  }
+
   if (!current) return null;
   const { id, args } = current;
 
@@ -95,7 +111,7 @@ export default function ClaimsAlert(){
       </div>
       <button
         className="claims-alert-open-button"
-        onClick={() => console.log('open', id)}
+        onClick={() => open(id)}
       >
         Open
       </button>
