@@ -70,3 +70,6 @@ npm install @google/generative-ai
 # markdown formatting for chatbot
 echo INSTALLING MARKDOWN FORMATTING FOR GEMINI
 npm install react-markdown
+
+echo INSTALLING REACT TRANSITIONS
+npm install react-transition-group

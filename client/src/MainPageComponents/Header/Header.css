@@ -1,4 +1,20 @@
-/* client/src/components/Header/Header.css */
+@keyframes header-icon-flash {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.1);
+  }
+}
+
+
+.header-icon-flash-active {
+  animation: header-icon-flash 0.3s ease-in; 
+}
+
+
 html {
   overflow: hidden;
 }
@@ -127,9 +143,8 @@ html {
   
   #genAI {
     padding: 2px;
+    background: none;
+    border-radius: 100%;
   }
-  #genAI:hover {
-    background-color:#ddcaf4;
-    border-radius: 30px;
-    color:#c49eec;
-  }
+
+  
