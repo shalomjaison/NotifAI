@@ -114,5 +114,5 @@ This returns the process id running at the port number, then run
 ```
 kill <process id>
 ```
-This terminates the process. An example is below with port number 3000. 
+This terminates the process. ***BUT WHATEVER YOU DO, DONT DELETE THE WRONG PROCESS ID! THAT COULD BE VERY BAD, IF YOUR VM ACTS WEIRD, MIGHT HAVE DELETED SOMETHING IMPORTANT, RESTART VM USING AZURE VM DASHBOARD.*** An example of right way to do it below with port number 3000. 
 <img width="1401" alt="Screenshot 2025-04-30 at 3 55 27 PM" src="https://github.com/user-attachments/assets/c4751553-ece0-40b4-bc43-5691f0a4cfc9" />
