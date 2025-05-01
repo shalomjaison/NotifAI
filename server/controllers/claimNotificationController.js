@@ -9,7 +9,7 @@ exports.getHighPriorityClaims = async (req, res) => {
     console.log('🏓 GET /notifications/claims/high-priority for', username);
 
     // 1) Find all HIGH_PRIORITY ClaimNotifications
-    //    that belong to an unread claims Notification sent → this user
+    //    that belong to an unread claims Notification sent to this user
     const rows = await ClaimNotification.findAll({
       where: { priority: 'HIGH_PRIORITY' },
       include: [
@@ -30,9 +30,8 @@ exports.getHighPriorityClaims = async (req, res) => {
 
     console.log('🔍 found', rows.length, 'high‐priority rows');
 
-    // 2) Shape into [{ id, args }, …]
     const payload = rows.map(c => ({
-      id:   c.notificationid,      // ← correct!
+      id:   c.notificationid,   // ← this is the Notification id
       args: c.get({ plain: true })
     }));
 
@@ -48,10 +47,9 @@ exports.markClaimRead = async (req, res) => {
     const { id } = req.params;
     console.log('📩 mark‐read called for notification', id, 'by', req.session.user.username);
 
-    // Simply clear the isread flag on the Notification row
     const [updated] = await Notification.update(
       { isread: true },
-      { where: { id } }    // ← drop the userid check
+      { where: { id } }    // ← mark the Notification as read
     );
     console.log('🔄 markClaimRead updated rows:', updated);
 

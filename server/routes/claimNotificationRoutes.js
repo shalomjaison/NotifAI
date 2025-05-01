@@ -9,11 +9,10 @@ const {
 
 const router = express.Router();
 
-router.use((req, res, next) => {
-    console.log(`🛣️ [CLAIMS ROUTER] ${req.method} ${req.originalUrl}`);
-    next();
-  });
-// protect all /notifications/claims routes
+// router.use((req, res, next) => {
+//     console.log(`🛣️ [CLAIMS ROUTER] ${req.method} ${req.originalUrl}`);
+//     next();
+//   }); //debug message to check if the router is working
 router.use(authMiddleware);
 
 // GET  /notifications/claims/high-priority

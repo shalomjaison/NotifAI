@@ -6,7 +6,6 @@ export default function ClaimsAlert(){
   const [queue,   setQueue]   = useState([]);
   const [current, setCurrent] = useState(null);
 
-  // 1) fetch on mount — now using the generic list endpoint
   useEffect(() => {
     const body = {
       most_recent_first: true,
@@ -20,14 +19,13 @@ export default function ClaimsAlert(){
 
     axios
       .post(
-        'http://localhost:3000/notifications',  // your list route
+        'http://localhost:3000/notifications',  
         body,
         { withCredentials: true }
       )
       .then(res => {
         console.log('📬 fetched claims:', res.data.notifications);
         // the controller returns an array of objects { from, to, notification }
-        // so map into our { id, args } shape
         const notes = res.data.notifications.map(n => ({
           id:   n.notification.id,
           args: n.notification.args
@@ -37,7 +35,7 @@ export default function ClaimsAlert(){
       .catch(console.error);
   }, []);
 
-   // 2) whenever current is null and there’s still something in queue, show the next one
+   // whenever current is null and there’s still something in queue, show the next one
    useEffect(() => {
     if (!current && queue.length > 0) {
       const [next, ...rest] = queue;
@@ -64,7 +62,7 @@ export default function ClaimsAlert(){
   //   }
   // }, [queue, current]);
 
-  // 3) dismiss & mark read (you already have this)
+  // 3) dismiss & mark read
   const dismiss = (id) => {
     setCurrent(null);
     axios.post(`http://localhost:3000/notifications/claims/${id}/mark-read`, {}, { withCredentials: true })

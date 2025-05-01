@@ -21,10 +21,10 @@ const calendarRoutes = require('./routes/calendar');
 
 const app = express();
 
-app.use((req, res, next) => {
-  console.log(`➡️ [APP] ${req.method} ${req.url}`);
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log(`➡️ [APP] ${req.method} ${req.url}`);
+//   next();
+// }); debug message to check what API is being called by the server
 
 app.use(
   cors({
