@@ -34,7 +34,11 @@ const User = sequelize.define(
     createdat: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
-    }
+    },
+    calendar_ics: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
   },
   {
     tableName: 'users',

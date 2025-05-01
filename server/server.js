@@ -31,6 +31,8 @@ if(USING_DOCKER == 1 || BACKEND_IN_VIRTUAL_MACHINE == 1){
 const clientURL = 'http://' + frontendHost + ':' + frontendPort;
 console.log("client url: ", clientURL);
 
+const calendarRoutes = require('./routes/calendar');
+
 const app = express();
 app.use(
   cors({
@@ -39,6 +41,7 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Configure express-session middleware
 app.use(
@@ -55,6 +58,7 @@ app.use(
     },
   })
 );
+app.use('/api/calendar', require('./routes/calendar'));
 
 // const port = 3000;
 
@@ -69,7 +73,7 @@ app.use('/users', userRoutes);
 app.use('/notifications', notificationRoutes);
 app.use('/genAI', genAIRoutes)
 
-const createHardcodedUser = async () => {
+const createHardcodedUsers = async () => {
   try {
     const existingUser = await User.findOne({
       where: {
@@ -98,6 +102,35 @@ const createHardcodedUser = async () => {
     } else {
       console.log('User already exists in the database womp womp.');
     }
+
+    const existingEmployee = await User.findOne({
+      where: {
+        fname: 'Joy',
+        lname: 'Smiles',
+        username: 'joy_smiles',
+        email: 'joy_smiles@gmail.com',
+        role: 'employee',
+      },
+    });
+    if (!existingEmployee) {
+      const mockRequest = {
+        body: {
+          fname: 'Joy',
+          lname: 'Smiles',
+          username: 'joy_smiles',
+          email: 'joy_smiles@gmail.com',
+          password: '123',
+          role: 'employee',
+        },
+      };
+      await createUserController(mockRequest);
+      console.log(
+        'Mock post request for creating employee sent successfully from server.js wahoo!'
+      );
+    } else {
+      console.log('Employee already exists in the database womp womp.');
+    }
+
   } catch (error) {
     console.error('Error hardcoding user:', error);
   }
@@ -117,15 +150,15 @@ console.log(`Server is running on port ${backendPort}, on host ${backendHost}, d
 const startServer = async () => {
   try {
     const force = (deploymentMode == 1) ? (false) : (true);
-    await sequelize.sync({ force: force });
+    await sequelize.sync({ force: force, alter:true });
+    console.log('Database synced successfully');
 
     if(deploymentMode == 0){
-      await createHardcodedUser();
+      await createHardcodedUsers();
     }
 
     server = app.listen(backendPort, backendHost, () => {
-    // server = app.listen(port, () => {
-        console.log(`Server is running on port ${backendPort}, on host ${backendHost}, deployment mode is ${deploymentMode} (1 for deployment, 0 for development)`);
+    console.log(`Server is running on port ${backendPort}, on host ${backendHost}, deployment mode is ${deploymentMode} (1 for deployment, 0 for development)`);
     });
     await viewUsers();
   } catch (error) {

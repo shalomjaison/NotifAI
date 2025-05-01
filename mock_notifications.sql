@@ -30,7 +30,11 @@ INSERT INTO Notifications (userid, type, title, body, isread, isarchived, datecr
 ('john_doe', 'news', 'Weather: Forecast Update', 'Here is the latest weather forecast update.', false, false, NOW()),
 ('john_doe', 'news', 'Animals: Wildlife Conservation', 'New efforts are being made for wildlife conservation.', false, false, NOW()),
 ('john_doe', 'news', 'Plants: Gardening Tips', 'Here are some new gardening tips for you.', false, false, NOW()),
-('john_doe', 'news', 'Vehicles: New Model', 'A new vehicle model has been released.', false, false, NOW());
+('john_doe', 'news', 'Vehicles: New Model', 'A new vehicle model has been released.', false, false, NOW()),
+
+-- claims
+('joy_smiles', 'claim', 'Accident claim pending', 'your claim has successfully processed and is awaiting final authorization for release', false, false, NOW()),
+('joy_smiles', 'claim', 'Documents required', 'your claims have incomplete documents please go to the portal and submit the required documents', false, false, NOW());
 
 -- Insert into NewsNotifications table (30 inserts)
 INSERT INTO NewsNotifications (notificationid, expirationdate, type) VALUES
@@ -65,6 +69,10 @@ INSERT INTO NewsNotifications (notificationid, expirationdate, type) VALUES
 (29, '2024-08-24', 'promotion'),
 (30, '2024-08-08', 'general');
 
+INSERT INTO claimnotifications (notificationid, insuredname, claimantname, tasktype,       duedate,     lineofbusiness, priority, iscompleted) VALUES
+(31, 'John Doe', 'John Doe', 'Upload Photos & Estimate', '2025-05-05', 'Auto',     'LOW_PRIORITY',   false),
+(32, 'John Doe', 'John Doe', 'Submit Documentation',    '2025-05-10', 'Property', 'HIGH_PRIORITY', false);
+
 -- Insert into NotificationRecipient table (30 inserts - all to john_doe)
 INSERT INTO NotificationRecipients (notificationid, recipientid, datesent) VALUES
 (1, 'john_doe', NOW()),
@@ -96,4 +104,8 @@ INSERT INTO NotificationRecipients (notificationid, recipientid, datesent) VALUE
 (27, 'john_doe', NOW()),
 (28, 'john_doe', NOW()),
 (29, 'john_doe', NOW()),
-(30, 'john_doe', NOW());
+(30, 'john_doe', NOW()),
+
+-- 31 and 32 are claims
+(31, 'john_doe', NOW()),
+(32, 'john_doe', NOW());
