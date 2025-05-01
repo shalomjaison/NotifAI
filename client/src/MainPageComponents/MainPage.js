@@ -23,7 +23,7 @@ function MainPage() {
   const [isAILoading, setIsAILoading] = useState(false); // *** Use this for AI operations ***
 
   const [isGenAIVisible, setIsGenAIVisible] = useState(false); 
-  const genAiRef = useRef(null); // 3. Create ref for the GenAI node
+  const genAiRef = useRef(null); 
   const [selectedNotificationWrapper, setSelectedNotificationWrapper] = useState(null); 
   const [genAIChatHistory, setGenAIChatHistory] = useState([]);
 
@@ -31,7 +31,7 @@ function MainPage() {
 
   const toggleGenAI = () => {
     setIsGenAIVisible(prevIsVisible => {
-      const nextIsVisible = !prevIsVisible; // Determine the *next* state
+      const nextIsVisible = !prevIsVisible;
       if (prevIsVisible && !nextIsVisible) {
         setGenAIChatHistory([]);
       }

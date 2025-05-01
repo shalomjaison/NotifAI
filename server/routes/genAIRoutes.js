@@ -6,6 +6,4 @@ const router = express.Router();
 
 router.post("/gemini-prompt", geminiPrompt)
 
-router.post('/gemini-summarize', geminiSummarize)
-
 module.exports = router
