@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 const Header = ({ userData, onGenAIClick }) => {
   const navigate = useNavigate(); // Initialize useNavigate
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isIconFlashing, setIsIconFlashing] = useState(false); 
+
   const handleProfileClick = () => {
     window.location.href= "/profile";
     setMenuOpen(false);
@@ -18,6 +20,16 @@ const Header = ({ userData, onGenAIClick }) => {
       window.location.href = "/"; // Redirect to the login page;
     }
   }, [userData, navigate]);
+
+  const handleIconClick = () => {
+    if (onGenAIClick) {
+      onGenAIClick();
+    }
+    setIsIconFlashing(true);
+    setTimeout(() => {
+      setIsIconFlashing(false);
+    }, 300); 
+  };
 
   console.log("menuOpen:", menuOpen);
   return (
@@ -34,7 +46,8 @@ const Header = ({ userData, onGenAIClick }) => {
           height={40}
           color={"#e9d5ff"}
           fill={"none"}
-          onClick={onGenAIClick} // <-- Call the function passed from MainPage
+          onClick={handleIconClick} // <-- Call the function passed from MainPage
+          className={isIconFlashing ? 'header-icon-flash-active' : ''} // <-- APPLY CLASS HERE
           style={{ cursor: 'pointer' }} // <-- Add pointer cursor
           id = "genAI"
         >
