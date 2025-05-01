@@ -101,10 +101,10 @@ Password and database name can be anything, can configure environment variable s
 14. Right now, if exit ssh, frontend and backend shuts down too. To enable it that they run at all times, instead of ./start_frontend.sh or ./start_backend.sh, do:
     
 ```
-nohup ./start_backend > backend_log &
+nohup ./start_backend.sh > backend_log &
 ```
 ```
-nohup ./start_frontend > frontend_log &
+nohup ./start_frontend.sh > frontend_log &
 ```
 This command starts both frontend and backend in the background, as prevents them from terminating on shell exit. Also, console output from frontend and backend go into files called backend_log and frontend_log. When sign back into shell, those two programs will still be running, to termiante them, run 
 ```
