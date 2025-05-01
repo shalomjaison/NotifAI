@@ -7,6 +7,7 @@
 
 echo STARTING BACKEND
 
+# NOTE: Dockerfile needs theis file in same directory
 cp .env ./server   
 
 docker build -t notifai-server ./server

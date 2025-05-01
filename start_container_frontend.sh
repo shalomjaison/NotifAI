@@ -7,6 +7,7 @@
 
 echo STARTING FRONTEND
 
+# NOTE: Dockerfile needs this file in same directory
 cp .env ./client
 
 docker build -t notifai-client ./client
