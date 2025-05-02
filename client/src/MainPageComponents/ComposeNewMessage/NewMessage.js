@@ -174,7 +174,7 @@ const NewMessage = () => {
 
             {/*Task type for news and claims types*/}
 
-            {emailType == "news" && emailType == "claim"(
+            {(emailType == "news" || emailType == "claim") && (
                 <div className="news-claims-task-type-container">
                     <input
                         type="text"

@@ -187,7 +187,7 @@ function MainPage() {
   const handleNotificationSelect = async (notificationWrapper) => {
 
     // Mark notif as read only if a recipient reads it
-    if(notificationWrapper.to.includes(userData.id)){
+    if(notificationWrapper.to.includes(userData.id) && !notificationWrapper.notification.isread){
       try {
         // Marking notif as read
         let id = notificationWrapper.notification.id;
