@@ -9,7 +9,9 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 74vh;
 }
 
 .email-popup-container p {
