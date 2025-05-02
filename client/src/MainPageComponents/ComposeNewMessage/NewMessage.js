@@ -172,9 +172,9 @@ const NewMessage = () => {
                 />
             </div>
 
-            {/*Task type for news and claim types*/}
+            {/*Task type for news and claims types*/}
 
-            {emailType == "claim" || emailType == "news" && (
+            {emailType == "news" && emailType == "claim"(
                 <div className="news-claims-task-type-container">
                     <input
                         type="text"
@@ -191,15 +191,25 @@ const NewMessage = () => {
 
             {emailType == "claim" && (
             <div className="claim-details-container">
-                <div className="select-claim-priority">
-                    <input
-                    type="text"
-                    placeholder="Priority"
-                    className="claim-priority-input"
-                    value={priority}
-                    onChange={(e) => setPriority(e.target.value)}
-                    required
-                    />
+
+                {/*priority*/}
+                <div className="email-type-container">
+                    {['HIGH_PRIORITY', 'MEDIUM_PRIORITY', 'LOW_PRIORITY'].map((type) => (
+                        <div className="news-claims-task-type-container" key={type}>
+                            <input
+                                type="radio"
+                                name="claimPriority"
+                                className="claimPriority"
+                                id={type}
+                                value={type}
+                                checked={priority === type}
+                                onChange={(e) => setPriority(e.target.value)}
+                                required
+                            />
+                            <label htmlFor={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</label>
+                        </div>
+                    ))}
+                    
                 </div>
 
                 <div className="select-insured-name">

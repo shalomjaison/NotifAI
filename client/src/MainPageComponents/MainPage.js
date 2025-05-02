@@ -186,13 +186,16 @@ function MainPage() {
 
   const handleNotificationSelect = async (notificationWrapper) => {
 
-    try {
-      // Marking notif as read
-      let id = notificationWrapper.notification.id;
-      await axios.post("http://localhost:3000/notifications/claims/" + id + "/mark-read", { withCredentials: true }); // send cookies with request
-
-    } catch (error) {
-      console.error("Mark notification as read error:" + error);
+    // Mark notif as read only if a recipient reads it
+    if(notificationWrapper.to.includes(userData.id)){
+      try {
+        // Marking notif as read
+        let id = notificationWrapper.notification.id;
+        await axios.post("http://localhost:3000/notifications/claims/" + id + "/mark-read", { withCredentials: true }); // send cookies with request
+  
+      } catch (error) {
+        console.error("Mark notification as read error:" + error);
+      }
     }
 
     setSelectedNotificationWrapper(notificationWrapper);
