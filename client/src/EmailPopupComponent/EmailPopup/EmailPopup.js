@@ -8,7 +8,11 @@ function EmailPopup({
   content,
   onBack,
   onDelete,
+  type,
+  args,
 }) {
+  console.log("EmailPopup type:", type);
+  console.log("EmailPopup args:", args);
   return (
     <div className="email-popup-container">
       {/* Header bar with back button, subject, and delete icon */}
@@ -50,7 +54,6 @@ function EmailPopup({
         </button>
       </div>
 
-      {/* From / To section */}
       <div className="email-popup-addresses">
         <div>
           <strong>From:</strong> {fromEmail}
@@ -58,9 +61,54 @@ function EmailPopup({
         <div>
           <strong>To:</strong> {toEmail}
         </div>
+        {type === "news" && (
+          <>
+            <div>Notification Type: News</div>
+            <div>
+              Expiration Date:{" "}
+              {new Date(args.expirationdate).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </div>
+            <div>News Type: {args.type}</div>
+          </>
+        )}
+        {type === "claim" && (
+          <>
+            <div>Notification Type: Claim</div>
+            <div>Insured Name: {args.insuredname}</div>
+            <div>Claimant Name: {args.claimantname}</div>
+            <div>Task Type: {args.tasktype}</div>
+            <div>
+              Due Date:{" "}
+              {new Date(args.duedate).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </div>
+            <div>Line of Business: {args.lineofbusiness}</div>
+            <div>Priority: {args.priority}</div>
+            <div>Is Completed: {args.iscompleted ? "Yes" : "No"}</div>
+          </>
+        )}
+        {type === "policy" && (
+          <>
+            <div>Notification Type: Policy</div>
+            <div>Changes to Premium: {args.changestopremium}</div>
+            <div>
+              Billing Reminder Date:{" "}
+              {new Date(args.billingreminderdate).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </div>
+          </>
+        )}
       </div>
-
-      {/* Body of the email */}
       <div className="email-popup-message-body">{content}</div>
     </div>
   );

@@ -257,6 +257,8 @@ function MainPage() {
                 fromEmail={selectedNotificationWrapper.from.join(", ")} // Format array to string
                 toEmail={selectedNotificationWrapper.to.join(", ")} // Format array to string
                 content={selectedNotificationWrapper.notification.body}
+                type={selectedNotificationWrapper.notification.type}
+                args={selectedNotificationWrapper.notification.args}
                 onBack={handleBackFromPopup}
                 onDelete={handleDeleteFromPopup}
               />
