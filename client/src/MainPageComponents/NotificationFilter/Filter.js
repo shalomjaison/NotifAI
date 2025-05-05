@@ -15,6 +15,7 @@
 import React, { createElement, useEffect, useState } from 'react';
 import './Filter.css';
 import axios from 'axios';
+import { deploymentMode, backendPort, backendHost, backendBaseURL } from '../../App';
 
 class Filter extends React.Component {
 
@@ -42,7 +43,7 @@ class Filter extends React.Component {
             // Send POST request to backend server at /notifications with currentFilterRequest as request body whenever currentFilterRequest is updated
             const fetchUserNotifications = async () => {
                 try {
-                    const response = await axios.post('http://localhost:3000/notifications', this.currentFilterRequest, { withCredentials: true});
+                    const response = await axios.post(backendBaseURL + '/notifications', this.currentFilterRequest, { withCredentials: true});
                     const notifications = response.data.notifications;
 
                     this.subscribers.forEach(fxn => {

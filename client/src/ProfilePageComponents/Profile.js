@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import './Profile.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { deploymentMode, backendPort, backendHost, backendBaseURL } from '../App';
+
 // const user = {
 //     firstName: "John",
 //     lastName: "Doe",
@@ -18,7 +20,7 @@ function Profile() {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await axios.get('http://localhost:3000/users/profile', {
+          const response = await axios.get(backendBaseURL + '/users/profile', {
             withCredentials: true,
           });
           console.log("Response status:", response.status);

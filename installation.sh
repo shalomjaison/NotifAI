@@ -8,6 +8,10 @@ echo STARTING INSTALLATION WEBPACK
 npm i --save-dev webpack webpack-cli webpack-dev-server
 npm install --save-dev html-webpack-plugin
 
+# process for environment variables react
+echo STARTING INSTALLATION PROCESS
+npm install process
+
 # CORS
 echo STARTING INSTALLATIONS CORS
 npm install cors
