@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import "./EmailPopup.css";
 import axios from 'axios';
 
-
-
+import { deploymentMode, backendPort, backendHost, backendBaseURL } from '../../App';
 
 function EmailPopup({
   subject,
@@ -46,7 +45,7 @@ function EmailPopup({
       history: [] 
     };
     try {        
-        const response = await axios.post('http://localhost:3000/genAI/gemini-prompt',
+        const response = await axios.post(backendBaseURL + '/genAI/gemini-prompt',
           requestBody, // Send the structured body
           { withCredentials: true }
       );
@@ -59,7 +58,7 @@ function EmailPopup({
         onSummaryReceived("Sorry! I couldn't generate a summary (empty response).");
       }
     } catch (error) {
-      console.error("Error summarizing:", error.response?.data || error.consoleMessage);
+      console.error("Error summarizing:", error);
     } finally {
       onSummarizeEnd();
     }

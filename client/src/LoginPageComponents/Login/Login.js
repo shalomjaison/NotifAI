@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
+import { deploymentMode, backendPort, backendHost, backendBaseURL } from '../../App';
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -15,7 +16,7 @@ function Login() {
     console.log("Login button clicked! Sending request...");
 
     try {
-      const response = await axios.post("http://localhost:3000/users/login", {
+      const response = await axios.post(backendBaseURL + "/users/login", {
         email: username, // Using username input for email
         password,
       }, { withCredentials: true }); // send cookies with request

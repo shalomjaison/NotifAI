@@ -13,13 +13,30 @@ const genAIRoutes = require('./routes/genAIRoutes');
 const { createUser: createUserController } = require('./controllers/userController'); // importing for mock post request
 const sequelize = require('./db/db');
 const User = require('./models/userModel');
+require('dotenv').config();
+
+const deploymentMode = process.env.DEPLOYMENT_MODE || 0;  // 1 for deployment, 0 for development
+const frontendHost = process.env.FRONTEND_HOST || "localhost";  
+const frontendPort = process.env.FRONTEND_PORT || "9500";
+const USING_DOCKER = process.env.USING_DOCKER || 0;   // exported inside start_container_backend.sh
+const BACKEND_IN_VIRTUAL_MACHINE = process.env.BACKEND_IN_VIRTUAL_MACHINE || 0;
+
+let backendHost = process.env.BACKEND_HOST || "localhost";  
+const backendPort = process.env.BACKEND_PORT || "3000";
+
+if(USING_DOCKER == 1 || BACKEND_IN_VIRTUAL_MACHINE == 1){
+  backendHost = "0.0.0.0"
+}
+
+const clientURL = 'http://' + frontendHost + ':' + frontendPort;
+console.log("client url: ", clientURL);
 
 const calendarRoutes = require('./routes/calendar');
 
 const app = express();
 app.use(
   cors({
-    origin: 'http://localhost:9500', // Allow requests from your React app
+    origin: clientURL, // Allow requests from your React app
     credentials: true, // Allow cookies to be sent
   })
 );
@@ -35,25 +52,28 @@ app.use(
     cookie: {
       httpOnly: true, // Make the cookie only accessible via HTTP(S)
       secure: false, // Set to true in production (when using HTTPS)
-      sameSite: 'Strict', // Prevent CSRF attacks
+      // sameSite: 'Strict', // Prevent CSRF attacks
+      sameSite: 'Lax', // Allow cookies in cross-origin requests
       maxAge: 1000 * 60 * 60 * 24, // Cookie expires after 1 day
     },
   })
 );
 app.use('/api/calendar', require('./routes/calendar'));
 
-const port = 3000;
+// const port = 3000;
 
-app.get('/hello-world-demo', (req, res) => {
-  console.log('/hello-world-demo get request received');
-  res.send({ text: 'Hello from the backend123!' });
-});
+if(deploymentMode == 0){
+  app.get('/hello-world-demo', (req, res) => {
+    console.log('/hello-world-demo get request received');
+    res.send({ text: 'Hello from the backend123!' });
+  });
+}
 
 app.use('/users', userRoutes);
 app.use('/notifications', notificationRoutes);
 app.use('/genAI', genAIRoutes)
 
-const createHardcodedUser = async () => {
+const createHardcodedUsers = async () => {
   try {
     const existingUser = await User.findOne({
       where: {
@@ -125,14 +145,20 @@ const viewUsers = async () => {
 };
 
 let server = null;
+console.log(`Server is running on port ${backendPort}, on host ${backendHost}, deployment mode is ${deploymentMode} (1 for deployment, 0 for development)`);
 
 const startServer = async () => {
   try {
-    await sequelize.sync({ alter: true }); // Sync the database
+    const force = (deploymentMode == 1) ? (false) : (true);
+    await sequelize.sync({ force: force, alter:true });
     console.log('Database synced successfully');
-    await createHardcodedUser();
-    server = app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
+
+    if(deploymentMode == 0){
+      await createHardcodedUsers();
+    }
+
+    server = app.listen(backendPort, backendHost, () => {
+    console.log(`Server is running on port ${backendPort}, on host ${backendHost}, deployment mode is ${deploymentMode} (1 for deployment, 0 for development)`);
     });
     await viewUsers();
   } catch (error) {
