@@ -317,6 +317,8 @@ class Filter extends React.Component {
                         <p>Select One</p>
                         {postedRecentButton()}
                         {postedOldestButton()}
+                        {dueEarliestButton()}
+                        {dueLatestButton()}
 
                         <p>Select One</p>
                         {sentButton()}
@@ -430,7 +432,7 @@ class Filter extends React.Component {
                             this.setCurrentFilterRequest(temp);
 
                         }} className="filter-menu-row" style={{backgroundColor: ("read" in this.currentFilterRequest.filters) && (this.currentFilterRequest.filters.read) ? ('#CBC3E3') : ("white")}}>
-                            <p>Read</p>
+                            <p>Read by Recipient</p>
                         </button>
                     </div>
                 );
@@ -452,7 +454,7 @@ class Filter extends React.Component {
                             this.setCurrentFilterRequest(temp);
 
                         }} className="filter-menu-row" style={{backgroundColor: ("read" in this.currentFilterRequest.filters) && (!this.currentFilterRequest.filters.read) ? ('#CBC3E3') : ("white")}}>
-                            <p>Unread</p>
+                            <p>Unread by Recipient</p>
                         </button>
                     </div>
                 );
