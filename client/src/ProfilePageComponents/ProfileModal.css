@@ -1,0 +1,125 @@
+.modal-overlay{
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.2);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    backdrop-filter: blur(5px);
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal-container {
+    opacity: 0;
+    transform: scale(0.99);
+    width: 70%;
+    min-height: 80vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: 9px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    /* padding: 1.5rem; */
+    border: 1px solid black;
+    transition: opacity 0.2s ease, transform 0.1s ease;
+}
+
+
+.modal-overlay.show {
+    opacity: 1;
+}
+
+.modal-container.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.modal-container.hidden {
+    opacity: 0;
+    transform: scale(0.99);
+}
+
+.modal-overlay.hidden {
+    opacity: 0;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    padding: 0;
+}
+
+.modal-sidebar {
+    display: flex;
+    flex-direction: column;
+    background-color: #EFEFEF;
+    min-height: 80vh;
+    min-width: 25%;
+    padding: 0.8rem;
+}
+
+.modal-content {
+    flex: 1;
+}
+
+.sidebar-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #aba9a9;
+}
+
+.profile-avatar {
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #DCD1E9;
+    width: 60px;
+    height: 60px;
+    font-family: "Roboto", sans-serif;
+    /* font-weight: bold; */
+    font-size: 32px;
+}
+
+.profile-greeting {
+    font-family: "KoHo", sans-serif;
+    padding-left: 22px;
+    font-size: 22px;
+    font-weight: 400;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1.5rem;
+    gap: 0.25rem;
+}
+
+.modal-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.75rem 1rem;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.modal-sidebar-item span{
+    padding-left: 33px;
+}
+
+.modal-sidebar-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}

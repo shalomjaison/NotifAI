@@ -2,18 +2,14 @@ import React, { useEffect, useState } from 'react';
 import './Header.css';
 import LogoutButton from '../LogoutButton/LogoutButton';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-
+import ProfileModal from '../../ProfilePageComponents/ProfileModal';'../../ProfilePageComponents/ProfileModal.js'
 
 
 const Header = ({ userData, onGenAIClick }) => {
   const navigate = useNavigate(); // Initialize useNavigate
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isIconFlashing, setIsIconFlashing] = useState(false); 
 
-  const handleProfileClick = () => {
-    window.location.href= "/profile";
-    setMenuOpen(false);
-  };
   useEffect(() => {
     if (!userData) {
       console.log("No user data found, redirecting to login");
@@ -31,7 +27,6 @@ const Header = ({ userData, onGenAIClick }) => {
     }, 300); 
   };
 
-  console.log("menuOpen:", menuOpen);
   return (
     <header className="header-container">
       <h1 className="header-title">
@@ -55,7 +50,7 @@ const Header = ({ userData, onGenAIClick }) => {
         </svg>
         <div className="header-profile-image-container" onClick={() => {
             console.log("Toggling dropdown");
-            setMenuOpen(!menuOpen);
+            setIsProfileModalOpen(true);
         }}>
           {/* Placeholder for profile image */}
           <div className="header-profile-image-placeholder">
@@ -65,23 +60,10 @@ const Header = ({ userData, onGenAIClick }) => {
               <circle cx="12" cy="7" r="4" />
             </svg>
           </div>
-          {menuOpen && (
-            <div className='header-dropdown'>
-              <div className="header-profile-image-placeholder">
-                {/*Avatar Icon*/}
-                <svg xmlns="http://www.w3.org/2000/svg" width="90" height="100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
-                </svg>
-              </div>
-              <p className='dropdown-greeting'>Hi, {userData?.fname || "User"}!</p>
-              <button className="dropdown-btn" onClick={handleProfileClick}>
-                Manage your Account
-              </button>
-              <LogoutButton />
-            </div>
-          )}
         </div>
+        {isProfileModalOpen && (
+            <ProfileModal handleModalClose={() => setIsProfileModalOpen(false)} />
+        )}
       </div>
     </header>
   );
