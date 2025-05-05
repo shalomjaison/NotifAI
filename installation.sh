@@ -8,6 +8,10 @@ echo STARTING INSTALLATION WEBPACK
 npm i --save-dev webpack webpack-cli webpack-dev-server
 npm install --save-dev html-webpack-plugin
 
+# process for environment variables react
+echo STARTING INSTALLATION PROCESS
+npm install process
+
 # CORS
 echo STARTING INSTALLATIONS CORS
 npm install cors
@@ -44,7 +48,8 @@ npm install express-session
 echo STARTING INSTALLATION PG
 npm install pg
 npm install sequelize pg pg-hstore
-
+npm install multer
+npm install node-ical
 # css-loader (frontend)
 echo INSTALLING CSS-LOADER
 npm install --save-dev css-loader
@@ -65,3 +70,6 @@ npm install @google/generative-ai
 # markdown formatting for chatbot
 echo INSTALLING MARKDOWN FORMATTING FOR GEMINI
 npm install react-markdown
+
+echo INSTALLING REACT TRANSITIONS
+npm install react-transition-group

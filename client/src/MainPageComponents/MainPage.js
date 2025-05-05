@@ -1,4 +1,5 @@
 import React from "react";
+import { CSSTransition } from "react-transition-group";
 import Sidebar from "./Sidebar/Sidebar";
 import Header from "./Header/Header";
 import Filter from "./NotificationFilter/Filter";
@@ -9,7 +10,14 @@ import Reminders from "./Reminders/Reminders";
 import GenAI from "./genAI/genAI";
 import axios from "axios";
 import EmailPopup from "../EmailPopupComponent/EmailPopup/EmailPopup";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+
+import {
+  deploymentMode,
+  backendPort,
+  backendHost,
+  backendBaseURL,
+} from "../App";
 
 // Main component to handle routing
 function MainPage() {
@@ -20,27 +28,67 @@ function MainPage() {
   });
 
   const [userData, setUserData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isGenAIVisible, setIsGenAIVisible] = useState(false); // state for Gemini visibility
+  const [isUserDataLoading, setIsUserDataLoading] = useState(true);
+  const [isAILoading, setIsAILoading] = useState(false); // *** Use this for AI operations ***
+
+  const [isGenAIVisible, setIsGenAIVisible] = useState(false);
+  const genAiRef = useRef(null);
   const [selectedNotificationWrapper, setSelectedNotificationWrapper] =
-    useState(null); // track emailPopup visibility
+    useState(null);
+  const [genAIChatHistory, setGenAIChatHistory] = useState([]);
 
   const toggleGenAI = () => {
-    setIsGenAIVisible((prevState) => !prevState);
-    console.log(isGenAIVisible);
+    setIsGenAIVisible((prevIsVisible) => {
+      const nextIsVisible = !prevIsVisible;
+      if (prevIsVisible && !nextIsVisible) {
+        setGenAIChatHistory([]);
+      }
+      return nextIsVisible;
+    });
+  };
+
+  const showGenAI = () => {
+    // Only update state if it's not already visible,
+    if (!isGenAIVisible) {
+      setIsGenAIVisible(true);
+    }
+  };
+
+  const handleSummaryReceived = (summaryText) => {
+    if (summaryText) {
+      // Format summary as a message object (matching GenAI's structure)
+      const summaryMessage = { role: "model", parts: [{ text: summaryText }] };
+      setGenAIChatHistory((prevHistory) => [...prevHistory, summaryMessage]);
+    }
+  };
+
+  const handleSummarizeStart = () => {
+    setIsAILoading(true);
+    const userSummarizeRequestMessage = {
+      role: "user",
+      parts: [{ text: "Summarize the current email/notification." }],
+    };
+    setGenAIChatHistory((prevHistory) => [
+      ...prevHistory,
+      userSummarizeRequestMessage,
+    ]);
+  };
+
+  const handleSummarizeEnd = () => {
+    setIsAILoading(false);
   };
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/users/me", {
+        const response = await axios.get(backendBaseURL + "/users/me", {
           withCredentials: true,
         });
         setUserData(response.data.user);
       } catch (error) {
         console.error("Error fetching user data:", error);
       } finally {
-        setIsLoading(false);
+        setIsUserDataLoading(false);
       }
     };
 
@@ -209,12 +257,19 @@ function MainPage() {
     },
   ];
 
-  if (isLoading) {
+  if (isUserDataLoading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div
+      style={{
+        display: "flex",
+        height: "100vh",
+        flexBasis: "30%",
+        flexShrink: 0,
+      }}
+    >
       {/* Sidebar component */}
       <Sidebar />
 
@@ -252,16 +307,39 @@ function MainPage() {
             {/* Notification list with filtered notifications */}
             {/* Conditionally render NotificationList or EmailPopup */}
             {selectedNotificationWrapper ? (
-              <EmailPopup
-                subject={selectedNotificationWrapper.notification.title}
-                fromEmail={selectedNotificationWrapper.from.join(", ")} // Format array to string
-                toEmail={selectedNotificationWrapper.to.join(", ")} // Format array to string
-                content={selectedNotificationWrapper.notification.body}
-                type={selectedNotificationWrapper.notification.type}
-                args={selectedNotificationWrapper.notification.args}
-                onBack={handleBackFromPopup}
-                onDelete={handleDeleteFromPopup}
-              />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "flex-start",
+                  width: "100%",
+                  paddingRight: "20px", // prevents it from touching the right edge
+                }}
+              >
+                <div
+                  style={{
+                    flexGrow: 1,
+                    maxWidth: "70vw", // adjusts with screen size
+                    minWidth: "300px",
+                  }}
+                >
+                  <EmailPopup
+                    type={selectedNotificationWrapper.notification.type}
+                    args={selectedNotificationWrapper.notification.args}
+                    subject={selectedNotificationWrapper.notification.title}
+                    fromEmail={selectedNotificationWrapper.from.join(", ")}
+                    toEmail={selectedNotificationWrapper.to.join(", ")}
+                    content={selectedNotificationWrapper.notification.body}
+                    onBack={handleBackFromPopup}
+                    onDelete={handleDeleteFromPopup}
+                    onGenAIClick={showGenAI}
+                    onSummaryReceived={handleSummaryReceived}
+                    onSummarizeStart={handleSummarizeStart}
+                    onSummarizeEnd={handleSummarizeEnd}
+                    isLoading={isAILoading}
+                  />
+                </div>
+              </div>
             ) : (
               <NotificationList
                 notifications={filteredNotifications}
@@ -279,7 +357,22 @@ function MainPage() {
           </div>
         </div>
       </div>
-      {isGenAIVisible && <GenAI />}
+      <CSSTransition
+        nodeRef={genAiRef} // 5a. Pass the ref
+        in={isGenAIVisible} // 5b. Control based on state
+        timeout={500} // 5c. Match CSS animation duration (0.5s)
+        classNames="genai-slide" // 5d. Base name for CSS classes
+        unmountOnExit // 5e. Remove from DOM after exit animation
+      >
+        {/* 6. Render GenAI and pass the ref down */}
+        <GenAI
+          ref={genAiRef}
+          chatHistory={genAIChatHistory} // Pass the state down
+          setChatHistory={setGenAIChatHistory} // Pass the setter function down
+          isLoading={isAILoading}
+          setIsLoading={setIsAILoading}
+        />
+      </CSSTransition>
     </div>
   );
 }

@@ -1,5 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import "./EmailPopup.css";
+import axios from "axios";
+
+import {
+  deploymentMode,
+  backendPort,
+  backendHost,
+  backendBaseURL,
+} from "../../App";
 
 function EmailPopup({
   subject,
@@ -10,7 +18,65 @@ function EmailPopup({
   onDelete,
   type,
   args,
+  onGenAIClick,
+  onSummaryReceived,
+  onSummarizeStart,
+  onSummarizeEnd,
+  isLoading,
 }) {
+  const [isFlashing, setIsFlashing] = useState(false);
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+
+  // Handler for the summarize button click
+  const handleSummarizeClick = async () => {
+    // Call the original function passed via props
+    onGenAIClick();
+    onSummarizeStart();
+
+    // Trigger the flash animation
+    setIsFlashing(true);
+
+    setTimeout(() => {
+      setIsFlashing(false);
+    }, 600);
+
+    const summaryContent = {
+      subject: subject,
+      from: fromEmail,
+      to: toEmail,
+      content: content,
+    };
+
+    const requestBody = {
+      prompt: JSON.stringify(summaryContent),
+      history: [],
+    };
+    try {
+      const response = await axios.post(
+        backendBaseURL + "/genAI/gemini-prompt",
+        requestBody, // Send the structured body
+        { withCredentials: true }
+      );
+
+      console.log("summarize info sent to gemeni: " + response.data);
+
+      if (response.data && response.data.generatedText) {
+        onSummaryReceived(response.data.generatedText);
+      } else {
+        onSummaryReceived(
+          "Sorry! I couldn't generate a summary (empty response)."
+        );
+      }
+    } catch (error) {
+      console.error("Error summarizing:", error);
+    } finally {
+      onSummarizeEnd();
+    }
+  };
+
+  const showTooltip = () => setIsTooltipVisible(true);
+  const hideTooltip = () => setIsTooltipVisible(false);
+
   console.log("EmailPopup type:", type);
   console.log("EmailPopup args:", args);
   return (
@@ -28,7 +94,6 @@ function EmailPopup({
         <div className="email-popup-subject-line">
           <strong>Subject Line:</strong> {subject}
         </div>
-
         <button
           className="email-popup-trash-button"
           onClick={onDelete}
@@ -108,7 +173,21 @@ function EmailPopup({
             </div>
           </>
         )}
+        <button
+          className={`summarize ${isFlashing ? "flash-active" : ""}`}
+          onClick={handleSummarizeClick}
+          onMouseEnter={showTooltip} // Show tooltip on hover enter
+          onMouseLeave={hideTooltip} // Hide tooltip on hover leave
+          disabled={isLoading}
+        >
+          <img src="/images/sparkles.png" alt="Summarize/Generate AI" />
+          {isTooltipVisible && (
+            <span className="custom-tooltip">Summarize with AI ✧˖°.</span>
+          )}
+        </button>
       </div>
+
+      {/* Body of the email */}
       <div className="email-popup-message-body">{content}</div>
     </div>
   );

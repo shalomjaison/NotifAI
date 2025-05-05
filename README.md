@@ -8,6 +8,7 @@ A Notification-as-a-Service Web-App
 - [Code Explanation](./documentation/code_explanation.md)
 - [Backend API (Using Swagger) Documentation](./documentation/backend_api.md)
 - [Frontend Specifications](./documentation/frontend_specs.md)
+- [Deployment (Microsoft Azure)](./documentation/deployment.md)
 
 ### Overview
 
