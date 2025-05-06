@@ -6,7 +6,7 @@ const NotificationRecipient = require('../models/notificationRecipientModel');
 exports.getHighPriorityClaims = async (req, res) => {
   try {
     const username = req.session.user.username;
-    console.log('🏓 GET /notifications/claims/high-priority for', username);
+    console.log(' GET /notifications/claims/high-priority for', username);
 
     // 1) Find all HIGH_PRIORITY ClaimNotifications
     //    that belong to an unread claims Notification sent to this user
@@ -45,13 +45,13 @@ exports.getHighPriorityClaims = async (req, res) => {
 exports.markClaimRead = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log('📩 mark‐read called for notification', id, 'by', req.session.user.username);
+    console.log('mark‐read called for notification', id, 'by', req.session.user.username);
 
     const [updated] = await Notification.update(
       { isread: true },
       { where: { id } }    // ← mark the Notification as read
     );
-    console.log('🔄 markClaimRead updated rows:', updated);
+    console.log('markClaimRead updated rows:', updated);
 
     if (updated === 0) {
       return res.status(404).json({ error: 'Not found' });

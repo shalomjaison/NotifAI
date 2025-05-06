@@ -107,7 +107,11 @@ export default function ClaimsAlert({selectNotifFunc}){
         <p className="claims-alert-message">{`Task: ${args.tasktype}`}</p>
         <p className="claims-alert-message">{`Due: ${new Date(
           args.duedate
-        ).toLocaleString()}`}</p>
+        ).toLocaleString('en-US', {
+      month: 'long',
+      day:   'numeric',
+      year:  'numeric',
+    })}`}</p>
       </div>
       <button
         className="claims-alert-open-button"

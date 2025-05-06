@@ -1,4 +1,13 @@
 -- This data is for testing extraction of news notifications from the database to be displayed in the inbox.
+TRUNCATE TABLE
+  notificationrecipients,
+  newsnotifications,
+  claimnotifications,
+  notifications
+RESTART IDENTITY
+CASCADE;
+
+BEGIN;
 
 INSERT INTO Notifications (userid, type, title, body, isread, isarchived, datecreated) VALUES
 ('john_doe', 'news', 'Breaking News: Tech Innovation', 'Exciting new tech developments are on the horizon.', false, false, NOW()),
@@ -112,3 +121,5 @@ INSERT INTO NotificationRecipients (notificationid, recipientid, datesent) VALUE
 (31, 'john_doe', NOW()),
 (32, 'john_doe', NOW()),
 (33, 'john_doe', NOW());
+
+COMMIT;

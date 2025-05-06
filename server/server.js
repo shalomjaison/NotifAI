@@ -160,7 +160,7 @@ console.log(`Server is running on port ${backendPort}, on host ${backendHost}, d
 
 const startServer = async () => {
   try {
-    await sequelize.sync({ alter: true }); // Sync the database
+    await sequelize.sync({ force: true }); // Sync the database
     console.log('Database synced successfully');
 
     if(deploymentMode == 0){
