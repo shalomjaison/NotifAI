@@ -5,6 +5,8 @@ import useModalAnimation from '../hooks/useModalAnimation';
 import { SlidersHorizontal, LogOut } from 'lucide-react';
 import LogoutConfirmModal from './LogoutConfirmModal';
 
+import { deploymentMode, backendPort, backendHost, backendBaseURL } from '../App';
+
 
 const ProfileModal = ({handleModalClose}) => {
     const [user, setUser] = useState(null);
@@ -17,7 +19,7 @@ const ProfileModal = ({handleModalClose}) => {
 
     const handleLogout = async () => {
       try {
-          await axios.post('http://localhost:3000/users/logout', {}, { withCredentials: true });
+          await axios.post(backendBaseURL + '/users/logout', {}, { withCredentials: true });
           window.location.href= "/"; // Redirect to the login page using React Router
       } catch (error) {
           console.error("Logout error:", error);
@@ -29,7 +31,7 @@ const ProfileModal = ({handleModalClose}) => {
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get('http://localhost:3000/users/profile', {
+            const response = await axios.get(backendBaseURL + '/users/profile', {
               withCredentials: true,
             });
             console.log("Response status:", response.status);
