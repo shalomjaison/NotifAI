@@ -9,6 +9,11 @@ import LogoutConfirmModal from './LogoutConfirmModal';
 const ProfileModal = ({handleModalClose}) => {
     const [user, setUser] = useState(null);
     const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+    const [activeSection, setActiveSection] = useState('personalInfo')
+
+    const handleItemClick = () => {
+      setActiveSection('preferences')
+    }
 
     const handleLogout = async () => {
       try {
@@ -49,16 +54,14 @@ const ProfileModal = ({handleModalClose}) => {
           <div className={animationClassNames.containerClass} onClick={handleModalClick}>
               <div className="modal-body">
                   <div className="modal-sidebar">
-                    <div className="sidebar-profile">
-                      <div className="sidebar-header">
+                      <div className= {`sidebar-header ${activeSection === 'personalInfo' ? 'active': ''}`} onClick={() => setActiveSection('personalInfo')}>
                         <div className="profile-avatar">{`${user?.fname?.charAt(0).toUpperCase()}`}</div>
                         <div className="profile-greeting">Hello, {user?.fname}!</div>
                       </div>
-                    </div>
                     <div className="sidebar-menu">
                       <button 
                         key={"preferences"} 
-                        className={`modal-sidebar-item`}
+                        className={`modal-sidebar-item ${activeSection === 'preferences' ? 'active': ''}`}
                         onClick={() => handleItemClick("preferences")}
                         aria-label="Preferences" title="Preferences"
                         >
@@ -86,7 +89,61 @@ const ProfileModal = ({handleModalClose}) => {
                     </div>
                   </div>
                   <div className="modal-content">
+                  {activeSection === 'personalInfo' && user && (
 
+                    <div className='personal-section'>
+                    <div className="profile-section">
+                      <h2 className="section-title">Account</h2>
+                    
+                      <div className="info-block">
+                        <div className="info-label">Name</div>
+                        <div className="info-subtext">{user.fname} {user.lname}</div>
+                      </div>
+                    
+                      <div className="info-block">
+                        <div className="info-label">User Type</div>
+                        <div className="info-subtext">{user.role}</div>
+                      </div>
+                    </div>
+                    <div className="profile-section">
+                    <h2 className="section-title">Security</h2>
+                  
+                    <div className="info-block">
+                      <div className="info-main">
+                        <div className="info-label">Email</div>
+                        <div className="info-subtext">{user.email}</div>
+                      </div>
+                      <button className="info-action">Change email</button>
+                    </div>
+                  
+                    <div className="info-block">
+                      <div className="info-main">
+                        <div className="info-label">Password</div>
+                        <div className="info-subtext">Set a password to protect your account. [Coming Soon!]</div>
+                      </div>
+                      <button className="info-action">Change password</button>
+                    </div>
+                  </div>
+                  </div>
+                  )}
+                  {activeSection === 'preferences' && (
+                    <div className="preferences-section">
+                    <h2 className="section-title">Preferences</h2>
+                  
+                    <div className="preference-item">
+                      <span className="preference-label">Dark Mode [Coming Soon!]</span>
+                      <label className="toggle-switch">
+                        <input type="checkbox" />
+                        <span className="slider"></span>
+                      </label>
+                    </div>
+                  
+                    <div className="preference-item">
+                      <span className="preference-label">Language</span>
+                      <span className="preference-value">English</span>
+                    </div>
+                  </div>
+                  )}
                   </div>
               </div>
           </div>

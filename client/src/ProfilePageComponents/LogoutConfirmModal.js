@@ -11,7 +11,11 @@ const LogoutConfirmModal = ({handleModalClose, onConfirm}) => {
     return (
         <div className={animationClassNames.overlayClass} onClick={handleAnimatedClose}>
             <div className={`${animationClassNames.containerClass} logout-confirm-container`} onClick={handleModalClick}>
-
+            <h2 className="logout-heading">Are you sure you want to logout?</h2>
+            <div className="logout-buttons">
+                <button className="cancel-button" onClick={handleAnimatedClose}>Cancel</button>
+                <button className="confirm-button" onClick={onConfirm}>Logout</button>
+            </div>
             </div>
         </div>    
     );
