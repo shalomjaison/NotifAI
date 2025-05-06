@@ -23,7 +23,7 @@ import {
 function MainPage() {
   const filter = new Filter();
   filter.addSubscriber((x) => {
-    console.log("hi, notifications retrieved after updating filter is");
+    console.log("notifications retrieved after updating filter is");
     console.log(x);
   });
 
@@ -208,12 +208,12 @@ function MainPage() {
   const handleDeleteFromPopup = () => {
     console.log(
       "Deleting notification with ID:",
-      selectedNotificationWrapper.notification.args.notificationid
+      selectedNotificationWrapper.notification.id
     );
     axios
       .delete(
-        "http://localhost:3000/notifications/" +
-          selectedNotificationWrapper.notification.args.notificationid,
+        backendBaseURL + "/notifications/" +
+          selectedNotificationWrapper.notification.id,
         {
           withCredentials: true,
         }
