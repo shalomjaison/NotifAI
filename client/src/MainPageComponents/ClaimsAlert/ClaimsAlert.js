@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import './ClaimsAlert.css';
 
+import { deploymentMode, backendPort, backendHost, backendBaseURL } from '../../App';
+
                         // func that opens notif and mark as read
 export default function ClaimsAlert({selectNotifFunc}){
   const [queue,   setQueue]   = useState([]);
@@ -20,7 +22,7 @@ export default function ClaimsAlert({selectNotifFunc}){
 
     axios
       .post(
-        'http://localhost:3000/notifications',  
+        backendBaseURL + '/notifications',  
         body,
         { withCredentials: true }
       )
@@ -66,7 +68,7 @@ export default function ClaimsAlert({selectNotifFunc}){
   // 3) dismiss & mark read
   const dismiss = (id) => {
     setCurrent(null);
-    axios.post(`http://localhost:3000/notifications/claims/${id}/mark-read`, {}, { withCredentials: true })
+    axios.post(backendBaseURL + `/notifications/claims/${id}/mark-read`, {}, { withCredentials: true })
       .catch(console.error);
   };
 
@@ -75,7 +77,7 @@ export default function ClaimsAlert({selectNotifFunc}){
           
     try {
       // Getting Notification Wrapper for selecting and opening it
-      const response = await axios.get("http://localhost:3000/notifications/" + id, { withCredentials: true }); // send cookies with request
+      const response = await axios.get(backendBaseURL + "/notifications/" + id, { withCredentials: true }); // send cookies with request
       const notifWrapper = response.data;
       selectNotifFunc(notifWrapper);
       setCurrent(null);
