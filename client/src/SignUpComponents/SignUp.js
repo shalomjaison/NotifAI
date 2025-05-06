@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./SignUp.css";
+import { deploymentMode, backendPort, backendHost, backendBaseURL } from '../App';
 
 function SignUp() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ function SignUp() {
 
     try {
       // Make a POST request to /users/signup
-      const response = await axios.post("http://localhost:3000/users/signup", {
+      const response = await axios.post(backendBaseURL + "/users/signup", {
         fname,
         lname,
         username,

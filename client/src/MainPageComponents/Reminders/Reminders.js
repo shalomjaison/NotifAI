@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import ReminderItem from '../ReminderItem/ReminderItem';
 import './Reminders.css';
 import axios from 'axios';
-axios.defaults.baseURL = 'http://localhost:3000';
+
+import { deploymentMode, backendPort, backendHost, backendBaseURL } from '../../App';
+
+// axios.defaults.baseURL = backendBaseURL;
 axios.defaults.withCredentials = true;
 
 function formatDateTime(iso) {
@@ -47,7 +50,7 @@ const Reminders = () => {
 
   const fetchReminders = async (page) => {
     try {
-      const res = await axios.get(`/api/calendar/reminders?page=${page}&limit=5`, {
+      const res = await axios.get(backendBaseURL+ `/api/calendar/reminders?page=${page}&limit=5`, {
         withCredentials: true
       });
       setReminders(res.data.events);
@@ -70,7 +73,7 @@ const Reminders = () => {
   
     try {
       setUploading(true);
-      await axios.post('/api/calendar/upload-calendar', formData, {
+      await axios.post(backendBaseURL + '/api/calendar/upload-calendar', formData, {
         withCredentials: true,
       });
       console.log("✅ Upload complete");

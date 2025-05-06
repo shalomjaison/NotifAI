@@ -20,3 +20,4 @@ EXPOSE 9500
 
 # Command to run the application when the container starts
 CMD [ "npm", "start" ]
+

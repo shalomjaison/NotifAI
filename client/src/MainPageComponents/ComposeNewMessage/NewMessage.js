@@ -3,6 +3,8 @@ import SearchRecipient from '../SearchRecipient/SearchRecipient';
 import './NewMessage.css';
 import axios from 'axios';
 
+import { deploymentMode, backendPort, backendHost, backendBaseURL } from '../../App';
+
 const NewMessage = () => {
     
     const [userData, setUserData] = useState(null);
@@ -32,7 +34,7 @@ const NewMessage = () => {
     useEffect(() => {
       const fetchUserData = async () => {
         try {
-          const response = await axios.get('http://localhost:3000/users/me', {
+          const response = await axios.get(backendBaseURL + '/users/me', {
             withCredentials: true,
           });
           setUserData(response.data.user);
@@ -93,7 +95,7 @@ const NewMessage = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:3000/notifications/create', {
+            const response = await axios.post(backendBaseURL + '/notifications/create', {
                 userid: userData.id,
                 type: emailType,
                 title: subject,
@@ -112,7 +114,7 @@ const NewMessage = () => {
               }
 
         } catch (error) {
-            console.error("NewMessage error:", error.response?.data || error.consoleMessage);
+            console.error("NewMessage error:", error);
             // setConsoleMessage(error.response?.data?.consoleMessage || "New Notification failed.");
         }
     };
