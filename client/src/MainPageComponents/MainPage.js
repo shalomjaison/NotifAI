@@ -193,7 +193,7 @@ function MainPage() {
       try {
         // Marking notif as read
         let id = notificationWrapper.notification.id;
-        await axios.post("http://localhost:3000/notifications/claims/" + id + "/mark-read", { withCredentials: true }); // send cookies with request
+        await axios.post(backendBaseURL + "/notifications/claims/" + id + "/mark-read", { withCredentials: true }); // send cookies with request
   
       } catch (error) {
         console.error("Mark notification as read error:" + error);
