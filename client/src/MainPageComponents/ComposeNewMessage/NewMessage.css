@@ -149,11 +149,13 @@ label{
 
 .search-recipient-container-box{
     border-bottom: 1px solid #fce7f3;
-    width: 510px;
+    width: 93%;
     display: block;
     padding-top: 7px;
     padding-bottom: 2px;
+    box-sizing: border-box;
 }
+
 
 .message-content-textbox{
     border: none;
