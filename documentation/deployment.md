@@ -23,6 +23,10 @@ After this, when starting frontend and backend, any device on same local area ne
 to configure router that provides the internet connection, also something about port forwarding (like forward to port 9500 on your machine to use frontend server at that port). To go internet level,
 easier to deploy on cloud.
 
+**EDIT:** After deploying on a Beaglebone microcontroller as bare metal server, more info is available. If deploying on your bare metal machine, if it has a network card, meaning it can access the internet, only thing left to make your computer publicly available is to configure port forwarding. Find your router than is supplying your machine with the internet connection, it should look like a small rectangular box. On its back should be instructions to sign into it via a browser using a URL and password. After signing in, configure port forwarding to forward frontend and backend port from router to your computer. Example, if your frontend on port 9500, and backend on port 3000, configure all TCP requests coming to router on port 9500 & 3000 to be redirected to ports 9500 and 3000 of your machine via its ip address. This ip address is not its actual ip address, just the ip address of computer associated with current network. Boom! It should work now. 
+
+If your machine does not have a network card, meaning machine cannot use internet by itself (test with ping 8.8.8.8, if no response, means no network card), need to connect machine to router using Ethernet cable. We will make machine use internet via the router's connection instead. This is a bit complicated, so I have link for Beaglebone as example https://ofitselfso.com/Beagle/NetworkingSetupConnectingTheBeagleboneBlack.php#:~:text=The%20ethernet%20cable%20should%20be,its%20IP%20address%20via%20DHCP.
+
 # HOW TO DEPLOY (MICROSOFT AZURE CLOUD)
 
 No need for anything fancy such as multiple frontend/backend servers and load balancers, as not much experience with distributed systems. This will just be for creating 1 frontend and 1
