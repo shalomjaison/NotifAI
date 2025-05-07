@@ -13,6 +13,9 @@ const genAIRoutes = require('./routes/genAIRoutes');
 const { createUser: createUserController } = require('./controllers/userController'); // importing for mock post request
 const sequelize = require('./db/db');
 const User = require('./models/userModel');
+const claimNotificationRoutes = require('./routes/claimNotificationRoutes');
+
+
 require('dotenv').config();
 
 const deploymentMode = process.env.DEPLOYMENT_MODE || 0;  // 1 for deployment, 0 for development
@@ -34,6 +37,12 @@ console.log("client url: ", clientURL);
 const calendarRoutes = require('./routes/calendar');
 
 const app = express();
+
+// app.use((req, res, next) => {
+//   console.log(`➡️ [APP] ${req.method} ${req.url}`);
+//   next();
+// }); debug message to check what API is being called by the server
+
 app.use(
   cors({
     origin: clientURL, // Allow requests from your React app
@@ -59,6 +68,10 @@ app.use(
   })
 );
 app.use('/api/calendar', require('./routes/calendar'));
+app.use('/users', userRoutes);
+app.use('/notifications/claims',    claimNotificationRoutes);
+app.use('/notifications', notificationRoutes);
+app.use('/genAI', genAIRoutes)
 
 // const port = 3000;
 
@@ -69,9 +82,7 @@ if(deploymentMode == 0){
   });
 }
 
-app.use('/users', userRoutes);
-app.use('/notifications', notificationRoutes);
-app.use('/genAI', genAIRoutes)
+
 
 const createHardcodedUsers = async () => {
   try {
@@ -150,7 +161,7 @@ console.log(`Server is running on port ${backendPort}, on host ${backendHost}, d
 const startServer = async () => {
   try {
     const force = (deploymentMode == 1) ? (false) : (true);
-    await sequelize.sync({ force: force, alter:true });
+    await sequelize.sync({ force: force, alter:true }); // Sync the database
     console.log('Database synced successfully');
 
     if(deploymentMode == 0){

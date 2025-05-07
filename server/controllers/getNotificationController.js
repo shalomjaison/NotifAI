@@ -23,6 +23,7 @@ const ClaimNotification = require('../models/claimModel');
  * 
  * Returns 200 with JSON if OK, 404 if not found, 500 if server side error
  */
+
 const getNotificationController = async (req, res) => {
     
     try {

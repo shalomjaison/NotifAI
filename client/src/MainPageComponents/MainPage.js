@@ -186,7 +186,20 @@ function MainPage() {
     }
   };
 
-  const handleNotificationSelect = (notificationWrapper) => {
+  const handleNotificationSelect = async (notificationWrapper) => {
+
+    // Mark notif as read only if a recipient reads it
+    if(notificationWrapper.to.includes(userData.id) && !notificationWrapper.notification.isread){
+      try {
+        // Marking notif as read
+        let id = notificationWrapper.notification.id;
+        await axios.post(backendBaseURL + "/notifications/claims/" + id + "/mark-read", { withCredentials: true }); // send cookies with request
+  
+      } catch (error) {
+        console.error("Mark notification as read error:" + error);
+      }
+    }
+
     setSelectedNotificationWrapper(notificationWrapper);
   };
 
@@ -290,7 +303,7 @@ function MainPage() {
           {/* Right sidebar - claims and reminders */}
           <div style={{ flexBasis: '30%'}}>
             {/* Claims alert */}
-            <ClaimsAlert />
+            <ClaimsAlert selectNotifFunc = {(notificationWrapper) => handleNotificationSelect(notificationWrapper)}/>
             {/* Reminders section */}
             <Reminders reminders={reminders} />
           </div>

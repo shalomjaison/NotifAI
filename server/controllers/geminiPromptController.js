@@ -79,7 +79,7 @@ const geminiPromptController = async (req, res) => {
         res.send({"generatedText": text});
     }
     catch (error) {
-        console.log("uh oh, error with gemini prompt")
+        console.log("uh oh, error with gemini prompt: " + error)
         return res.status(500).json({ error: "rip"})
     }
 }
