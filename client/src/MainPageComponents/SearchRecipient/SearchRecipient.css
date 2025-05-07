@@ -1,44 +1,84 @@
-  
-  .search-input-wrapper {
-    display: flex;
-    align-items: center;
-    padding: 0px 8px;
-    width: 476px;
-  }
+.search-input-username-wrapper.multi {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border-bottom: 1px solid #fce7f3;
+  padding: 6px 12px;
+  width: 500px;
+  box-sizing: border-box;
+  gap: 6px;
+  border: none !important;
+  outline: none !important;
+}
 
-  .search-input-wrapper:focus {
-    outline: none;
-  }
-  
-  .search-input {
-    border: none;
-    outline: none;
-    width: 100%;
-    font-size: 12px;
-  }
-  
-  .search-input::placeholder {
-    opacity: .8;
-  }
+.search-input-username-wrapper.multi:focus{
+  outline: none !important;
+  border: none !important;
+}
 
-  .clear-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin-left: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.7;
-    transition: opacity 0.2s ease;
-  }
-  
-  .clear-button:hover {
-    opacity: 1;
-  }
-  
-  .clear-button:focus {
-    outline: none;
-    opacity: 1;
-  }
+.search-input-username-wrapper input.search-username-input {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  width: 100%;
+  font-size: 14px;
+  color: black !important;
+  background-color: transparent;
+  font-family: Arial;
+  flex-grow: 1;
+}
+
+.search-input-username-wrapper input.search-username-input:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.search-input-username-wrapper input.search-username-input::placeholder {
+  color: #6b7280 !important;
+  font-family: Arial;
+  font-size: 14px;
+}
+
+.search-username-input:focus{
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.search-username-input{
+  font: Arial;
+  font-size: 14px;
+  color: black;
+  padding-left: 10px;
+}
+
+.search-username-input::placeholder {
+  color: #6b7280;
+  font-size: 14px;
+  font-family: Arial;
+}
+
+.recipient-chip {
+  background-color: #fce7f3;
+  border-radius: 16px;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  margin: 3px;
+}
+
+.recipient-chip.invalid {
+  background-color: #c73232;
+}
+
+.remove-recipient {
+  margin-left: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  color: #6366f1;
+}

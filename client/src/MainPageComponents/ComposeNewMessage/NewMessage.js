@@ -12,7 +12,7 @@ const NewMessage = () => {
     {/*All email types */}
     const [subject, setSubject] = useState('');
     const [emailType, setEmailType] = useState('');
-    const [recipient, setRecipient] = useState([]);
+    const [recipients, setRecipients] = useState([]);
     const [body, setBody] = useState('')
     const[deadline, setDeadline] = useState(null)
 
@@ -100,7 +100,7 @@ const NewMessage = () => {
                 type: emailType,
                 title: subject,
                 body: body,
-                recipients: [recipient],
+                recipients: [recipients],
                 newsDetails: newsDetails,
                 claimDetails: claimDetails,
                 policyDetails: policyDetails,
@@ -123,157 +123,162 @@ const NewMessage = () => {
 
     return (
         <div className='new-mail-wrapper'>
-        <form onSubmit={handleNewMessage}>
-            <div className="new-mail-title">
-                <div className="new-mail-container">
-                    <p>New Message</p>
-                </div>
-            </div>
-            <input
-                type="text"
-                placeholder="Subject"
-                className="subject"
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                required
-            />
-
-            {/*Choose Email Type*/}
-            <div className="email-type-container">
-                <div className="email-type-text-container">
-                    <p className="email-type-text">Type: </p>
-                </div>
-                {['news', 'policy', 'claim'].map((type) => (
-                    <div className="email-option" key={type}>
-                        <input
-                            type="radio"
-                            name="emailType"
-                            className="emailType"
-                            id={type}
-                            value={type}
-                            checked={emailType === type}
-                            onChange={(e) => setEmailType(e.target.value)}
-                            required
-                        />
-                        <label htmlFor={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</label>
+        <form onSubmit={handleNewMessage} className="email-form">
+            <div className='scrollable-container'>
+                <div className="new-mail-title">
+                    <div className="new-mail-container">
+                        <p>New Message</p>
                     </div>
-                ))}
-                
-            </div>
-
-            {/*deadline for all types*/}
-            <div className="email-deadline-container">
-                <p>Deadline</p>
+                </div>
                 <input
-                    type="datetime-local"
-                    placeholder="Deadline"
-                    className="email-deadline"
-                    value={deadline}
-                    onChange={(e) => setDeadline(e.target.value)}
+                    type="text"
+                    placeholder="Subject"
+                    className="subject"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
                     required
                 />
-            </div>
 
-            {/*Task type for news and claim types*/}
+                {/*Choose Email Type*/}
+                <div className="email-type-container">
+                    <div className="email-type-text-container">
+                        <p className="email-type-text">Type: </p>
+                    </div>
+                    {['news', 'policy', 'claim'].map((type) => (
+                        <div className="email-option" key={type}>
+                            <input
+                                type="radio"
+                                name="emailType"
+                                className="emailType"
+                                id={type}
+                                value={type}
+                                checked={emailType === type}
+                                onChange={(e) => setEmailType(e.target.value)}
+                                required
+                            />
+                            <label htmlFor={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</label>
+                        </div>
+                    ))}
+                    
+                </div>
 
-            {emailType == "claim" || emailType == "news" && (
-                <div className="news-claims-task-type-container">
+                {/*deadline for all types*/}
+                <div className="email-deadline-container">
+                    <p className="deadline-placeholder">Deadline:</p>
                     <input
-                        type="text"
-                        placeholder="Type of Task"
-                        className="news-claims-task-type"
-                        value={taskType}
-                        onChange={(e) => setTaskType(e.target.value)}
+                        type="datetime-local"
+                        placeholder="Deadline"
+                        className="email-deadline"
+                        value={deadline}
+                        onChange={(e) => setDeadline(e.target.value)}
                         required
                     />
                 </div>
-            )}
 
-            {/*claims info*/}
+                {/*Task type for news and claim types*/}
 
-            {emailType == "claim" && (
-            <div className="claim-details-container">
-                <div className="select-claim-priority">
-                    <input
-                    type="text"
-                    placeholder="Priority"
-                    className="claim-priority-input"
-                    value={priority}
-                    onChange={(e) => setPriority(e.target.value)}
-                    required
-                    />
-                </div>
-
-                <div className="select-insured-name">
-                    <input
-                    type="text"
-                    placeholder="Name of Insured"
-                    className="insured-name-input"
-                    value={insuredName}
-                    onChange={(e) => setInsuredName(e.target.value)}
-                    required
-                    />
-                </div>
-
-                <div className="select-claimant-name">
-                    <input
-                        type="text"
-                        placeholder="Name of Claimant"
-                        className="claimant-name-input"
-                        value={claimantName}
-                        onChange={(e) => setClaimantName(e.target.value)}
-                        required
-                        />
-                </div>
-
-                <div className="select-line-of-business">
-                    <input
-                        type="text"
-                        placeholder="Line of Business"
-                        className="line-of-business-input"
-                        value={lineOfBusiness}
-                        onChange={(e) => setLineOfBusiness(e.target.value)}
-                        required
-                        />
-                </div>
-            </div>
-            )}
-
-            {/*policy info*/}
-
-            {emailType == "policy" && (
-                <div className="policy-details-container">
-
-                    <div className="select-changes-to-premium">
+                {(emailType == "claim" || emailType == "news") && (
+                    <div className="news-claims-task-type-container">
                         <input
                             type="text"
-                            placeholder="Changes To Premium"
-                            className="changes-to-premium-input"
-                            value={changesToPremium}
-                            onChange={(e) => setChangesToPremium(e.target.value)}
+                            placeholder="Type of Task"
+                            className="news-claims-task-type"
+                            value={taskType}
+                            onChange={(e) => setTaskType(e.target.value)}
+                            required
+                        />
+                    </div>
+                )}
+
+                {/*claims info*/}
+
+                {emailType == "claim" && (
+                <div className="claim-details-container">
+                    <div className="select-claim-priority">
+                        <input
+                        type="text"
+                        placeholder="Priority"
+                        className="claim-priority-input"
+                        value={priority}
+                        onChange={(e) => setPriority(e.target.value)}
+                        required
+                        />
+                    </div>
+
+                    <div className="select-insured-name">
+                        <input
+                        type="text"
+                        placeholder="Name of Insured"
+                        className="insured-name-input"
+                        value={insuredName}
+                        onChange={(e) => setInsuredName(e.target.value)}
+                        required
+                        />
+                    </div>
+
+                    <div className="select-claimant-name">
+                        <input
+                            type="text"
+                            placeholder="Name of Claimant"
+                            className="claimant-name-input"
+                            value={claimantName}
+                            onChange={(e) => setClaimantName(e.target.value)}
                             required
                             />
                     </div>
 
+                    <div className="select-line-of-business">
+                        <input
+                            type="text"
+                            placeholder="Line of Business"
+                            className="line-of-business-input"
+                            value={lineOfBusiness}
+                            onChange={(e) => setLineOfBusiness(e.target.value)}
+                            required
+                            />
+                    </div>
                 </div>
-            )}
+                )}
 
-            <div className="search-recipient-container-box">
-                <SearchRecipient onSearch={setRecipient}/>
+                {/*policy info*/}
+
+                {emailType == "policy" && (
+                    <div className="policy-details-container">
+
+                        <div className="select-changes-to-premium">
+                            <input
+                                type="text"
+                                placeholder="Changes To Premium"
+                                className="changes-to-premium-input"
+                                value={changesToPremium}
+                                onChange={(e) => setChangesToPremium(e.target.value)}
+                                required
+                                />
+                        </div>
+
+                    </div>
+                )}
+
+                <div className="search-recipient-container-box">
+                    <SearchRecipient onSearch={setRecipients} className='search-import'/>
+                </div>
+                <div className='message-content-container'>
+                    <textarea
+                        id="message"
+                        className="message-content-textbox"
+                        value={body}
+                        onChange={(e) => {
+                            setBody(e.target.value);
+                            e.target.style.height = 'auto'
+                            e.target.style.height = `${e.target.scrollHeight}px`;
+                        }}
+                        required
+                    ></textarea>
+                </div>
             </div>
-
-            <textarea
-                id="message"
-                className="message-content-textbox"
-                rows="4"
-                cols="40"
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
-                required
-            ></textarea>
-        
-            <button type="submit" className="send-button">Send</button>
-
+            <div className='send-button-container'>
+                <button type="submit" className="send-button">Send</button>
+            </div>
         </form>
         </div>
       );

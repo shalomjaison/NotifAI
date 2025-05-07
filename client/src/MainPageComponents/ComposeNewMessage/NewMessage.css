@@ -5,12 +5,35 @@
     left: 70%;
     transform: translateX(-50%);
     width: 510px;
-    padding-bottom: 50px;
     border: 2px solid #fce7f3;
     border-radius: 8px;
-    height: 50%;
+    height: 60%;
     background-color: white;
     z-index: 10;
+    display: flex;
+    flex-direction: column;
+}
+
+.scrollable-container{
+    flex: 2;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-bottom: 10px;
+}
+
+.email-form{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.email-form input:not(.subject) {
+    border: none;
+    color: #6b7280;
+}
+
+.email-form input:focus{
+    outline: none;
 }
 
 .new-mail-title{
@@ -43,17 +66,19 @@ p{
     border: none;
     border-bottom: 1px solid #fce7f3;
     padding: 8px 15px;
-    padding-top: 10px;
+    padding-top: 0px;
     padding-left: 17px;
     width: 478px;
     position: center;
     display: block;
+    font-size: 14px;
+    font: Arial;
 }
 
 .subject::placeholder{
-    opacity: .8;
     color: #6b7280;
     font-size: 14px;
+    font: Arial;
 }
 
 .subject:focus{
@@ -112,39 +137,144 @@ label{
 }
 
 .email-deadline-container{
-
+    border: none;
+    border-bottom: 1px solid #fce7f3;
+    padding: 8px 15px;
+    padding-top: 8px;
+    padding-bottom: 9px;
+    padding-left: 17px;
+    width: 478px;
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-end;
+    position: relative;
 }
 
-.news-details-container{
-
+p.deadline-placeholder{
+    color: #6b7280;
+    font-size: 14px;
+    font-family: Arial;
+    margin: 0;
+    padding-bottom: 2px;
+    padding-left: 1px;
+    padding-top: 0px;
+    position: absolute;
+    bottom: 0%;
+    left: 17px;
+    transform: translateY(-3px);
+    padding-right: 20px;
+    z-index: 1;
 }
 
-.claim-details-container{
-
+.email-deadline{
+    border: none;
+    color: #6b7280;
+    padding-left: 80px;
+    width: 100%;
+    position: relative;
+    top: 5px;
 }
 
-.select-claim-priority{
-
+.email-deadline:focus{
+    outline: none;
 }
 
-.select-insured-name{
-
+.news-claims-task-type{
+    border: none;
+    font-size: 14px;
+    font: Arial;
 }
 
-.select-claimant-name{
-
+.news-claims-task-type::placeholder{
+    color: #6b7280;
+    font-size: 14px;
+    font: Arial;
 }
 
-.select-line-of-buisness{
+.news-claims-task-type-container {
+    border: none;
+    border-bottom: 1px solid #fce7f3;
+    padding: 8px 15px;
+    padding-top: 12px;
+    padding-left: 17px;
+    width: 478px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+}
 
+.claim-details-container {
+    border: none;
+    width: 510px;
+    border-bottom: 1px solid #fce7f3;
 }
 
 .policy-details-container{
-
+    border: none;
+    border-bottom: 1px solid #fce7f3;
+    padding: 1px 15px;
+    padding-left: 15px;
+    width: 478px;
+    height: 35px;
+    display: flex;
+    bottom: -5px;
+    flex-direction: column;
+    position: relative;
+    transform: translateY(-3px);
 }
 
-.select-changes-to-premium{
-    width: 10;
+.select-changes-to-premium {
+    width: 100%;
+    height: 35px;
+    display: flex;
+    flex-direction: column;
+    font: Arial;
+    font-size: 14px;
+}
+
+.changes-to-premium-input {
+    height: 100%;
+    border: none;
+    outline: none;
+    width: 100%;
+    font: Arial;
+    font-size: 14px;
+    color: #6b7280;
+    background-color: transparent;
+}
+
+.select-claim-priority,
+.select-insured-name,
+.select-claimant-name {
+    border: none;
+    border-bottom: 1px solid #fce7f3;
+    background-color: transparent;
+    width: 510px;
+}
+
+.claim-priority-input,
+.insured-name-input,
+.claimant-name-input,
+.line-of-business-input {
+    padding: 8px 15px;
+    padding-top: 15px;
+    padding-left: 20px;
+    width: 100%;
+    position: center;
+    display: block;
+    font: Arial;
+    font-size: 14px;
+    background-color: transparent;
+}
+
+.claim-priority-input::placeholder,
+.insured-name-input::placeholder,
+.claimant-name-input::placeholder,
+.line-of-business-input::placeholder{
+    color: #6b7280;
+    font-size: 14px;
+    font: Arial;
 }
 
 .search-recipient-container-box{
@@ -155,18 +285,33 @@ label{
     padding-bottom: 2px;
 }
 
+.search-import{
+    margin-left: 15px;
+}
+
+.search-import:focus{
+    outline: none;
+}
+
+.message-content-container{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
 .message-content-textbox{
     border: none;
     resize: none;
     color: black;
-    padding-left: 17px;
+    padding-left: 15px;
     padding-top: 10px;
-    padding-right: 5px;
-    width: 95%;
-    flex: 1;
+    padding-right: 6.5px;
+    width: 100%;
     color: black;
     font-size: 14px;
-    height: 250px;
+    min-height: 120px;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 
@@ -175,19 +320,27 @@ label{
     color: black;
 }
 
+.send-button-container{
+    position: sticky;
+    bottom: 0;
+    padding: 11px 15px;
+    border-top: 1px solid #fce7f3;
+    display: flex;
+    background-color: white;
+    justify-content: flex-end;
+    z-index: 2;
+}
+
 .send-button{
     background-color: #fce7f3;
     color: black;
     border-radius: 14%;
-    border-width: 0;
-    padding: 5px 8px;
-    margin-right: 3;
+    border: none;
+    padding: 5px 12px;
+    margin-right: 20px;
     cursor: pointer;
-    display: flex;
-    justify-content: flex-start;
-    position: absolute;
-    bottom: 10px;
-    right: 15px;
+    display: inline-flex;
+    justify-content: center;
 }
 
 .send-button:hover {
