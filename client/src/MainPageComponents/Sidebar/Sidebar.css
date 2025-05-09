@@ -7,6 +7,7 @@
   padding: 16px 0;
   overflow: hidden;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Smoother easing function */
+  flex-shrink: 0;
 }
   
 .sidebar-container:hover {
@@ -97,6 +98,10 @@
   visibility: visible;
   transform: translateX(0); 
   transition: opacity 0.3s ease, visibility 0s, transform 0.3s ease;
+}
+
+.sidebar-item-compose span {
+  margin-left: 37px;
 }
 
 .sidebar-logo-container {
