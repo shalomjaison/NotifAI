@@ -29,7 +29,7 @@
 
 .email-form input:not(.subject) {
     border: none;
-    color: #6b7280;
+    color: black;;
 }
 
 .email-form input:focus{
@@ -183,6 +183,7 @@ p.deadline-placeholder{
     border: none;
     font-size: 14px;
     font: Arial;
+    color: black;
 }
 
 .news-claims-task-type::placeholder{

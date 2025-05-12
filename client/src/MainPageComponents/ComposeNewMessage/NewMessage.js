@@ -100,7 +100,7 @@ const NewMessage = () => {
                 type: emailType,
                 title: subject,
                 body: body,
-                recipients: [recipients],
+                recipients: recipients,
                 newsDetails: newsDetails,
                 claimDetails: claimDetails,
                 policyDetails: policyDetails,
