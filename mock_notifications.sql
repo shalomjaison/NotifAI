@@ -1,4 +1,13 @@
 -- This data is for testing extraction of news notifications from the database to be displayed in the inbox.
+TRUNCATE TABLE
+  notificationrecipients,
+  newsnotifications,
+  claimnotifications,
+  notifications
+RESTART IDENTITY
+CASCADE;
+
+BEGIN;
 
 INSERT INTO Notifications (userid, type, title, body, isread, isarchived, datecreated) VALUES
 ('john_doe', 'news', 'Breaking News: Tech Innovation', 'Exciting new tech developments are on the horizon.', false, false, NOW()),
@@ -34,7 +43,10 @@ INSERT INTO Notifications (userid, type, title, body, isread, isarchived, datecr
 
 -- claims
 ('joy_smiles', 'claim', 'Accident claim pending', 'your claim has successfully processed and is awaiting final authorization for release', false, false, NOW()),
-('joy_smiles', 'claim', 'Documents required', 'your claims have incomplete documents please go to the portal and submit the required documents', false, false, NOW());
+('joy_smiles', 'claim', 'Missing Documents and Appointment Request for Claim #7574743', 'Dear John Doe, 
+
+This email concerns your claim (#7574743) submitted on May 1, 2025. To expedite the processing of your claim, we require additional documentation. Please provide the following as soon as possible: Police Verification Report, Medical Records. To submit these, please make an appointment with one of our claims representative to discuss your expedite request further. Please go to tbe portal and choose a convenient time for you by May 10,2025', false, false, NOW()),
+('joy_smiles', 'claim', 'request for appointment', 'your next steps to accept your claim require an appoinment to you nearest insurance liason. Please do so at your convenience by May 10,2025.', false, false, NOW());
 
 -- Insert into NewsNotifications table (30 inserts)
 INSERT INTO NewsNotifications (notificationid, expirationdate, type) VALUES
@@ -71,7 +83,8 @@ INSERT INTO NewsNotifications (notificationid, expirationdate, type) VALUES
 
 INSERT INTO claimnotifications (notificationid, insuredname, claimantname, tasktype,       duedate,     lineofbusiness, priority, iscompleted) VALUES
 (31, 'John Doe', 'John Doe', 'Upload Photos & Estimate', '2025-05-05', 'Auto',     'LOW_PRIORITY',   false),
-(32, 'John Doe', 'John Doe', 'Submit Documentation',    '2025-05-10', 'Property', 'HIGH_PRIORITY', false);
+(32, 'John Doe', 'John Doe', 'Missing Documentation and Appointment for Claim #7574743',    '2025-05-10', 'Property', 'HIGH_PRIORITY', false),
+(33,'John Doe', 'John Doe', 'Appointment', '2025-05-10','Renters Insurance', 'HIGH_PRIORITY', false);
 
 -- Insert into NotificationRecipient table (30 inserts - all to john_doe)
 INSERT INTO NotificationRecipients (notificationid, recipientid, datesent) VALUES
@@ -108,4 +121,7 @@ INSERT INTO NotificationRecipients (notificationid, recipientid, datesent) VALUE
 
 -- 31 and 32 are claims
 (31, 'john_doe', NOW()),
-(32, 'john_doe', NOW());
+(32, 'john_doe', NOW()),
+(33, 'john_doe', NOW());
+
+COMMIT;

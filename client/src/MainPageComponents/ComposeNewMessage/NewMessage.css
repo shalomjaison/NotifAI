@@ -275,10 +275,11 @@ p.deadline-placeholder{
 
 .search-recipient-container-box{
     border-bottom: 1px solid #fce7f3;
-    width: 510px;
+    width: 93%;
     display: block;
     padding-top: 7px;
     padding-bottom: 2px;
+    box-sizing: border-box;
 }
 
 .search-import{
@@ -309,7 +310,6 @@ p.deadline-placeholder{
     box-sizing: border-box;
     overflow: hidden;
 }
-
 
 .message-content-textbox:focus{
     outline: none;

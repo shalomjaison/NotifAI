@@ -159,9 +159,7 @@ const NewMessage = () => {
                             <label htmlFor={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</label>
                         </div>
                     ))}
-                    
-                </div>
-
+                  
                 {/*deadline for all types*/}
                 <div className="email-deadline-container">
                     <p className="deadline-placeholder">Deadline:</p>

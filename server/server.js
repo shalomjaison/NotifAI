@@ -13,6 +13,9 @@ const genAIRoutes = require('./routes/genAIRoutes');
 const { createUser: createUserController } = require('./controllers/userController'); // importing for mock post request
 const sequelize = require('./db/db');
 const User = require('./models/userModel');
+const claimNotificationRoutes = require('./routes/claimNotificationRoutes');
+
+
 require('dotenv').config();
 
 const deploymentMode = process.env.DEPLOYMENT_MODE || 0;  // 1 for deployment, 0 for development
@@ -34,6 +37,12 @@ console.log("client url: ", clientURL);
 const calendarRoutes = require('./routes/calendar');
 
 const app = express();
+
+// app.use((req, res, next) => {
+//   console.log(`➡️ [APP] ${req.method} ${req.url}`);
+//   next();
+// }); debug message to check what API is being called by the server
+
 app.use(
   cors({
     origin: clientURL, // Allow requests from your React app
@@ -59,6 +68,10 @@ app.use(
   })
 );
 app.use('/api/calendar', require('./routes/calendar'));
+app.use('/users', userRoutes);
+app.use('/notifications/claims',    claimNotificationRoutes);
+app.use('/notifications', notificationRoutes);
+app.use('/genAI', genAIRoutes)
 
 // const port = 3000;
 
@@ -69,9 +82,7 @@ if(deploymentMode == 0){
   });
 }
 
-app.use('/users', userRoutes);
-app.use('/notifications', notificationRoutes);
-app.use('/genAI', genAIRoutes)
+
 
 const createHardcodedUsers = async () => {
   try {
@@ -119,7 +130,7 @@ const createHardcodedUsers = async () => {
           lname: 'Smiles',
           username: 'joy_smiles',
           email: 'joy_smiles@gmail.com',
-          password: '123',
+          password: '123456',
           role: 'employee',
         },
       };
@@ -129,6 +140,90 @@ const createHardcodedUsers = async () => {
       );
     } else {
       console.log('Employee already exists in the database womp womp.');
+    }
+
+    const existingBoss = await User.findOne({
+      where: {
+        fname: 'Mike',
+        lname: 'Wasabi',
+        username: 'mike_wasabi',
+        email: 'mike_wasabi@gmail.com',
+        role: 'employee',
+      },
+    });
+    if (!existingBoss) {
+      const mockRequest = {
+        body: {
+          fname: 'Mike',
+          lname: 'Wasabi',
+          username: 'mike_wasabi',
+          email: 'mike_wasabi@gmail.com',
+          password: '123456',
+          role: 'employee',
+        },
+      };
+      await createUserController(mockRequest);
+      console.log(
+        'Mock post request for creating boss sent successfully from server.js wahoo!'
+      );
+    } else {
+      console.log('Boss already exists in the database womp womp.');
+    }
+
+    const existingCustomer = await User.findOne({
+      where: {
+        fname: 'Mac',
+        lname: 'Cheese',
+        username: 'mac_cheese',
+        email: 'mac_cheese@gmail.com',
+        role: 'customer',
+      },
+    });
+    if (!existingCustomer) {
+      const mockRequest = {
+        body: {
+          fname: 'Mac',
+          lname: 'Cheese',
+          username: 'mac_cheese',
+          email: 'mac_cheese@gmail.com',
+          password: '123456',
+          role: 'customer',
+        },
+      };
+      await createUserController(mockRequest);
+      console.log(
+        'Mock post request for creating customer sent successfully from server.js wahoo!'
+      );
+    } else {
+      console.log('Customer already exists in the database womp womp.');
+    }
+
+    const existingEmployee2 = await User.findOne({
+      where: {
+        fname: 'Tiff',
+        lname: 'Taco',
+        username: 'tiff_taco',
+        email: 'tiff_taco@gmail.com',
+        role: 'employee',
+      },
+    });
+    if (!existingEmployee2) {
+      const mockRequest = {
+        body: {
+          fname: 'Tiff',
+          lname: 'Taco',
+          username: 'tiff_taco',
+          email: 'tiff_taco@gmail.com',
+          password: '123456',
+          role: 'employee',
+        },
+      };
+      await createUserController(mockRequest);
+      console.log(
+        'Mock post request for creating employee 2 sent successfully from server.js wahoo!'
+      );
+    } else {
+      console.log('Employee 2 already exists in the database womp womp.');
     }
 
   } catch (error) {
@@ -150,7 +245,7 @@ console.log(`Server is running on port ${backendPort}, on host ${backendHost}, d
 const startServer = async () => {
   try {
     const force = (deploymentMode == 1) ? (false) : (true);
-    await sequelize.sync({ force: force, alter:true });
+    await sequelize.sync({ force: force, alter:true }); // Sync the database
     console.log('Database synced successfully');
 
     if(deploymentMode == 0){

@@ -25,24 +25,27 @@
   } ],
   "components" : {
     "schemas" : {
-      "user" : {
+      "User" : {
         "title" : "user",
         "type" : "object",
-        "required" : [ "id", "username", "password", "email", "first_name", "last_name", "role", "date_created" ],
+        "required" : [ "username", "fname", "lname", "email", "password", "role", "createdat", "calendar_ics" ],
         "properties" : {
-          "id" : {
-            "type" : "integer"
-          },
           "username" : {
             "type" : "string",
             "x-stoplight" : {
               "id" : "iguo8qtzshz1y"
             }
           },
-          "password" : {
+          "fname" : {
             "type" : "string",
             "x-stoplight" : {
-              "id" : "j595j1frqzur2"
+              "id" : "o13es8z1btxqt"
+            }
+          },
+          "lname" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "thqo727f1cbyp"
             }
           },
           "email" : {
@@ -51,59 +54,57 @@
               "id" : "c6dlfmvalhntn"
             }
           },
-          "phone_number" : {
+          "password" : {
             "type" : "string",
             "x-stoplight" : {
-              "id" : "oufnkc7pn7ktm"
-            }
-          },
-          "first_name" : {
-            "type" : "string",
-            "x-stoplight" : {
-              "id" : "o13es8z1btxqt"
-            }
-          },
-          "last_name" : {
-            "type" : "string",
-            "x-stoplight" : {
-              "id" : "thqo727f1cbyp"
+              "id" : "j595j1frqzur2"
             }
           },
           "role" : {
             "x-stoplight" : {
               "id" : "5u19fv6q3jiyi"
             },
-            "enum" : [ "CUSTOMER", "EMPLOYEE", "ADMIN" ],
-            "readOnly" : true
+            "type" : "string",
+            "default" : "customer",
+            "description" : "should be either employee or customer"
           },
-          "date_created" : {
+          "createdat" : {
             "type" : "string",
             "x-stoplight" : {
               "id" : "ed9by1m9zlsxp"
             },
             "format" : "date-time"
+          },
+          "calendar_ics" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "xjb27rjg9pav4"
+            },
+            "description" : "for calendar feature, every user can upload an ics file"
           }
-        }
+        },
+        "description" : "Data model for Users that backend uses, note that password may not be included in responses for privacy, can always expect username and email to be returned"
       },
-      "notification" : {
-        "title" : "notification",
+      "Notification" : {
+        "title" : "Notification",
         "type" : "object",
-        "required" : [ "id", "type", "date_created", "title", "is_read" ],
+        "description" : "Data model for Notifications that backend uses, note that the tables of the notifications in database do not match this style, as there are 5 tables: Notifications, NotificationRecipients, NewsNotifications, ClaimNotifications, PolicyNotifications",
+        "required" : [ "id", "userid", "type", "title", "isread", "datecreated", "args" ],
         "properties" : {
           "id" : {
             "type" : "integer"
+          },
+          "userid" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "6tkbns60yctcu"
+            }
           },
           "type" : {
             "x-stoplight" : {
               "id" : "c10q17kgxzb61"
             },
-            "enum" : [ "NEWS", "CLAIM", "POLICY", "OTHER" ]
-          },
-          "date_created" : {
-            "type" : "string",
-            "x-stoplight" : {
-              "id" : "dgtl7qb7pgd7i"
-            }
+            "enum" : [ "news", "claim", "policy" ]
           },
           "title" : {
             "type" : "string",
@@ -117,38 +118,160 @@
               "id" : "i8np8aqyarzsb"
             }
           },
-          "is_read" : {
+          "isread" : {
             "type" : "boolean",
             "x-stoplight" : {
               "id" : "xem2k475xeczk"
             }
           },
-          "is_archived" : {
+          "isarchived" : {
             "type" : "boolean",
             "x-stoplight" : {
               "id" : "4265p9adsra0q"
             }
           },
+          "datecreated" : {
+            "type" : "string",
+            "x-stoplight" : {
+              "id" : "dgtl7qb7pgd7i"
+            },
+            "format" : "date-time"
+          },
           "args" : {
             "type" : "object",
             "x-stoplight" : {
-              "id" : "jvkcqfal8u531"
+              "id" : "8h06y0n8cxrcx"
             },
+            "description" : "args contains all the properties of Notification that are specific to claims/policy/news",
+            "required" : [ "notificationid" ],
             "properties" : {
-              "due_date" : {
+              "notificationid" : {
+                "type" : "integer",
+                "x-stoplight" : {
+                  "id" : "zo1ct31ej2g2n"
+                },
+                "description" : "every notif type has this property"
+              },
+              "policyid" : {
+                "type" : "integer",
+                "x-stoplight" : {
+                  "id" : "b0gocw12qnnku"
+                },
+                "description" : "all policy notifications have this"
+              },
+              "changestopremium" : {
                 "type" : "string",
                 "x-stoplight" : {
-                  "id" : "ag12k5uj85ooj"
+                  "id" : "num9ya61d2i1w"
                 },
-                "format" : "date-time"
+                "description" : "all policy notifications have this"
+              },
+              "billingreminderdate" : {
+                "type" : "string",
+                "x-stoplight" : {
+                  "id" : "8w8kknl0j7yw4"
+                },
+                "format" : "date-time",
+                "description" : "all policy notifications have this"
+              },
+              "insuredname" : {
+                "type" : "string",
+                "x-stoplight" : {
+                  "id" : "ub7kjpkh0nsa1"
+                },
+                "description" : "all claim notifications have this"
+              },
+              "claimantname" : {
+                "type" : "string",
+                "x-stoplight" : {
+                  "id" : "gw96oydoe0xuk"
+                },
+                "description" : "all claim notifications have this"
+              },
+              "tasktype" : {
+                "type" : "string",
+                "x-stoplight" : {
+                  "id" : "xclr4r4oqpz4d"
+                },
+                "description" : "all claim notifications have this"
+              },
+              "duedate" : {
+                "type" : "string",
+                "x-stoplight" : {
+                  "id" : "oh2hm7lkxni8e"
+                },
+                "format" : "date-time",
+                "description" : "all claim notifications have this"
+              },
+              "lineofbusiness" : {
+                "type" : "string",
+                "x-stoplight" : {
+                  "id" : "6a12w12ybpy1f"
+                },
+                "description" : "all claim notifications have this"
               },
               "priority" : {
+                "type" : "string",
                 "x-stoplight" : {
-                  "id" : "ie7lfzu5x7w1n"
+                  "id" : "kssicktlma92n"
                 },
-                "enum" : [ "LOW", "MEDIUM", "HIGH" ]
+                "description" : "all claim notifications have this"
+              },
+              "iscompleted" : {
+                "type" : "boolean",
+                "x-stoplight" : {
+                  "id" : "ia1kxqta0d5xn"
+                },
+                "description" : "all claim notifications have this"
+              },
+              "expirationdate" : {
+                "type" : "string",
+                "x-stoplight" : {
+                  "id" : "8tksuir26vury"
+                },
+                "format" : "date-time",
+                "description" : "all news notifications have this"
+              },
+              "type" : {
+                "type" : "string",
+                "x-stoplight" : {
+                  "id" : "lk5vtolrroitx"
+                },
+                "description" : "all news notifications have this"
               }
             }
+          }
+        }
+      },
+      "NotificationWrapper" : {
+        "title" : "NotificationWrapper",
+        "type" : "object",
+        "description" : "Data model used exclusively by backend",
+        "required" : [ "from", "to", "notification" ],
+        "properties" : {
+          "from" : {
+            "type" : "array",
+            "items" : {
+              "x-stoplight" : {
+                "id" : "m8kf6qnctrbzv"
+              },
+              "type" : "string"
+            }
+          },
+          "to" : {
+            "type" : "array",
+            "x-stoplight" : {
+              "id" : "p3baizv39gwod"
+            },
+            "items" : {
+              "x-stoplight" : {
+                "id" : "rn1q6b0t6g42w"
+              },
+              "type" : "string"
+            }
+          },
+          "notification" : {
+            "$ref" : "#/components/schemas/Notification"
           }
         }
       }
@@ -168,22 +291,7 @@
                 "schema" : {
                   "type" : "array",
                   "items" : {
-                    "$ref" : "#/components/schemas/user"
-                  }
-                },
-                "examples" : {
-                  "Example 1" : {
-                    "value" : [ {
-                      "id" : 0,
-                      "username" : "cool guy",
-                      "password" : "gdgj6rghf",
-                      "email" : "jsmiles@gmail.com",
-                      "phone_number" : "9781750132",
-                      "first_name" : "John",
-                      "last_name" : "Smiles",
-                      "role" : "CUSTOMER",
-                      "date_created" : "2019-08-24T14:15:22Z"
-                    } ]
+                    "$ref" : "#/components/schemas/User"
                   }
                 }
               }
@@ -191,154 +299,15 @@
           }
         },
         "operationId" : "get-users",
-        "description" : "Gets all users currently in database, currently used for testing"
-      },
-      "post" : {
-        "summary" : "Create User (POST)",
-        "tags" : [ ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
+        "description" : "Gets all users currently in database, currently used for testing. Requires cookie gained from login for user session.",
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
           },
-          "400" : {
-            "description" : "Bad Request",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "reason" : {
-                      "type" : "string",
-                      "x-stoplight" : {
-                        "id" : "nmv7aa9am3s4j"
-                      },
-                      "description" : "if request failed, more specific details are provided here"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403" : {
-            "description" : "Forbidden (account already exists)",
-            "content" : { }
-          }
-        },
-        "operationId" : "post-users",
-        "description" : "Attempts to create a new user account and store the created user data model in a database",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "type" : "object",
-                "required" : [ "username", "password", "first_name", "last_name", "role" ],
-                "properties" : {
-                  "username" : {
-                    "type" : "string",
-                    "x-stoplight" : {
-                      "id" : "5bfgorzwen0na"
-                    }
-                  },
-                  "email" : {
-                    "type" : "string",
-                    "x-stoplight" : {
-                      "id" : "p1j3jroaqx7z5"
-                    }
-                  },
-                  "phone_number" : {
-                    "type" : "string",
-                    "x-stoplight" : {
-                      "id" : "3xvcorfitbvti"
-                    }
-                  },
-                  "password" : {
-                    "type" : "string",
-                    "x-stoplight" : {
-                      "id" : "lonvkn1p6y6fn"
-                    }
-                  },
-                  "first_name" : {
-                    "type" : "string",
-                    "x-stoplight" : {
-                      "id" : "f2q8ksu0b3475"
-                    }
-                  },
-                  "last_name" : {
-                    "type" : "string",
-                    "x-stoplight" : {
-                      "id" : "b142fe3ytrnux"
-                    }
-                  },
-                  "role" : {
-                    "x-stoplight" : {
-                      "id" : "cfd6ygytwztwi"
-                    },
-                    "enum" : [ "CUSTOMER", "EMPLOYEE", "ADMIN" ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "patch" : {
-        "summary" : "Update User (PATCH)",
-        "tags" : [ ],
-        "responses" : {
-          "200" : {
-            "description" : "OK"
-          },
-          "304" : {
-            "description" : "Not Modified"
-          },
-          "404" : {
-            "description" : "Not Found (user's ID not found)"
-          }
-        },
-        "operationId" : "patch-users",
-        "description" : "Updates information about account, currently does not change password or user's role",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "type" : "object",
-                "properties" : {
-                  "id" : {
-                    "type" : "integer",
-                    "x-stoplight" : {
-                      "id" : "s3s58bchbopor"
-                    },
-                    "description" : "user's ID"
-                  },
-                  "first_name" : {
-                    "type" : "string",
-                    "x-stoplight" : {
-                      "id" : "cc3v2jf6jjq53"
-                    }
-                  },
-                  "last_name" : {
-                    "type" : "string",
-                    "x-stoplight" : {
-                      "id" : "n8bitc3f0k8x0"
-                    }
-                  },
-                  "email" : {
-                    "type" : "string",
-                    "x-stoplight" : {
-                      "id" : "vashveh82u3hn"
-                    }
-                  },
-                  "phone_number" : {
-                    "type" : "string",
-                    "x-stoplight" : {
-                      "id" : "ar3ybcqs9hqsw"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+          "in" : "cookie",
+          "name" : "connect.sid",
+          "description" : "cookie gained from login"
+        } ]
       }
     },
     "/users/login" : {
@@ -349,27 +318,11 @@
           "200" : {
             "description" : "OK"
           },
-          "400" : {
-            "description" : "Bad Request",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "reason" : {
-                      "type" : "string",
-                      "x-stoplight" : {
-                        "id" : "5rgxm43ihm17w"
-                      },
-                      "description" : "if request failed, more specific details are provided here"
-                    }
-                  }
-                }
-              }
-            }
-          },
           "401" : {
-            "description" : "Unauthorized (incorrect password)"
+            "description" : "Invalid Username or Password"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "operationId" : "post-users-login",
@@ -409,33 +362,288 @@
           "200" : {
             "description" : "OK"
           },
-          "403" : {
-            "description" : "Forbidden (user already logged out)"
-          },
-          "404" : {
-            "description" : "Not Found (user id not found)"
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "operationId" : "get-users-logout",
-        "description" : "Attempts to log the user out of the session ",
+        "description" : "Attempts to log the user out of the session. Logs out user based on the cookie of request.",
+        "requestBody" : {
+          "content" : { }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "cookie",
+          "name" : "connect.sid",
+          "description" : "cookie gained from login"
+        } ]
+      }
+    },
+    "/users/signup" : {
+      "post" : {
+        "summary" : "Signup User (POST)",
+        "tags" : [ ],
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "message" : {
+                      "type" : "string",
+                      "x-stoplight" : {
+                        "id" : "8vkozzkydqv0y"
+                      }
+                    },
+                    "user" : {
+                      "type" : "object",
+                      "x-stoplight" : {
+                        "id" : "gjg6oak6xz0c8"
+                      },
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer",
+                          "x-stoplight" : {
+                            "id" : "iy1qbo0hk2hgz"
+                          }
+                        },
+                        "fname" : {
+                          "type" : "string",
+                          "x-stoplight" : {
+                            "id" : "y4cm6ckvlzf5m"
+                          }
+                        },
+                        "lname" : {
+                          "type" : "string",
+                          "x-stoplight" : {
+                            "id" : "15o23pfl3avj9"
+                          }
+                        },
+                        "username" : {
+                          "type" : "string",
+                          "x-stoplight" : {
+                            "id" : "ffh588rppe7tc"
+                          }
+                        },
+                        "email" : {
+                          "type" : "string",
+                          "x-stoplight" : {
+                            "id" : "9xabllmasdyt4"
+                          }
+                        },
+                        "role" : {
+                          "type" : "string",
+                          "x-stoplight" : {
+                            "id" : "n5c6hs03z5b6i"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "User with email already exists"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        },
+        "operationId" : "post-users-signup",
+        "description" : "creates account for user",
         "requestBody" : {
           "content" : {
             "application/json" : {
               "schema" : {
                 "type" : "object",
-                "required" : [ "id" ],
+                "required" : [ "fname", "lname", "username", "email", "password", "role" ],
                 "properties" : {
-                  "id" : {
-                    "type" : "integer",
+                  "fname" : {
+                    "type" : "string",
                     "x-stoplight" : {
-                      "id" : "p9116c3s1nntr"
+                      "id" : "4rf1igzv0yder"
                     }
+                  },
+                  "lname" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "uic0taidkz7ln"
+                    }
+                  },
+                  "username" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "h3prif9c6mixy"
+                    }
+                  },
+                  "email" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "tsgi1qhqw91x5"
+                    }
+                  },
+                  "password" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "1trsjxjj5uic7"
+                    }
+                  },
+                  "role" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "adojxu3k4qmr1"
+                    },
+                    "description" : "should be either employee or customer"
                   }
                 }
               }
             }
           }
         }
+      }
+    },
+    "/users/me" : {
+      "get" : {
+        "summary" : "Me User (GET)",
+        "tags" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "user" ],
+                  "properties" : {
+                    "user" : {
+                      "type" : "object",
+                      "x-stoplight" : {
+                        "id" : "g8rr0307jdxvi"
+                      },
+                      "required" : [ "id", "username", "email", "fname" ],
+                      "properties" : {
+                        "id" : {
+                          "type" : "string",
+                          "x-stoplight" : {
+                            "id" : "014xrzzemhz52"
+                          },
+                          "description" : "id is same as username for now"
+                        },
+                        "username" : {
+                          "type" : "string",
+                          "x-stoplight" : {
+                            "id" : "ssf0fmnlorb0h"
+                          }
+                        },
+                        "email" : {
+                          "type" : "string",
+                          "x-stoplight" : {
+                            "id" : "7ee91zhvcux3g"
+                          }
+                        },
+                        "fname" : {
+                          "type" : "string",
+                          "x-stoplight" : {
+                            "id" : "v2pomyrkjtzcq"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized, please log in"
+          }
+        },
+        "operationId" : "get-users-me",
+        "description" : "Gets info about user based on cookie in request. Cookie automatically obtained by browser after signing in. Mostly used for checking if requester is logged in.",
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "cookie",
+          "name" : "connect.sid",
+          "description" : "cookie gained from signing in"
+        } ]
+      }
+    },
+    "/users/profile" : {
+      "get" : {
+        "summary" : "Get User Profile (GET)",
+        "tags" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "username", "fname", "lname", "email", "role" ],
+                  "properties" : {
+                    "username" : {
+                      "type" : "string",
+                      "x-stoplight" : {
+                        "id" : "38jjtz5sgqnre"
+                      }
+                    },
+                    "fname" : {
+                      "type" : "string",
+                      "x-stoplight" : {
+                        "id" : "rywnawi9yn1lz"
+                      }
+                    },
+                    "lname" : {
+                      "type" : "string",
+                      "x-stoplight" : {
+                        "id" : "p0hrx9l21cavf"
+                      }
+                    },
+                    "email" : {
+                      "type" : "string",
+                      "x-stoplight" : {
+                        "id" : "bd18k6zlugnil"
+                      }
+                    },
+                    "role" : {
+                      "type" : "string",
+                      "x-stoplight" : {
+                        "id" : "ngj94jqld7ioq"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized, please log in"
+          },
+          "404" : {
+            "description" : "User not Found"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        },
+        "operationId" : "get-users-profile",
+        "description" : "Gets info for user that does not contain sensitive info such as password. Finds user based on cookie of request, which is obtained after signing in.",
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "cookie",
+          "name" : "connect.sid",
+          "description" : "cookie gained after log in"
+        } ]
       }
     },
     "/notifications" : {
@@ -456,42 +664,8 @@
                       "x-stoplight" : {
                         "id" : "ug7yetz52viu5"
                       },
-                      "description" : "contains array of objects in matching order and filters of request, each object also has information about who sent and received the notification, as notification does not store sender and receiver",
                       "items" : {
-                        "x-stoplight" : {
-                          "id" : "8uanmatduu2av"
-                        },
-                        "type" : "object",
-                        "required" : [ "from", "to", "notification" ],
-                        "properties" : {
-                          "from" : {
-                            "type" : "array",
-                            "x-stoplight" : {
-                              "id" : "kvy6xfgc6wj47"
-                            },
-                            "items" : {
-                              "x-stoplight" : {
-                                "id" : "opawhe6c1l9ij"
-                              },
-                              "type" : "string"
-                            }
-                          },
-                          "to" : {
-                            "type" : "array",
-                            "x-stoplight" : {
-                              "id" : "426vieudfteck"
-                            },
-                            "items" : {
-                              "x-stoplight" : {
-                                "id" : "jt5x7rt98naj3"
-                              },
-                              "type" : "string"
-                            }
-                          },
-                          "notification" : {
-                            "$ref" : "#/components/schemas/notification"
-                          }
-                        }
+                        "$ref" : "#/components/schemas/NotificationWrapper"
                       }
                     }
                   }
@@ -518,12 +692,12 @@
               }
             }
           },
-          "404" : {
-            "description" : "Not Found (user not found)"
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "operationId" : "get-notifications",
-        "description" : "Gets all notifications from the user in an ordered list with filters applied to it",
+        "description" : "Gets all notifications from the user in an ordered list with filters applied to it.  Requires cookie gained from login for user session.",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -552,13 +726,6 @@
                     },
                     "required" : [ "sent", "args" ],
                     "properties" : {
-                      "method" : {
-                        "x-stoplight" : {
-                          "id" : "pi64g1q3gdgcb"
-                        },
-                        "enum" : [ "IN_APP", "EMAIL", "SMS", "TEAMS" ],
-                        "description" : "if blank, do not filter by method\n"
-                      },
                       "sent" : {
                         "type" : "boolean",
                         "x-stoplight" : {
@@ -580,13 +747,6 @@
                         },
                         "description" : "if true, leave only archived notifications, if false or undefined, do not filter by archived"
                       },
-                      "text" : {
-                        "type" : "string",
-                        "x-stoplight" : {
-                          "id" : "3udpodujm5r2q"
-                        },
-                        "description" : "filter from the searching feature of user inbox, filters title, description, and users involved in notifications for matching text"
-                      },
                       "read" : {
                         "type" : "boolean",
                         "x-stoplight" : {
@@ -605,7 +765,7 @@
                             "x-stoplight" : {
                               "id" : "adb8fw77rop7t"
                             },
-                            "description" : "overides most_recent_first, need to check if notification type has due date, if property not found, do not sort by earliest due date"
+                            "description" : "sorts by params billing reminder date, due date, reminder date, as all these are similar for being due"
                           },
                           "is_completed" : {
                             "type" : "boolean",
@@ -634,16 +794,100 @@
             }
           }
         },
-        "parameters" : [ ]
-      }
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "cookie",
+          "name" : "connect.sid",
+          "description" : "cookie gained from login"
+        } ]
+      },
+      "servers" : [ ]
     },
-    "/notifications/send" : {
+    "/notifications/create" : {
       "post" : {
-        "summary" : "Send Notification (POST)",
+        "summary" : "Create Notification (POST)",
         "tags" : [ ],
         "responses" : {
-          "200" : {
-            "description" : "OK"
+          "201" : {
+            "description" : "Created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "message", "newNotification" ],
+                  "properties" : {
+                    "message" : {
+                      "type" : "string",
+                      "x-stoplight" : {
+                        "id" : "cdkwruz3svgmo"
+                      },
+                      "description" : "says success message"
+                    },
+                    "newNotification" : {
+                      "type" : "object",
+                      "x-stoplight" : {
+                        "id" : "ftdsvf4mbspgv"
+                      },
+                      "required" : [ "id", "userid", "type", "title", "body", "datecreated", "isread", "isarchived" ],
+                      "description" : "the notif just created, does not contain type specific info",
+                      "properties" : {
+                        "id" : {
+                          "type" : "integer",
+                          "x-stoplight" : {
+                            "id" : "wqxyfo27jj3yd"
+                          }
+                        },
+                        "userid" : {
+                          "type" : "string",
+                          "x-stoplight" : {
+                            "id" : "6v44pmfn8zbot"
+                          }
+                        },
+                        "type" : {
+                          "x-stoplight" : {
+                            "id" : "cik81i5grlg79"
+                          },
+                          "enum" : [ "news", "claim", "policy" ]
+                        },
+                        "title" : {
+                          "type" : "string",
+                          "x-stoplight" : {
+                            "id" : "crol4wt2h1ldj"
+                          }
+                        },
+                        "body" : {
+                          "type" : "string",
+                          "x-stoplight" : {
+                            "id" : "bmbadz6ncwl43"
+                          }
+                        },
+                        "datecreated" : {
+                          "type" : "string",
+                          "x-stoplight" : {
+                            "id" : "h0dqo9zfxuemn"
+                          },
+                          "format" : "date-time"
+                        },
+                        "isread" : {
+                          "type" : "boolean",
+                          "x-stoplight" : {
+                            "id" : "t55s58khstngc"
+                          }
+                        },
+                        "isarchived" : {
+                          "type" : "boolean",
+                          "x-stoplight" : {
+                            "id" : "dsaa8v9deifr0"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "400" : {
             "description" : "Bad Request",
@@ -652,19 +896,20 @@
                 "schema" : {
                   "type" : "object",
                   "properties" : {
-                    "reason" : {
+                    "message" : {
                       "type" : "string",
                       "x-stoplight" : {
                         "id" : "sjeq38wa0vmzc"
-                      }
+                      },
+                      "description" : "reason for bad request"
                     }
                   }
                 }
               }
             }
           },
-          "404" : {
-            "description" : "Not Found (user_id not found)"
+          "500" : {
+            "description" : "Internal Server Error"
           }
         },
         "operationId" : "post-notifications-send",
@@ -673,34 +918,504 @@
             "application/json" : {
               "schema" : {
                 "type" : "object",
-                "required" : [ "sender_id", "receiver_ids", "notification" ],
+                "required" : [ "userid", "type", "title", "body", "recipients", "newsDetails", "claimDetails", "policyDetails" ],
                 "properties" : {
-                  "sender_id" : {
-                    "type" : "integer",
+                  "userid" : {
+                    "type" : "string",
                     "x-stoplight" : {
                       "id" : "31a1bsokqtwwo"
+                    },
+                    "description" : "username of user"
+                  },
+                  "type" : {
+                    "x-stoplight" : {
+                      "id" : "6f0q4jreff57z"
+                    },
+                    "enum" : [ "news", "claim", "policy" ]
+                  },
+                  "title" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "6t8pkpizztiz9"
                     }
                   },
-                  "receiver_ids" : {
+                  "body" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "8o8ogrwe39989"
+                    }
+                  },
+                  "recipients" : {
                     "type" : "array",
                     "x-stoplight" : {
-                      "id" : "qovkgur81466a"
+                      "id" : "wpffk3g3mbyny"
                     },
                     "items" : {
                       "x-stoplight" : {
-                        "id" : "km233ajnhfjzd"
+                        "id" : "8iu0o8xfyw58e"
                       },
-                      "type" : "integer"
+                      "type" : "string"
                     }
                   },
-                  "notification" : {
-                    "$ref" : "#/components/schemas/notification"
+                  "newsDetails" : {
+                    "type" : "object",
+                    "x-stoplight" : {
+                      "id" : "4ftq2wukef82l"
+                    },
+                    "description" : "needed if creating news notif, else can leave null/undefined",
+                    "properties" : {
+                      "expirationdate" : {
+                        "type" : "string",
+                        "x-stoplight" : {
+                          "id" : "5wbjxs5oorg2g"
+                        },
+                        "format" : "date-time"
+                      },
+                      "type" : {
+                        "type" : "string",
+                        "x-stoplight" : {
+                          "id" : "3q7354g0l13gs"
+                        }
+                      }
+                    }
+                  },
+                  "claimDetails" : {
+                    "type" : "object",
+                    "x-stoplight" : {
+                      "id" : "trzw1xplqs6yl"
+                    },
+                    "description" : "needed if creating claims notif, else can leave null/undefined",
+                    "properties" : {
+                      "insuredname" : {
+                        "type" : "string",
+                        "x-stoplight" : {
+                          "id" : "6btrzub4iruz8"
+                        }
+                      },
+                      "claimantname" : {
+                        "type" : "string",
+                        "x-stoplight" : {
+                          "id" : "m3eq4gvv5ejad"
+                        }
+                      },
+                      "tasktype" : {
+                        "type" : "string",
+                        "x-stoplight" : {
+                          "id" : "t69tyhlws0s2v"
+                        }
+                      },
+                      "duedate" : {
+                        "type" : "string",
+                        "x-stoplight" : {
+                          "id" : "7ebj21u9debu0"
+                        },
+                        "format" : "date-time"
+                      },
+                      "lineofbusiness" : {
+                        "type" : "string",
+                        "x-stoplight" : {
+                          "id" : "17cue1w03wr7k"
+                        }
+                      },
+                      "priority" : {
+                        "type" : "string",
+                        "x-stoplight" : {
+                          "id" : "53sico61lzdc8"
+                        }
+                      },
+                      "iscompleted" : {
+                        "type" : "boolean",
+                        "x-stoplight" : {
+                          "id" : "08jvm6vpice9x"
+                        }
+                      }
+                    }
+                  },
+                  "policyDetails" : {
+                    "type" : "object",
+                    "x-stoplight" : {
+                      "id" : "f1ixy8ex0qbsg"
+                    },
+                    "description" : "needed if creating policy notif, else can leave null/undefined",
+                    "properties" : {
+                      "changestopremium" : {
+                        "type" : "string",
+                        "x-stoplight" : {
+                          "id" : "o9263oqbpqh6g"
+                        }
+                      },
+                      "billingreminderdate" : {
+                        "type" : "string",
+                        "x-stoplight" : {
+                          "id" : "qxptjh7k1mkc7"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description" : "Creates notif from one user to 1-many recipients.  Requires cookie gained from login for user session.",
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "cookie",
+          "name" : "connect.sid",
+          "description" : "cookie gained from login"
+        } ]
+      },
+      "parameters" : [ ]
+    },
+    "/notifications/{id}" : {
+      "parameters" : [ {
+        "schema" : {
+          "type" : "integer"
+        },
+        "name" : "id",
+        "in" : "path",
+        "required" : true,
+        "description" : "id of notif"
+      } ],
+      "get" : {
+        "summary" : "Get Notification (GET)",
+        "tags" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/NotificationWrapper"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        },
+        "operationId" : "get-notifications-id",
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "cookie",
+          "name" : "connect.sid",
+          "description" : "cookie gained from login"
+        } ],
+        "description" : "Get single notification by id, returns a notification wrapper. Requires cookie gained from login for user session."
+      },
+      "delete" : {
+        "summary" : "Delete Notification (DELETE)",
+        "tags" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "message" ],
+                  "properties" : {
+                    "message" : {
+                      "type" : "string",
+                      "x-stoplight" : {
+                        "id" : "2pi7rqqmy8457"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "error" ],
+                  "properties" : {
+                    "error" : {
+                      "type" : "string",
+                      "x-stoplight" : {
+                        "id" : "wgh7cco2hsdc0"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId" : "delete-notifications-id",
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "cookie",
+          "name" : "connect.sid",
+          "description" : "cookie gained from login"
+        } ],
+        "description" : "Deletes single notification by its id. Requires cookie gained from login for user session."
+      }
+    },
+    "/notifications/claims/{id}/mark-read" : {
+      "parameters" : [ {
+        "schema" : {
+          "type" : "integer"
+        },
+        "name" : "id",
+        "in" : "path",
+        "required" : true,
+        "description" : "id of notification"
+      } ],
+      "post" : {
+        "summary" : "Mark Claim Read (POST)",
+        "tags" : [ ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          },
+          "404" : {
+            "description" : "Not Found"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        },
+        "operationId" : "post-notifications-claims-id-mark-read",
+        "description" : "marks claims notif as read, but actually can mark ANY notif as read. Requires cookie, meaning requester needs to have logged in.",
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "cookie",
+          "name" : "connect.sid",
+          "description" : "cookie gained after logging in"
+        } ]
+      }
+    },
+    "/genAI/gemini-prompt" : {
+      "post" : {
+        "summary" : "Gemini Prompt (POST)",
+        "tags" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "generatedText" ],
+                  "properties" : {
+                    "generatedText" : {
+                      "type" : "string",
+                      "x-stoplight" : {
+                        "id" : "v6eaf6zfdll15"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        },
+        "operationId" : "post-genAI-gemini-prompt",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "required" : [ "prompt" ],
+                "properties" : {
+                  "prompt" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "e3n9rq5mgdywd"
+                    },
+                    "description" : "if summarizing email, prompt is actually an object containing fields \"subject\", \"from\", \"to\", \"content\" as a string using JSON.stringify. If is any prompt to language model API, prompt is a random string"
+                  },
+                  "history" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "kpse8ji01j78h"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description" : "Supports both summarizing emails and general answers to NotifAI-related questions"
+      }
+    },
+    "/api/calendar/upload-calendar" : {
+      "parameters" : [ ],
+      "post" : {
+        "summary" : "Upload Calendar (POST)",
+        "tags" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        },
+        "operationId" : "post-api-calendar-upload-calendar",
+        "description" : "Stores ics calendar file for user. Requires requester to be logged in (have cookie).",
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "cookie",
+          "name" : "connect.sid"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "required" : [ "calendar" ],
+                "properties" : {
+                  "calendar" : {
+                    "type" : "string",
+                    "x-stoplight" : {
+                      "id" : "i7wkeampq51h1"
+                    },
+                    "description" : "NOTE: calendar is actually a binary file representing meta data of ics file. If confused, check how it is done in /NotifAI/client/src/MainPageComponents/Reminders/Reminders.js on Github."
                   }
                 }
               }
             }
           }
         }
+      }
+    },
+    "/api/calendar/reminders" : {
+      "get" : {
+        "summary" : "Get Reminders (GET)",
+        "tags" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "required" : [ "events", "page", "total", "totalPages" ],
+                  "properties" : {
+                    "events" : {
+                      "type" : "array",
+                      "x-stoplight" : {
+                        "id" : "rctafy7plrdpe"
+                      },
+                      "items" : {
+                        "x-stoplight" : {
+                          "id" : "lg0bgvtmoe0f4"
+                        },
+                        "type" : "object",
+                        "required" : [ "summary", "start", "end", "location" ],
+                        "properties" : {
+                          "summary" : {
+                            "type" : "string",
+                            "x-stoplight" : {
+                              "id" : "yhjkmcjpfzpie"
+                            }
+                          },
+                          "start" : {
+                            "type" : "string",
+                            "x-stoplight" : {
+                              "id" : "tdzhd576jdea1"
+                            }
+                          },
+                          "end" : {
+                            "type" : "string",
+                            "x-stoplight" : {
+                              "id" : "6v3zeq69t878l"
+                            }
+                          },
+                          "location" : {
+                            "type" : "string",
+                            "x-stoplight" : {
+                              "id" : "lm418bnhtanjg"
+                            },
+                            "description" : "is '' if no location"
+                          },
+                          "members" : {
+                            "type" : "array",
+                            "x-stoplight" : {
+                              "id" : "zmsffok6qa3dj"
+                            },
+                            "description" : "optional",
+                            "items" : {
+                              "x-stoplight" : {
+                                "id" : "f21nfwuy8kp3s"
+                              },
+                              "type" : "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "page" : {
+                      "type" : "integer",
+                      "x-stoplight" : {
+                        "id" : "cvlnodyvmeaah"
+                      }
+                    },
+                    "total" : {
+                      "type" : "integer",
+                      "x-stoplight" : {
+                        "id" : "ku09u1fo5hm0t"
+                      }
+                    },
+                    "totalPages" : {
+                      "type" : "integer",
+                      "x-stoplight" : {
+                        "id" : "vocmx7zom7slr"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        },
+        "operationId" : "get-api-calendar-reminders",
+        "description" : "Gets reminders from ics file stored for user, requires user to be logged in. Note for two query parameters, limit specifies how many reminder per page, so each request should use same number for limit.",
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "cookie",
+          "name" : "connect.sid",
+          "description" : "gained from logging in"
+        }, {
+          "schema" : {
+            "type" : "number"
+          },
+          "in" : "query",
+          "name" : "page",
+          "description" : "which page of reminders to bring up, starts at and defaults to 1"
+        }, {
+          "schema" : {
+            "type" : "number"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "how many reminders to retrieve at page number, which means pretty much how many reminders per page, defaults to 5"
+        } ]
       }
     }
   }
