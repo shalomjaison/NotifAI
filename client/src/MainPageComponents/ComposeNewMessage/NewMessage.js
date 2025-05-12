@@ -191,18 +191,35 @@ const NewMessage = () => {
                 )}
 
                 {/*claims info*/}
-
                 {emailType == "claim" && (
                 <div className="claim-details-container">
-                    <div className="select-claim-priority">
-                        <input
-                        type="text"
-                        placeholder="Priority"
-                        className="claim-priority-input"
-                        value={priority}
-                        onChange={(e) => setPriority(e.target.value)}
-                        required
-                        />
+                    {/*priority*/}
+                    <div className="email-type-container">
+                        <div className="email-type-text-container">
+                            <p className="email-type-text">Priority:</p>
+                        </div>
+                        {['HIGH_PRIORITY', 'MEDIUM_PRIORITY', 'LOW_PRIORITY'].map((type) => {
+                            const labelMap = {
+                                HIGH_PRIORITY: 'High',
+                                MEDIUM_PRIORITY: 'Medium',
+                                LOW_PRIORITY: 'Low',
+                            };
+                            return (
+                                <div className="claim-priority-option" key={type}>
+                                    <input
+                                        type="radio"
+                                        className="emailType"
+                                        id={type}
+                                        value={type}
+                                        checked={priority === type}
+                                        onChange={(e) => setPriority(e.target.value)}
+                                        required
+                                    />
+                                    <label htmlFor={type}>{labelMap[type]}</label>
+                                </div>
+                            );
+                        })}
+                    
                     </div>
 
                     <div className="select-insured-name">

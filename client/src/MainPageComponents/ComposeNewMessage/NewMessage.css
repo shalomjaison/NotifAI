@@ -108,6 +108,14 @@ p.email-type-text{
     padding-bottom: 6px;
 }
 
+.claim-priority-option{
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 11px 15px;
+    padding-left: 1px;
+}
+
 .email-option {
     display: flex;
     align-items: center;
@@ -121,19 +129,9 @@ p.email-type-text{
 }
 
 label{
-    font-size: 5;
+    font-size: 14px;
     color: #6b7280;
     font-family: Arial;
-}
-
-.emailType:hover{
-    color:#e9d5ff;
-    border: 1px #6366f1;
-}
-
-.emailType:checked{
-    color: #6366f1;
-    border: 1px #6366f1;
 }
 
 .email-deadline-container{
@@ -245,7 +243,6 @@ p.deadline-placeholder{
     background-color: transparent;
 }
 
-.select-claim-priority,
 .select-insured-name,
 .select-claimant-name {
     border: none;
@@ -254,7 +251,6 @@ p.deadline-placeholder{
     width: 510px;
 }
 
-.claim-priority-input,
 .insured-name-input,
 .claimant-name-input,
 .line-of-business-input {
@@ -269,7 +265,6 @@ p.deadline-placeholder{
     background-color: transparent;
 }
 
-.claim-priority-input::placeholder,
 .insured-name-input::placeholder,
 .claimant-name-input::placeholder,
 .line-of-business-input::placeholder{
