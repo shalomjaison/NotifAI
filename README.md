@@ -18,7 +18,7 @@ NotifAI is a Notification as a Service (NaaS) platform designed to consolidate n
 
 ##### 1. High Level Diagram
 
-![High Level Logical Architecture](./documentation/images/architecture.png)
+<img width="594" alt="Screenshot 2025-05-12 at 7 46 37 PM" src="https://github.com/user-attachments/assets/583d248c-8fa7-47b8-b598-20ba2db6d581" />
 
 ##### 2. Main Components
 
