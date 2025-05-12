@@ -1,10 +1,12 @@
 # VIEWING DOCUMENTATION
-1. View documentation on SmartBear's API Hub w/ Swagger platform https://app.swaggerhub.com/apis-docs/universityofmassachu/notifai-server/1.0.0
-
+1. View documentation on SmartBear's API Hub w/ Swagger platform
+```
+   https://app.swaggerhub.com/apis-docs/universityofmassachu-4ab/notif-ai_backend_server_api/1.0.0
+```
    (NOTE: this will be read only, to edit, see colalborating on swagger, also there is some bug that prevents enums of request/response bodies from displaying,
     I recommend using the option to open the html file NotifAI/server/api_documentation.html containing docs on a browser instead)
    
-3. Open NotifAI/server/api_documentation.html on browser, an image is included in OVERVIEW section
+4. Open NotifAI/server/api_documentation.html on browser, an image is included in OVERVIEW section
    
 # OVERVIEW
 Backend REST API documentation developed using Swagger's API Hub. Swagger is a part of SmartBear, a company for developing software quality tools. 
@@ -28,15 +30,17 @@ Both of these files were generated from Swagger's API Hub
 
 Go to the url and click start free trial (don't worry, it won't ask for credit card, there is 30 day free trial but I think we can still work on public API documentation after 30 days haha)
 
-
+```
 https://swagger.io/api-hub/why-api-hub/
-
+```
 
 After your account is created, click this link to join public NotifAI server API project
 
+```
+https://app.swaggerhub.com/apis/universityofmassachu-4ab/notif-ai_backend_server_api/1.0.0
+```
 
-https://app.swaggerhub.com/apis/universityofmassachu/notifai-server/1.0.0
-
+If do not have edit privilege, might need owner to add your account.
 
 After clicking the link, you should be brought to the development page, which looks like this. Notice in top right how "Code" is selected, this shows the documentation as json.
 <img width="1505" alt="Screenshot 2025-03-29 at 10 06 50 PM" src="https://github.com/user-attachments/assets/40381df7-d2c7-4a7a-b07c-e8e54f66de15" />
