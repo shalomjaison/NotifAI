@@ -1,53 +1,86 @@
 import React, { useState } from 'react';
 import './SearchRecipient.css';
+import axios from 'axios';
+import { backendBaseURL } from '../../App';
 
 const SearchRecipient = ({ onSearch = () => {}}) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [inputValue, setInputValue] = useState('');
+  const [recipients, setRecipients] = useState([]);
+  const [invalidUsernames, setInvalidUsernames] = useState([]);
 
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    onSearch(value);
+  const validUsername = async (username) => {
+    try {
+      console.log(`Validating username: ${username}`);
+      
+      const res = await axios.get(`${backendBaseURL}/users/exists/${username}`, {
+        withCredentials: true,
+      });
+      console.log(`API Response:`, res.data);
+  
+      return res.data.exists;
+    } catch (err) {
+      console.error('Validation error:', err);
+      
+      return false;
+    }
   };
 
-  const clearSearch = () => {
-    setSearchTerm('');
-    onSearch('');
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const addRecipient = async () => {
+    const value = inputValue.trim();
+    if (value && !recipients.includes(value)) {
+      const isValid = await validUsername(value);
+      if (isValid) {
+        const newRecipients = [...recipients, value];
+        setRecipients(newRecipients);
+        setInvalidUsernames(invalidUsernames.filter((name) => name !== value));
+        onSearch(newRecipients);
+      } else {
+        setInvalidUsernames([...invalidUsernames, value]);
+      }
+    }
+    setInputValue('');
+  };
+
+  const handleKeyDown = async (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const trimmed = inputValue.trim();
+      if (trimmed === '' || recipients.includes(trimmed)) return;
+
+      await addRecipient();
+    }
+  };
+
+  const removeRecipient = (name) => {
+    const updated = recipients.filter(n => n !== name);
+    setRecipients(updated);
+    onSearch(updated);
   };
 
   return (
-      <div className="search-input-wrapper">
-        
-        <input
-          type="text"
-          placeholder="To: Enter Username"
-          className="search-input"
-          value={searchTerm}
-          onChange={handleInputChange}
-        />
-        {searchTerm && (
-          <button 
-            onClick={clearSearch}
-            className="clear-button"
-            aria-label="Clear search"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#6b7280"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
-          </button>
-        )}
-      </div>
+    <div className="search-input-username-wrapper multi">
+      {recipients.map((name, index) => (
+        <div
+          key={index}
+          className={`recipient-chip ${invalidUsernames.includes(name) ? 'invalid' : ''}`}
+        >
+          {name}
+          <button onClick={() => removeRecipient(name)} className="remove-recipient">×</button>
+        </div>
+      ))}
+      <input
+        type="text"
+        placeholder={recipients.length === 0 ? 'To: Enter Username' : ''}
+        className="search-username-input"
+        value={inputValue}
+        onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+      />
+    </div>
   );
 };
 

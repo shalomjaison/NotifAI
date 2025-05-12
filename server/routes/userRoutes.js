@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 //  new router object to hold routes related to users.
-const { getAllUsers } = require('../controllers/userController');
+const { getAllUsers, checkUsername } = require('../controllers/userController');
 const{loginUser}=require('../controllers/loginUserController');
 const {logoutUser} = require('../controllers/logoutUserController'); // Import the logout controller
 const authMiddleware = require('../middleware/authMiddleware');
@@ -24,5 +24,7 @@ router.post('/logout', logoutUser); // Add the logout route
 router.get('/me', authMiddleware, meUser); 
 // Get Current User Profile
 router.get('/profile', getUserProfile);
+// Check if the username exists
+router.get('/exists/:username', checkUsername);
 
 module.exports = router;

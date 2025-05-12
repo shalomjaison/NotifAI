@@ -34,8 +34,19 @@ const getAllUsersController = async (req, res) => {
     }
 };
 
+const checkUsernameController = async (req, res) => {
+    try {
+        const { username } = req.params;
+        const user = await User.findOne({ where: { username } });
+        res.status(200).json({ exists: !!user });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 
 module.exports = { // Export the controller functions with different names.
     createUser: createUserController,
     getAllUsers: getAllUsersController,
+    checkUsername: checkUsernameController,
 };
