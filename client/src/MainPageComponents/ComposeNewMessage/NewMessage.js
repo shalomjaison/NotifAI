@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import { deploymentMode, backendPort, backendHost, backendBaseURL } from '../../App';
 
-const NewMessage = () => {
+const NewMessage = ({onClose, onMinimize}) => {
     
     const [userData, setUserData] = useState(null);
 
@@ -14,7 +14,7 @@ const NewMessage = () => {
     const [emailType, setEmailType] = useState('');
     const [recipients, setRecipients] = useState([]);
     const [body, setBody] = useState('')
-    const[deadline, setDeadline] = useState(null)
+    const [deadline, setDeadline] = useState(null)
 
     {/*news and claims task type */}
     const[taskType, setTaskType] = useState('')
@@ -129,6 +129,16 @@ const NewMessage = () => {
                     <div className="new-mail-container">
                         <p>New Message</p>
                     </div>
+                    <div className='close-button-container'>
+                        <button
+                            type="button"
+                            className="minimize-button"
+                            onClick={() => onMinimize && onMinimize()}
+                        >
+                            _
+                        </button>
+                        <button className="close-button" onClick={onClose}>X</button>
+                    </div>
                 </div>
                 <input
                     type="text"
@@ -171,6 +181,10 @@ const NewMessage = () => {
                         onChange={(e) => setDeadline(e.target.value)}
                         required
                     />
+                </div>
+                
+                <div className="search-recipient-container-box">
+                    <SearchRecipient onSearch={setRecipients} className='search-import'/>
                 </div>
 
                 {/*Task type for news and claim types*/}
@@ -274,9 +288,6 @@ const NewMessage = () => {
                     </div>
                 )}
 
-                <div className="search-recipient-container-box">
-                    <SearchRecipient onSearch={setRecipients} className='search-import'/>
-                </div>
                 <div className='message-content-container'>
                     <textarea
                         id="message"
@@ -294,6 +305,7 @@ const NewMessage = () => {
             <div className='send-button-container'>
                 <button type="submit" className="send-button">Send</button>
             </div>
+
         </form>
         </div>
       );

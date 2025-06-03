@@ -2,10 +2,8 @@
 .new-mail-wrapper {
     position: fixed;
     bottom: 0;
-    left: 70%;
-    transform: translateX(-50%);
     width: 510px;
-    border: 2px solid #fce7f3;
+    border: 2px solid #DCD1E9;
     border-radius: 8px;
     height: 60%;
     background-color: white;
@@ -37,23 +35,47 @@
 }
 
 .new-mail-title{
-    background-color: #fce7f3;
-    color: #6b7280;
+    background-color: #DCD1E9;
+    color: #000000;
     text-align: left;
     font-weight: 500;
-    width: 508px;
     border-radius: 2%;
-    border: 2px solid #fce7f3;
+    border: 2px solid #DCD1E9;
     height: 35px;
     top: 100;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     font-size: 15px;
     margin-bottom: 16px;
-    align-items: stretch;
     position: relative;
+}
 
+.close-button {
+    border: none;
+    border-radius: 50%;
+    padding: 10px 12px;
+    background-color: #DCD1E9;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.close-button:hover {
+    background-color: #d2bfe9;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.minimize-button {
+    border: none;
+    border-radius: 50%;
+    padding: 10px 12px;
+    background-color: #DCD1E9;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.minimize-button:hover {
+    background-color: #d2bfe9;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 p{
