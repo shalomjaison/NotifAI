@@ -388,7 +388,7 @@ function MainPage() {
             }}
             onClick = {() => toggleMinimizePopup(popup.id)}
           >
-            <span>{popup.subject}</span>
+            <span style={{fontFamily: `"Assistant", sans-serif`}}>{popup.subject}</span>
             <button className="close-button" onClick = {(e) => {
               e.stopPropagation();
               closePopup(popup.id);
