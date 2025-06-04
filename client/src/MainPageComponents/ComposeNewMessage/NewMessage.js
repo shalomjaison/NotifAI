@@ -5,12 +5,11 @@ import axios from 'axios';
 
 import { deploymentMode, backendPort, backendHost, backendBaseURL } from '../../App';
 
-const NewMessage = ({onClose, onMinimize}) => {
+const NewMessage = ({onClose, onMinimize, updatePopupSubject, subject}) => {
     
     const [userData, setUserData] = useState(null);
 
     {/*All email types */}
-    const [subject, setSubject] = useState('');
     const [emailType, setEmailType] = useState('');
     const [recipients, setRecipients] = useState([]);
     const [body, setBody] = useState('')
@@ -28,8 +27,6 @@ const NewMessage = ({onClose, onMinimize}) => {
     {/*policy type*/}
     const[changesToPremium, setChangesToPremium] = useState('')
 
-    {/*Other useStates */}
-    const [message, setMessage] = useState('');
   
     useEffect(() => {
       const fetchUserData = async () => {
@@ -127,7 +124,7 @@ const NewMessage = ({onClose, onMinimize}) => {
             <div className='scrollable-container'>
                 <div className="new-mail-title">
                     <div className="new-mail-container">
-                        <p>New Message</p>
+                        <p>{subject.length !== 0 ?`New Message - ` + subject:`New Message`}</p>
                     </div>
                     <div className='close-button-container'>
                         <button
@@ -145,7 +142,7 @@ const NewMessage = ({onClose, onMinimize}) => {
                     placeholder="Subject"
                     className="subject"
                     value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
+                    onChange={(e) => updatePopupSubject(e.target.value)}
                     required
                 />
 

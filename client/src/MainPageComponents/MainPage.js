@@ -53,7 +53,7 @@ function MainPage() {
   const openComposePopup = () => {
     if (composePopups.length < 3){
       const newPopupId = Date.now(); // Simple ID generation
-      setComposePopups((prev) => [...prev, { id: newPopupId, minimized: false, slotIndex: 2 - prev.length }]);
+      setComposePopups((prev) => [...prev, { id: newPopupId, subject: '', minimized: false }]);
     }
     else {
       console.log("Maximum of 3 popups reached.");
@@ -72,6 +72,12 @@ function MainPage() {
       )
     );
   };
+
+  const onUpdateSubject = (popupId, newSubject) => {
+    setComposePopups((prev) => 
+      prev.map((popup) => popup.id === popupId ? {...popup, subject: newSubject}: popup)
+    );
+  }
 
   const showGenAI = () => {
     // Only update state if it's not already visible,
@@ -360,12 +366,11 @@ function MainPage() {
           </div>
 
         </div>
+
         <div style={{ position: 'fixed', bottom: 0, right: 20, display: 'flex', gap: '8px' }}>
-          {composePopups
-          .map((popup, index) => ({ ...popup, visualSlot: 2 - index }))
+          {composePopups.map((popup, index) => ({ ...popup, visualSlot: 2 - index }))
           .filter((popup) => popup.minimized)
-          .sort((a, b) => a.visualSlot - b.visualSlot)
-          .map((popup) => {
+          .sort((a, b) => a.visualSlot - b.visualSlot).map((popup) => {
             return (
             <div
             key={popup.id}
@@ -383,7 +388,7 @@ function MainPage() {
             }}
             onClick = {() => toggleMinimizePopup(popup.id)}
           >
-            <span>New Message {popup.id}</span>
+            <span>{popup.subject}</span>
             <button className="close-button" onClick = {(e) => {
               e.stopPropagation();
               closePopup(popup.id);
@@ -396,8 +401,7 @@ function MainPage() {
           }
         </div>
 
-        {composePopups
-        .map((popup, index) => {
+        {composePopups.map((popup, index) => {
           return(
           <div key={popup.id} className="popup-overlay" style={{ zIndex: 1000 + index }}>
             <div
@@ -413,6 +417,8 @@ function MainPage() {
               <NewMessage
                 onClose={() => closePopup(popup.id)}
                 onMinimize={() => toggleMinimizePopup(popup.id)}
+                updatePopupSubject={(newSubject) => onUpdateSubject(popup.id, newSubject)}
+                subject={popup.subject}
               />
             </div>
           </div>
