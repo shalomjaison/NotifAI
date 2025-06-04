@@ -11,6 +11,7 @@ import GenAI from "./genAI/genAI";
 import axios from "axios";
 import EmailPopup from "../EmailPopupComponent/EmailPopup/EmailPopup";
 import { useState, useEffect, useRef } from "react";
+import NewMessage from './ComposeNewMessage/NewMessage';
 
 import {
   deploymentMode,
@@ -46,6 +47,37 @@ function MainPage() {
       return nextIsVisible;
     });
   };
+  
+  const [composePopups, setComposePopups] = useState([]); // Array to handle multiple popups
+
+  const openComposePopup = () => {
+    if (composePopups.length < 3){
+      const newPopupId = Date.now(); // Simple ID generation
+      setComposePopups((prev) => [...prev, { id: newPopupId, subject: '', minimized: false }]);
+    }
+    else {
+      console.log("Maximum of 3 popups reached.");
+    }
+  };
+
+
+  const closePopup = (popupId) => {
+    setComposePopups(prev => prev.filter(popup => popup.id !== popupId));
+  };
+
+  const toggleMinimizePopup = (popupId) => {
+    setComposePopups((prev) =>
+      prev.map((popup) =>
+        popup.id === popupId ? { ...popup, minimized: !popup.minimized } : popup
+      )
+    );
+  };
+
+  const onUpdateSubject = (popupId, newSubject) => {
+    setComposePopups((prev) => 
+      prev.map((popup) => popup.id === popupId ? {...popup, subject: newSubject}: popup)
+    );
+  }
 
   const showGenAI = () => {
     // Only update state if it's not already visible,
@@ -94,42 +126,6 @@ function MainPage() {
 
     fetchUserData();
   }, []);
-
-  // Sample data for notifications - link to API later
-  const allNotifications = [
-    {
-      id: 1,
-      source: "Slack",
-      sender: "Sahana Satish",
-      message: "Hey! the UI mock-up is up",
-      time: "1 hour ago",
-      icon: "slack",
-    },
-    {
-      id: 2,
-      source: "Claims",
-      sender: "Claims Department",
-      message: "Your payment of $50 is due tommorrow",
-      time: "1 hour ago",
-      details: "Hello this is to inform you.....",
-    },
-    {
-      id: 3,
-      source: "Slack",
-      sender: "Gin Park",
-      message: "Your payment of $300 is due tommorrow",
-      time: "1 hour ago",
-      icon: "slack",
-    },
-    {
-      id: 4,
-      source: "Claims",
-      sender: "Claims Department",
-      message: "We are contacting you about your car's extended...",
-      time: "1 hour ago",
-      details: "Hello this is to inform you.....",
-    },
-  ];
 
   // State for filtered notifications
   // filteredNotifications and notifications are each a list of objects, each object contains three fields: from, to, and notification
@@ -284,7 +280,7 @@ function MainPage() {
       }}
     >
       {/* Sidebar component */}
-      <Sidebar />
+      <Sidebar onComposeClick={openComposePopup}/>
 
       {/* Main content area */}
       <div style={{ flexGrow: 1, padding: "20px", overflow: "auto" }}>
@@ -368,7 +364,66 @@ function MainPage() {
             {/* Reminders section */}
             <Reminders reminders={reminders} />
           </div>
+
         </div>
+
+        <div style={{ position: 'fixed', bottom: 0, right: 20, display: 'flex', gap: '8px' }}>
+          {composePopups.map((popup, index) => ({ ...popup, visualSlot: 2 - index }))
+          .filter((popup) => popup.minimized)
+          .sort((a, b) => a.visualSlot - b.visualSlot).map((popup) => {
+            return (
+            <div
+            key={popup.id}
+            style = {{
+              width: `190px`,
+              height: `30px`,
+              backgroundColor: `#DCD1E9`,
+              border: '1px solid #DCD1E9',
+              cursor: `pointer`,
+              display: `flex`,
+              alignItems: `center`,
+              justifyContent: `space-between`,
+              padding: `3px 6px`,
+              borderRadius: `5px`
+            }}
+            onClick = {() => toggleMinimizePopup(popup.id)}
+          >
+            <span>{popup.subject}</span>
+            <button className="close-button" onClick = {(e) => {
+              e.stopPropagation();
+              closePopup(popup.id);
+            }}
+            >
+              X
+            </button>
+          </div>
+          );})
+          }
+        </div>
+
+        {composePopups.map((popup, index) => {
+          return(
+          <div key={popup.id} className="popup-overlay" style={{ zIndex: 1000 + index }}>
+            <div
+              className="popup-content"
+              style={{
+                display: popup.minimized ? 'none' : 'block',
+                position: 'fixed',
+                bottom: '0',
+                left: `${72.5 - index * 27}%`,
+                zIndex: 1000 + index,
+              }}
+            >
+              <NewMessage
+                onClose={() => closePopup(popup.id)}
+                onMinimize={() => toggleMinimizePopup(popup.id)}
+                updatePopupSubject={(newSubject) => onUpdateSubject(popup.id, newSubject)}
+                subject={popup.subject}
+              />
+            </div>
+          </div>
+        );})}
+
       </div>
       <CSSTransition
         nodeRef={genAiRef} // 5a. Pass the ref

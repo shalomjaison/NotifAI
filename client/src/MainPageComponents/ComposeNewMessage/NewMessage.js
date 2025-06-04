@@ -5,16 +5,15 @@ import axios from 'axios';
 
 import { deploymentMode, backendPort, backendHost, backendBaseURL } from '../../App';
 
-const NewMessage = () => {
+const NewMessage = ({onClose, onMinimize, updatePopupSubject, subject}) => {
     
     const [userData, setUserData] = useState(null);
 
     {/*All email types */}
-    const [subject, setSubject] = useState('');
     const [emailType, setEmailType] = useState('');
     const [recipients, setRecipients] = useState([]);
     const [body, setBody] = useState('')
-    const[deadline, setDeadline] = useState(null)
+    const [deadline, setDeadline] = useState(null)
 
     {/*news and claims task type */}
     const[taskType, setTaskType] = useState('')
@@ -28,8 +27,6 @@ const NewMessage = () => {
     {/*policy type*/}
     const[changesToPremium, setChangesToPremium] = useState('')
 
-    {/*Other useStates */}
-    const [message, setMessage] = useState('');
   
     useEffect(() => {
       const fetchUserData = async () => {
@@ -127,7 +124,17 @@ const NewMessage = () => {
             <div className='scrollable-container'>
                 <div className="new-mail-title">
                     <div className="new-mail-container">
-                        <p>New Message</p>
+                        <p>{subject.length !== 0 ?`New Message - ` + subject:`New Message`}</p>
+                    </div>
+                    <div className='close-button-container'>
+                        <button
+                            type="button"
+                            className="minimize-button"
+                            onClick={() => onMinimize && onMinimize()}
+                        >
+                            _
+                        </button>
+                        <button className="close-button" onClick={onClose}>X</button>
                     </div>
                 </div>
                 <input
@@ -135,7 +142,7 @@ const NewMessage = () => {
                     placeholder="Subject"
                     className="subject"
                     value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
+                    onChange={(e) => updatePopupSubject(e.target.value)}
                     required
                 />
 
@@ -171,6 +178,10 @@ const NewMessage = () => {
                         onChange={(e) => setDeadline(e.target.value)}
                         required
                     />
+                </div>
+                
+                <div className="search-recipient-container-box">
+                    <SearchRecipient onSearch={setRecipients} className='search-import'/>
                 </div>
 
                 {/*Task type for news and claim types*/}
@@ -274,9 +285,6 @@ const NewMessage = () => {
                     </div>
                 )}
 
-                <div className="search-recipient-container-box">
-                    <SearchRecipient onSearch={setRecipients} className='search-import'/>
-                </div>
                 <div className='message-content-container'>
                     <textarea
                         id="message"
@@ -294,6 +302,7 @@ const NewMessage = () => {
             <div className='send-button-container'>
                 <button type="submit" className="send-button">Send</button>
             </div>
+
         </form>
         </div>
       );

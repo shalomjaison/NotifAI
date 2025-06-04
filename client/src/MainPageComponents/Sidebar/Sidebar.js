@@ -13,7 +13,7 @@ import {
   Bell
 } from 'lucide-react';
 import './Sidebar.css';
-import NewMessage from '../ComposeNewMessage/NewMessage';
+
 
 
 const sidebarItems = [
@@ -35,22 +35,14 @@ const sidebarItems = [
   }
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ onComposeClick }) => {
   const [activeItem, setActiveItem] = useState('inbox');
-
   const [PopUpOpen, setPopUpOpen] = useState(false);
-
-  // const togglePopUp = () => {
-  //   setPopUpOpen(!PopUpOpen);
-  // };
 
   const handleItemClick = (item_id) => {
     setActiveItem(item_id);
     if(item_id == "compose"){
-      setPopUpOpen(true);
-    }
-    else{
-      setPopUpOpen(false);
+      onComposeClick();
     }
   };
 
@@ -64,16 +56,6 @@ const Sidebar = () => {
       </div>
 
       <div className="sidebar-components">
-
-        {/* Popup with NewMessage.js containing code for constructing notification */}
-        {PopUpOpen && (
-          <div className="popup-container">
-            <div className="popup-content">
-              <NewMessage />
-            </div>
-          </div>
-        )}
-
         <button 
           key={"compose"} 
           className={`sidebar-item-compose ${PopUpOpen ? 'active' : ''}`}
