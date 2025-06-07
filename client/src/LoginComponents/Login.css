@@ -1,0 +1,136 @@
+:root {
+  /* Font sizes */
+  --font-sm: 0.875rem;
+  --font-base: 1rem;
+  --font-md: 1.25rem;
+  --font-lg: 1.5rem;
+  --font-xl: 2rem;
+  --font-xxl: 3.75rem;
+
+  /* Spacing */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 2rem;
+  --space-lg: 3rem;
+
+  /* Colors */
+  --text-dark: #1f1f1f;
+  --text-muted: #444;
+  --bg-light: #fdfbff;
+  --card-bg: #e7e2ed;
+  --brand-primary: #40335d;
+}
+
+
+.auth-page {
+  display: flex;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  padding: var(--space-lg);
+}
+
+.left-pane{
+    width: 55% ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-sm);
+}
+
+.company-logo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:var(--space-sm);
+}
+
+.company-icon svg{
+  transform: translateY(15%);
+  width: 2.15rem;
+  height: 2.15rem;
+}
+
+.company-name{
+    font-family: "KoHo", sans-serif;
+    font-size: var(--font-xl);
+    font-weight: 500;
+    line-height: 1;
+}
+
+.company-primary-text{
+  font-family: "Average", serif;
+  font-weight: 400;
+  font-size: var(--font-xxl);
+  font-style: normal;
+  max-width: 40rem;
+  margin-top: var(--space-md);
+}
+
+.company-secondary-text {
+  font-family: "Roboto Slab", serif;
+  font-size: var(--font-lg);
+  font-weight: 200;
+  font-style: normal;
+  max-width: 30rem;
+  margin-top: var(--space-sm);
+}
+
+.company-feature-text {
+    font-family: "Average", serif;
+  font-size: 2.5rem;
+  margin-top: var(--space-md);
+}
+
+
+
+.company-deliverables {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: var(--space-sm);
+    gap: var(--space-md);
+}
+
+.company-deliverable {
+    background-color: var(--card-bg);
+    padding: var(--space-sm);
+    border-radius: 0.85rem;
+    display: flex;
+    gap: var(--space-sm);
+    margin: 2px;
+    max-width: 17rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    align-items: flex-start;
+}
+
+.deliv-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: var(--space-xs);
+}
+
+.deliv-main-text {
+    font-family: "Average", serif;
+    font-weight: 400;
+    font-size: var(--font-lg);
+    min-height: 3.58rem;
+}
+
+.deliv-desc {
+    font-family: "Average Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: var(--font-base);
+    line-height: 1.4;
+}
+
+.deliv-icon {
+    transform: translateY(5%);
+}
+
+.deliv-icon svg{
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--brand-primary);
+}
+
