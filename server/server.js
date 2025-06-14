@@ -14,6 +14,7 @@ const { createUser: createUserController } = require('./controllers/userControll
 const sequelize = require('./db/db');
 const User = require('./models/userModel');
 const claimNotificationRoutes = require('./routes/claimNotificationRoutes');
+const calendarRoutes = require(`./routes/calendar`);
 
 
 require('dotenv').config();
@@ -72,7 +73,7 @@ app.use('/users', userRoutes);
 app.use('/notifications/claims',    claimNotificationRoutes);
 app.use('/notifications', notificationRoutes);
 app.use('/genAI', genAIRoutes)
-
+// app.use('/api/calendar', calendarRoutes);
 // const port = 3000;
 
 if(deploymentMode == 0){

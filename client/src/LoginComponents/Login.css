@@ -34,7 +34,7 @@ html, body {
   background-color: var(--bg-light);
   color: var(--text-dark);
   padding: var(--space-lg);
-  height: auto;
+  height: 85vh;
   overflow-y: auto;
 }
 

@@ -24,12 +24,28 @@ function formatDateTime(iso) {
   });
   return `${datePart}, ${timePart}`;
 }
+
+const trimFileName = (name, maxLength = 20) => {
+  if (name.length <= maxLength) return name;
+  
+  const firstPart = name.slice(0, 10);
+  const lastPart = name.slice(-5);
+  return `${firstPart}...${lastPart}`;
+};
+
 const Reminders = () => {
   const [reminders, setReminders] = useState([]);
   const [page, setPage] = useState(1);
   const [file, setFile] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
-  const [uploading, setUploading] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
+  const [showNewReminderForm, setShowNewReminderForm] = useState(false);
+
+  const handleNewReminderClick = () => {
+    setShowNewReminderForm(true); // later you can toggle this
+  };
+
+  const reminderLimit = 7;
 
   useEffect(() => {
     fetchReminders(page);
@@ -42,6 +58,12 @@ const Reminders = () => {
     // also re-fetch on tab/window focus
     const handleFocus = () => fetchReminders(page);
     window.addEventListener('focus', handleFocus);
+    const savedName = localStorage.getItem("calendarFileName");
+    if (savedName) {
+      setFile({ name: savedName }); // fake file object just to show name
+      setUploaded(true);
+      localStorage.removeItem("remindersCleared");
+    }
     return () => {
       clearInterval(intervalId);
       window.removeEventListener('focus', handleFocus);
@@ -49,19 +71,28 @@ const Reminders = () => {
   }, [page]);
 
   const fetchReminders = async (page) => {
+    if (localStorage.getItem("remindersCleared") === "true") {
+      console.log("Skipping fetch — reminders were cleared locally");
+      return;
+    }
     try {
-      const res = await axios.get(backendBaseURL+ `/api/calendar/reminders?page=${page}&limit=5`, {
+      const res = await axios.get(backendBaseURL+ `/api/calendar/reminders?page=${page}&limit=${reminderLimit}`, {
         withCredentials: true
       });
       setReminders(res.data.events);
-      setTotalPages(res.data.totalPages);
+      setTotalPages(Math.max(1, res.data.totalPages));
     } catch (err) {
       console.error(' Error fetching reminders:', err);
     }
   };
+
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
+    setUploaded(false);
     setFile(selectedFile || null);
+    if (selectedFile) {
+      e.target.value = null;
+    }
   };
 
   const handleUpload = async () => {
@@ -70,35 +101,76 @@ const Reminders = () => {
     if (!file) return;
     const formData = new FormData();
     formData.append('calendar', file);
-  
+    
     try {
-      setUploading(true);
+      setUploaded(true);
+      localStorage.setItem("calendarFileName", file.name);
       await axios.post(backendBaseURL + '/api/calendar/upload-calendar', formData, {
         withCredentials: true,
       });
       console.log("✅ Upload complete");
   
-      setFile(null);
+      // setFile(null);
+      localStorage.removeItem("remindersCleared");
       await fetchReminders(1);
       setPage(1);
     } catch (err) {
       console.error(' Upload failed:', err);
-    } finally {
-      setUploading(false);
     }
   };
+
+  const handleClearFile = () => {
+    setFile(null); 
+    setReminders([]); 
+    setTotalPages(1); 
+    setUploaded(false); 
+    localStorage.removeItem("calendarFileName");   
+    // prevent future fetches
+    localStorage.setItem("remindersCleared", "true");
+  }
   
 
   return (
     <div className="reminders-container">
-      <h2 className="reminders-title">REMINDERS</h2>
-
-      <input type="file" accept=".ics" onChange={handleFileChange} disabled={uploading} />
-      {file && (
-        <button className="upload-button" onClick={handleUpload} disabled={uploading}>
-          {uploading ? "Uploading..." : "Upload Calendar"}
+      <div className="reminders-header">
+        <h2 className="reminders-title">REMINDERS</h2>
+        <button className="new-reminder-btn" onClick={handleNewReminderClick}>
+          + New Reminder
         </button>
-      )}
+      </div>
+      <div className="upload-container">
+        <input
+          type="file"
+          id="file-upload"
+          accept=".ics"
+          onChange={handleFileChange}
+          style={{ display: 'none' }}
+        />
+        
+        <label htmlFor="file-upload" className="upload-label">
+          {file ? "Replace File" : "Choose .ics File"}
+        </label>
+
+        {file && (
+          <div className="uploaded-file">
+            <span className="uploaded-file-name" title={file.name}>
+              {trimFileName(file.name)}
+            </span>
+            {uploaded && (
+            <button onClick={handleClearFile} disabled={!uploaded}className="clear-file-btn"
+            >
+              ✖
+            </button>
+            )}
+          </div>
+        )}
+
+        {file && !uploaded &&(
+          <button className="upload-button" onClick={handleUpload} disabled={uploaded}>
+            Upload Calendar
+          </button>
+        )}
+      </div>
 
       {reminders.map((reminder, idx) => (
         <ReminderItem
@@ -114,11 +186,22 @@ const Reminders = () => {
         />
       ))}
 
-      <div className="pagination-controls">
-        <button disabled={page === 1} onClick={() => setPage(p => p - 1)}>Prev</button>
-        <span> Page {page} of {totalPages} </span>
-        <button disabled={page === totalPages} onClick={() => setPage(p => p + 1)}>Next</button>
-      </div>
+      {uploaded && totalPages >= 1 && reminders.length > 0 && 
+      (<div className="pagination-controls " >
+        <button className="pagination-btn" disabled={page === 1} onClick={() => setPage(p => p - 1)}>Prev</button>
+        <span className="pagination-page"> Page {page} of {totalPages} </span>
+        <button className="pagination-btn" disabled={page === totalPages} onClick={() => setPage(p => p + 1)}>Next</button>
+      </div>)}
+
+      {(reminders.length === 0) && (
+        <div className="empty-reminders">
+          <p className="empty-message">No Reminders Yet</p>
+          <p className="empty-subtext">
+            Upload a <span>.ics</span> file or 
+            <button onClick={handleNewReminderClick} className="inline-link">add one manually</button>.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
