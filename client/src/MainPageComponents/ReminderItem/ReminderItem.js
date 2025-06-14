@@ -19,8 +19,8 @@ const ReminderItem = ({ reminder }) => {
         </div>
       </div>
 
-      <p className="reminder-item-location">
-        {location}
+      <p className="reminder-item-tag">
+        Productivity
       </p>
       <p className="reminder-item-date">
         {date}
