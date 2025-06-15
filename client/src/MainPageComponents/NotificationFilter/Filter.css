@@ -39,11 +39,12 @@
     color: black;
     width: 100%;
     margin-right: 20px;
+    transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .filter-icon:hover {
     opacity: 0.6;
-    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="%23e9d5ff"><text x="0" y="25" font-size="19">❤</text></svg>'), auto; 
+    cursor:pointer;
 }
 
 .filter-menu-container{

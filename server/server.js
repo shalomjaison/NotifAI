@@ -35,7 +35,6 @@ if(USING_DOCKER == 1 || BACKEND_IN_VIRTUAL_MACHINE == 1){
 const clientURL = 'http://' + frontendHost + ':' + frontendPort;
 console.log("client url: ", clientURL);
 
-const calendarRoutes = require('./routes/calendar');
 
 const app = express();
 
@@ -73,8 +72,7 @@ app.use('/users', userRoutes);
 app.use('/notifications/claims',    claimNotificationRoutes);
 app.use('/notifications', notificationRoutes);
 app.use('/genAI', genAIRoutes)
-// app.use('/api/calendar', calendarRoutes);
-// const port = 3000;
+
 
 if(deploymentMode == 0){
   app.get('/hello-world-demo', (req, res) => {
