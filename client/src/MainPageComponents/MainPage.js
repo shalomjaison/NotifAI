@@ -293,15 +293,16 @@ function MainPage() {
         height: "100vh",
         flexBasis: "30%",
         flexShrink: 0,
+        paddingTop: "2px"
       }}
     >
       {/* Sidebar component */}
       <Sidebar onComposeClick={openComposePopup}/>
 
       {/* Main content area */}
-      <div style={{ flexGrow: 1, padding: "20px", overflow: "auto" }}>
+      <div style={{ flexGrow: 1, padding: "0px 0px 20px 0"}}>
         {/* Header component */}
-        <Header userData={userData} onGenAIClick={toggleGenAI} onProfileClick={() => setIsProfileModalOpen(true)}/>
+        <Header userData={userData} onGenAIClick={toggleGenAI} onProfileClick={() => setIsProfileModalOpen(true)} onSearch={handleSearch} filterRenderButton={filter.renderButton()} filterRenderMenu={filter.renderFilterMenu()}/>
 
         <div
           style={{
@@ -311,23 +312,12 @@ function MainPage() {
           }}
         >
           {/* Notifications section */}
-          <div style={{ flexBasis: "70%" }}>
-            {/* Search and Filter */}
-            <div
-              className="search-filter-wrapper"
-              style={{ position: "relative" }}
-            >
-              {/* Search component with onSearch handler */}
-              <Search onSearch={handleSearch} />
-              {filter.renderButton()}
-            </div>
+          <div style={{ flexBasis: "70%",
+                              paddingLeft: "20px",
+                              paddingRight: "20px"
+           }}>
 
             {/*Filter Bubbles and Filter Select */}
-            <div style={{ flexBasis: "70%" }}>
-              <div style={{ zIndex: 1, position: "absolute" }}>
-                {filter.renderFilterMenu()}
-              </div>
-            </div>
 
             {/* Notification list with filtered notifications */}
             {/* Conditionally render NotificationList or EmailPopup */}

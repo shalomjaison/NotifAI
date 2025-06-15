@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './Header.css';
-import LogoutButton from '../LogoutButton/LogoutButton';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import Search from '../Search/Search';
 
 
-
-const Header = ({ userData, onGenAIClick, onProfileClick }) => {
+const Header = ({ userData, onGenAIClick, onProfileClick, onSearch, filterRenderButton, filterRenderMenu }) => {
   const navigate = useNavigate(); // Initialize useNavigate
   const [isIconFlashing, setIsIconFlashing] = useState(false); 
 
@@ -28,9 +27,21 @@ const Header = ({ userData, onGenAIClick, onProfileClick }) => {
 
   return (
     <header className="header-container">
-      <h1 className="header-title">
-        NOTIFAI
-      </h1>
+      <div
+        className="header-search-wrapper"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          position: 'relative', // 👈 Needed so absolute menu is relative to this
+        }}
+      >
+        <Search onSearch={onSearch} />
+        {filterRenderButton}
+        <div style={{ position: 'absolute', top: '100%', right: 0, zIndex: 10 }}>
+          {filterRenderMenu}
+        </div>
+      </div>
 
       <div className="header-actions">
         <svg
